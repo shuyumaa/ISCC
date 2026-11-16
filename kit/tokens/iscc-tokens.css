@@ -1,0 +1,40 @@
+/* ISCC tokens. Built from src/tokens.css by tools/build_kit.py */
+:root{
+  --metal:#C9A44C;--metal-lit:#E4CF9A;--ct:#15294E;--ct-lit:#4868A4;
+  --black:#0B0D10;--parch:#EFE9DA;--silver:#9AA3B2;
+  --fd:'Big Shoulders Display',sans-serif;--fb:'Archivo',sans-serif;
+  --fcd:'Noto Serif SC',serif;--fcb:'Noto Sans SC',sans-serif;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+body,body[data-theme="dark"]{
+  --ground:#0B0D10;--plate:#0B0D10;--stage:#07090D;--ink:#EFE9DA;--ink2:#9AA3B2;
+  --gold:#C9A44C;--side-ct:#4868A4;--side-t:#C9A44C;
+  --hair:rgba(201,164,76,.28);--edge:rgba(154,163,178,.16);
+  --glass:rgba(11,13,16,.62);--glass-edge:rgba(239,233,218,.16);
+}
+body[data-theme="light"]{
+  --ground:#F2EEE3;--plate:#FAF7EF;--stage:#E9E1CD;--ink:#14161C;--ink2:#5B6470;
+  --gold:#7A5D22;--side-ct:#15294E;--side-t:#7A5D22;
+  --hair:rgba(122,93,34,.35);--edge:rgba(20,22,28,.14);
+  --glass:rgba(250,247,239,.68);--glass-edge:rgba(20,22,28,.12);
+}
+body[data-lang="en"] .lz,body[data-lang="zh"] .le{display:none}
+
+/* ---- kit additions (iscc-tokens.css only; everything above is src/tokens.css verbatim) ---- */
+:root{
+  --c-cup-gold:#C9A44C;--c-gold-light:#E4CF9A;--c-legacy-blue:#15294E;--c-legacy-blue-lit:#4868A4;
+  --c-arena-black:#0B0D10;--c-parchment:#EFE9DA;--c-engraving-silver:#9AA3B2;
+  --c-porcelain:#F2EEE3;--c-ink:#14161C;--c-ink-gold:#7A5D22;
+  --c-arena-deep:#0E1420;--c-beam-stage:#07090D;--c-porcelain-plate:#FAF7EF;--c-porcelain-stage:#E9E1CD;
+  --sp-xs:10px;--sp-sm:14px;--sp-md:26px;--sp-lg:48px;--sp-section:104px;
+  --ease-out:cubic-bezier(.16,1,.3,1);
+  --r-plate:0;--r-glass:14px;
+  --fs-display:clamp(38px,5.4vw,68px);--lh-display:.98;--ls-display:.02em;
+  --fs-headline:24px;--ls-headline:.08em;
+  --fs-lead:17px;--lh-lead:1.7;
+  --fs-body:15px;--lh-body:1.6;
+  --fs-label:11px;--ls-label:.22em;
+  --fs-cn-display:clamp(38px,5.4vw,68px);--lh-cn-display:1.16;--ls-cn-display:.08em;
+  --fs-cn-body:16px;--lh-cn-body:1.95;
+  --dur-fast:.3s;--dur-base:.6s;--dur-plate:.7s;--dur-sheen:1.1s;
+}

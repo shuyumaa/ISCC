@@ -1,0 +1,10 @@
+{
+  "display900": "BigShouldersDisplay-Black",
+  "display800": "BigShouldersDisplay-ExtraBold",
+  "body400": "Archivo-Regular",
+  "body600": "Archivo-SemiBold",
+  "body700": "Archivo-Bold",
+  "cnDisplay900": "NotoSerifSC-Black",
+  "cnBody400": "NotoSansSC-Regular",
+  "cnBody600": "NotoSansSC-SemiBold"
+}

@@ -1,0 +1,332 @@
+{
+  "color": {
+    "brand": {
+      "cupGold": {
+        "$value": "#C9A44C",
+        "$type": "color",
+        "$description": "T side"
+      },
+      "goldLight": {
+        "$value": "#E4CF9A",
+        "$type": "color"
+      },
+      "legacyBlue": {
+        "$value": "#15294E",
+        "$type": "color",
+        "$description": "CT side"
+      },
+      "legacyBlueLit": {
+        "$value": "#4868A4",
+        "$type": "color",
+        "$description": "CT on dark"
+      },
+      "arenaBlack": {
+        "$value": "#0B0D10",
+        "$type": "color"
+      },
+      "parchment": {
+        "$value": "#EFE9DA",
+        "$type": "color"
+      },
+      "engravingSilver": {
+        "$value": "#9AA3B2",
+        "$type": "color"
+      }
+    },
+    "lightArena": {
+      "porcelain": {
+        "$value": "#F2EEE3",
+        "$type": "color"
+      },
+      "ink": {
+        "$value": "#14161C",
+        "$type": "color"
+      },
+      "inkGold": {
+        "$value": "#7A5D22",
+        "$type": "color",
+        "$description": "text-safe gold"
+      }
+    },
+    "arena": {
+      "dark": {
+        "ground": {
+          "$value": "#0B0D10",
+          "$type": "color"
+        },
+        "plate": {
+          "$value": "#0B0D10",
+          "$type": "color"
+        },
+        "stage": {
+          "$value": "#07090D",
+          "$type": "color"
+        },
+        "ink": {
+          "$value": "#EFE9DA",
+          "$type": "color"
+        },
+        "ink2": {
+          "$value": "#9AA3B2",
+          "$type": "color"
+        },
+        "gold": {
+          "$value": "#C9A44C",
+          "$type": "color"
+        },
+        "sideCt": {
+          "$value": "#4868A4",
+          "$type": "color"
+        },
+        "sideT": {
+          "$value": "#C9A44C",
+          "$type": "color"
+        },
+        "hair": {
+          "$value": "rgba(201,164,76,.28)",
+          "$type": "color"
+        },
+        "edge": {
+          "$value": "rgba(154,163,178,.16)",
+          "$type": "color"
+        },
+        "glass": {
+          "$value": "rgba(11,13,16,.62)",
+          "$type": "color"
+        },
+        "glassEdge": {
+          "$value": "rgba(239,233,218,.16)",
+          "$type": "color"
+        }
+      },
+      "light": {
+        "ground": {
+          "$value": "#F2EEE3",
+          "$type": "color"
+        },
+        "plate": {
+          "$value": "#FAF7EF",
+          "$type": "color"
+        },
+        "stage": {
+          "$value": "#E9E1CD",
+          "$type": "color"
+        },
+        "ink": {
+          "$value": "#14161C",
+          "$type": "color"
+        },
+        "ink2": {
+          "$value": "#5B6470",
+          "$type": "color"
+        },
+        "gold": {
+          "$value": "#7A5D22",
+          "$type": "color"
+        },
+        "sideCt": {
+          "$value": "#15294E",
+          "$type": "color"
+        },
+        "sideT": {
+          "$value": "#7A5D22",
+          "$type": "color"
+        },
+        "hair": {
+          "$value": "rgba(122,93,34,.35)",
+          "$type": "color"
+        },
+        "edge": {
+          "$value": "rgba(20,22,28,.14)",
+          "$type": "color"
+        },
+        "glass": {
+          "$value": "rgba(250,247,239,.68)",
+          "$type": "color"
+        },
+        "glassEdge": {
+          "$value": "rgba(20,22,28,.12)",
+          "$type": "color"
+        }
+      }
+    },
+    "side": {
+      "ct": {
+        "$value": "#15294E",
+        "$type": "color"
+      },
+      "ctLit": {
+        "$value": "#4868A4",
+        "$type": "color"
+      },
+      "t": {
+        "$value": "#C9A44C",
+        "$type": "color"
+      }
+    },
+    "ratio": {
+      "black": {
+        "$value": 70,
+        "$type": "number"
+      },
+      "blue": {
+        "$value": 20,
+        "$type": "number"
+      },
+      "gold": {
+        "$value": 10,
+        "$type": "number"
+      }
+    }
+  },
+  "type": {
+    "family": {
+      "display": {
+        "$value": "'Big Shoulders Display', sans-serif",
+        "$type": "fontFamily"
+      },
+      "body": {
+        "$value": "'Archivo', sans-serif",
+        "$type": "fontFamily"
+      },
+      "cnDisplay": {
+        "$value": "'Noto Serif SC', serif",
+        "$type": "fontFamily"
+      },
+      "cnBody": {
+        "$value": "'Noto Sans SC', sans-serif",
+        "$type": "fontFamily"
+      }
+    },
+    "scale": {
+      "display": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{type.family.display}",
+          "fontSize": "clamp(38px, 5.4vw, 68px)",
+          "fontWeight": 900,
+          "lineHeight": 0.98,
+          "letterSpacing": "0.02em"
+        }
+      },
+      "headline": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{type.family.display}",
+          "fontSize": "24px",
+          "fontWeight": 800,
+          "letterSpacing": "0.08em"
+        }
+      },
+      "lead": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{type.family.body}",
+          "fontSize": "17px",
+          "fontWeight": 400,
+          "lineHeight": 1.7
+        }
+      },
+      "body": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{type.family.body}",
+          "fontSize": "15px",
+          "fontWeight": 400,
+          "lineHeight": 1.6
+        }
+      },
+      "label": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{type.family.body}",
+          "fontSize": "11px",
+          "fontWeight": 600,
+          "letterSpacing": "0.22em"
+        }
+      },
+      "cnDisplay": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{type.family.cnDisplay}",
+          "fontSize": "clamp(38px, 5.4vw, 68px)",
+          "fontWeight": 900,
+          "lineHeight": 1.16,
+          "letterSpacing": "0.08em"
+        }
+      },
+      "cnBody": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{type.family.cnBody}",
+          "fontSize": "16px",
+          "fontWeight": 400,
+          "lineHeight": 1.95
+        }
+      }
+    }
+  },
+  "space": {
+    "xs": {
+      "$value": "10px",
+      "$type": "dimension"
+    },
+    "sm": {
+      "$value": "14px",
+      "$type": "dimension"
+    },
+    "md": {
+      "$value": "26px",
+      "$type": "dimension"
+    },
+    "lg": {
+      "$value": "48px",
+      "$type": "dimension"
+    },
+    "section": {
+      "$value": "104px",
+      "$type": "dimension"
+    }
+  },
+  "radius": {
+    "plate": {
+      "$value": "0px",
+      "$type": "dimension"
+    },
+    "glass": {
+      "$value": "14px",
+      "$type": "dimension"
+    }
+  },
+  "motion": {
+    "easing": {
+      "out": {
+        "$value": [
+          0.16,
+          1,
+          0.3,
+          1
+        ],
+        "$type": "cubicBezier"
+      }
+    },
+    "duration": {
+      "fast": {
+        "$value": "300ms",
+        "$type": "duration"
+      },
+      "base": {
+        "$value": "600ms",
+        "$type": "duration"
+      },
+      "plate": {
+        "$value": "700ms",
+        "$type": "duration"
+      },
+      "sheen": {
+        "$value": "1100ms",
+        "$type": "duration"
+      }
+    }
+  }
+}

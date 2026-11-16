@@ -1,113 +1,93 @@
-<div class="bc" id="broadcast" role="img" aria-label="ISCC broadcast HUD kit: scorebug, killfeed, lower third, map veto, economy, round history, stinger">
+<div class="bc" id="broadcast" role="img" aria-label="ISCC broadcast HUD: scoreboard, player rows, focus panel, radar, killfeed, economy, round history, map veto, lower third, round-win stinger">
   <div class="bc-frame">
-
-    <!-- host inserts tactical map / canvas here -->
     <div class="bc-feed" aria-hidden="true"></div>
 
-    <!-- round history: MR12, two halves of 12 -->
-    <div class="bc-hist" aria-hidden="true">
-      <span class="lbl h-l"><span class="le">1H</span><span class="lz">上半</span></span>
-      <span class="h-pips"><i class="hp c"></i><i class="hp t"></i><i class="hp c"></i><i class="hp c"></i><i class="hp t"></i><i class="hp t"></i><i class="hp c"></i><i class="hp t"></i><i class="hp c"></i><i class="hp t"></i><i class="hp t"></i><i class="hp c"></i></span>
-      <i class="h-div"></i>
-      <span class="h-pips"><i class="hp c"></i><i class="hp now"></i><i class="hp"></i><i class="hp"></i><i class="hp"></i><i class="hp"></i><i class="hp"></i><i class="hp"></i><i class="hp"></i><i class="hp"></i><i class="hp"></i><i class="hp"></i></span>
-      <span class="lbl h-l h-r"><span class="le">2H</span><span class="lz">下半</span></span>
+    <!-- top-centre scoreboard -->
+    <div class="sb">
+      <div class="sb-bar">
+        <div class="sb-t ct"><i class="mono">K</i><div class="sb-id"><b class="sb-tag">KES</b><span class="lbl sb-nm"><span class="le">KESTRELS</span><span class="lz">红隼</span></span></div><span class="sb-sc" data-s="ct"><i class="dg">7</i></span></div>
+        <div class="sb-mid"><i class="logo-slot" style="--s:calc(var(--p)*28)" aria-hidden="true"></i></div>
+        <div class="sb-t t"><span class="sb-sc" data-s="t"><i class="dg">6</i></span><div class="sb-id"><b class="sb-tag">LAN</b><span class="lbl sb-nm"><span class="le">LANTERNS</span><span class="lz">灯笼</span></span></div><i class="mono">L</i></div>
+        <i class="sb-bomb"></i><i class="sb-def"></i>
+      </div>
+      <div class="sb-tab" data-st="def">
+        <span class="sb-mp ct"><i class="on"></i><i></i></span>
+        <span class="sb-clk"><i class="dg">1</i><i class="dg nar">:</i><i class="dg">5</i><i class="dg">5</i></span>
+        <span class="sb-lb">
+          <span class="lbl l-def">MR12 · <span class="le">ROUND <b class="rn">14</b></span><span class="lz">第<b class="rn">14</b>局</span></span>
+          <span class="lbl l-bomb"><span class="le">BOMB PLANTED</span><span class="lz">炸弹已安放</span></span>
+          <span class="lbl l-res"><span class="le"></span><span class="lz"></span></span>
+        </span>
+        <span class="sb-mp t"><i></i><i></i></span>
+      </div>
+      <div class="hist" aria-hidden="true"><span class="hh"><i class="hp" data-i="0"></i><i class="hp" data-i="1"></i><i class="hp" data-i="2"></i><i class="hp" data-i="3"></i><i class="hp" data-i="4"></i><i class="hp" data-i="5"></i><i class="hp" data-i="6"></i><i class="hp" data-i="7"></i><i class="hp" data-i="8"></i><i class="hp" data-i="9"></i><i class="hp" data-i="10"></i><i class="hp" data-i="11"></i></span><i class="hd"></i><span class="hh"><i class="hp" data-i="12"></i><i class="hp" data-i="13"></i><i class="hp" data-i="14"></i><i class="hp" data-i="15"></i><i class="hp" data-i="16"></i><i class="hp" data-i="17"></i><i class="hp" data-i="18"></i><i class="hp" data-i="19"></i><i class="hp" data-i="20"></i><i class="hp" data-i="21"></i><i class="hp" data-i="22"></i><i class="hp" data-i="23"></i></span></div>
     </div>
 
-    <!-- scorebug -->
-    <div class="bc-sb">
-      <div class="sb-team sb-ct">
-        <div class="sb-main">
-          <div class="sb-meta">
-            <div class="lbl sb-name"><span class="le">KESTRELS</span><span class="lz">红隼</span></div>
-            <div class="sb-school"><span class="le">Harbour Collegiate</span><span class="lz">海港书院</span></div>
-          </div>
-          <div class="sb-tag">KES</div>
-        </div>
-        <div class="sb-pips"><i class="pip"></i><i class="pip"></i><i class="pip"></i><i class="pip"></i><i class="pip"></i></div>
-      </div>
-
-      <div class="sb-mid">
-        <i class="logo-slot" style="--s:max(14px,1.5cqw)" aria-hidden="true"></i>
-        <div class="sb-lbl">
-          <span class="lbl l l-def"><span>MR12 · </span><span class="le">ROUND 14</span><span class="lz">第14局</span></span>
-          <span class="lbl l l-res"></span>
-          <span class="lbl l l-bomb"><span class="le">BOMB PLANTED</span><span class="lz">炸弹已安放</span></span>
-        </div>
-        <div class="sb-score"><b class="n n-ct">7</b><i>:</i><b class="n n-t">6</b></div>
-        <div class="sb-clock">
-          <span class="clk">1:55</span>
-          <span class="ring-w">
-            <svg viewBox="0 0 48 48" aria-hidden="true"><circle class="rg-track" cx="24" cy="24" r="21"/><circle class="rg-arc" cx="24" cy="24" r="21"/></svg>
-            <span class="ring-n">40</span>
-          </span>
-        </div>
-      </div>
-
-      <div class="sb-team sb-t">
-        <div class="sb-main">
-          <div class="sb-tag">LAN</div>
-          <div class="sb-meta">
-            <div class="lbl sb-name"><span class="le">LANTERNS</span><span class="lz">灯笼</span></div>
-            <div class="sb-school"><span class="le">Northgate Academy</span><span class="lz">北门学堂</span></div>
-          </div>
-        </div>
-        <div class="sb-pips"><i class="pip"></i><i class="pip"></i><i class="pip"></i><i class="pip"></i><i class="pip"></i></div>
-      </div>
+    <!-- radar -->
+    <div class="rd">
+      <div class="rd-fr"><div class="bc-radar-slot"></div><i class="rd-c a"></i><i class="rd-c b"></i><i class="rd-c c"></i><i class="rd-c d"></i></div>
+      <div class="lbl rd-lb"><span class="rd-t">ATRIUM 中庭</span></div>
     </div>
 
     <!-- killfeed -->
-    <div class="bc-kf" aria-hidden="true"></div>
+    <div class="kf" aria-hidden="true"></div>
 
-    <!-- lower third -->
-    <div class="bc-l3 t" data-player="ember">
-      <i class="l3-bar"></i>
-      <div class="l3-in">
-        <div class="l3-h">ember</div>
-        <div class="lbl l3-sub"><span class="l3-sc"><span class="f"><span class="le">Northgate Academy</span><span class="lz">北门学堂</span></span><span class="s">LAN</span></span><span> · </span><span class="l3-role"><span class="le">ENTRY</span><span class="lz">突破手</span></span></div>
-        <div class="l3-stats">
-          <div class="l3-st"><b class="l3-k">17</b><span class="lbl"><span class="le">K</span><span class="lz">击杀</span></span></div>
-          <div class="l3-st"><b class="l3-d">11</b><span class="lbl"><span class="le">D</span><span class="lz">死亡</span></span></div>
-          <div class="l3-st"><b class="l3-a">81.4</b><span class="lbl"><span class="le">ADR</span><span class="lz">场均伤害</span></span></div>
-        </div>
-      </div>
+    <!-- player rows -->
+    <div class="rws rws-ct" aria-hidden="true"><div class="rw ct" data-p="kite"><b class="rw-hp"></b><div class="rw-m"><div class="rw-l1"><span class="rw-n">kite</span><span class="rw-kd"><b class="rw-k">0</b><i>/</i><b class="rw-d">0</b></span></div><div class="rw-l2"><span class="rw-bar"><i class="rw-fill"></i><i class="rw-tk"></i></span><span class="rw-ar"><i></i></span><span class="rw-ut"><i></i><i></i><i></i><i></i></span></div></div><div class="rw-c"><span class="rw-w"></span><span class="rw-mn"></span></div></div><div class="rw ct" data-p="ninefold"><b class="rw-hp"></b><div class="rw-m"><div class="rw-l1"><span class="rw-n">ninefold</span><span class="rw-kd"><b class="rw-k">0</b><i>/</i><b class="rw-d">0</b></span></div><div class="rw-l2"><span class="rw-bar"><i class="rw-fill"></i><i class="rw-tk"></i></span><span class="rw-ar"><i></i></span><span class="rw-ut"><i></i><i></i><i></i><i></i></span></div></div><div class="rw-c"><span class="rw-w"></span><span class="rw-mn"></span></div></div><div class="rw ct" data-p="mossglass"><b class="rw-hp"></b><div class="rw-m"><div class="rw-l1"><span class="rw-n">mossglass</span><span class="rw-kd"><b class="rw-k">0</b><i>/</i><b class="rw-d">0</b></span></div><div class="rw-l2"><span class="rw-bar"><i class="rw-fill"></i><i class="rw-tk"></i></span><span class="rw-ar"><i></i></span><span class="rw-ut"><i></i><i></i><i></i><i></i></span></div></div><div class="rw-c"><span class="rw-w"></span><span class="rw-mn"></span></div></div><div class="rw ct" data-p="odd1"><b class="rw-hp"></b><div class="rw-m"><div class="rw-l1"><span class="rw-n">odd1</span><span class="rw-kd"><b class="rw-k">0</b><i>/</i><b class="rw-d">0</b></span></div><div class="rw-l2"><span class="rw-bar"><i class="rw-fill"></i><i class="rw-tk"></i></span><span class="rw-ar"><i></i></span><span class="rw-ut"><i></i><i></i><i></i><i></i></span></div></div><div class="rw-c"><span class="rw-w"></span><span class="rw-mn"></span></div></div><div class="rw ct" data-p="quill"><b class="rw-hp"></b><div class="rw-m"><div class="rw-l1"><span class="rw-n">quill</span><span class="rw-kd"><b class="rw-k">0</b><i>/</i><b class="rw-d">0</b></span></div><div class="rw-l2"><span class="rw-bar"><i class="rw-fill"></i><i class="rw-tk"></i></span><span class="rw-ar"><i></i></span><span class="rw-ut"><i></i><i></i><i></i><i></i></span></div></div><div class="rw-c"><span class="rw-w"></span><span class="rw-mn"></span></div></div></div>
+    <div class="rws rws-t" aria-hidden="true"><div class="rw t" data-p="ember"><b class="rw-hp"></b><div class="rw-m"><div class="rw-l1"><span class="rw-n">ember</span><span class="rw-kd"><b class="rw-k">0</b><i>/</i><b class="rw-d">0</b></span></div><div class="rw-l2"><span class="rw-bar"><i class="rw-fill"></i><i class="rw-tk"></i></span><span class="rw-ar"><i></i></span><span class="rw-ut"><i></i><i></i><i></i><i></i></span></div></div><div class="rw-c"><span class="rw-w"></span><span class="rw-mn"></span></div></div><div class="rw t" data-p="tallow"><b class="rw-hp"></b><div class="rw-m"><div class="rw-l1"><span class="rw-n">tallow</span><span class="rw-kd"><b class="rw-k">0</b><i>/</i><b class="rw-d">0</b></span></div><div class="rw-l2"><span class="rw-bar"><i class="rw-fill"></i><i class="rw-tk"></i></span><span class="rw-ar"><i></i></span><span class="rw-ut"><i></i><i></i><i></i><i></i></span></div></div><div class="rw-c"><span class="rw-w"></span><span class="rw-mn"></span></div></div><div class="rw t" data-p="wick"><b class="rw-hp"></b><div class="rw-m"><div class="rw-l1"><span class="rw-n">wick</span><span class="rw-kd"><b class="rw-k">0</b><i>/</i><b class="rw-d">0</b></span></div><div class="rw-l2"><span class="rw-bar"><i class="rw-fill"></i><i class="rw-tk"></i></span><span class="rw-ar"><i></i></span><span class="rw-ut"><i></i><i></i><i></i><i></i></span></div></div><div class="rw-c"><span class="rw-w"></span><span class="rw-mn"></span></div></div><div class="rw t" data-p="sable"><b class="rw-hp"></b><div class="rw-m"><div class="rw-l1"><span class="rw-n">sable</span><span class="rw-kd"><b class="rw-k">0</b><i>/</i><b class="rw-d">0</b></span></div><div class="rw-l2"><span class="rw-bar"><i class="rw-fill"></i><i class="rw-tk"></i></span><span class="rw-ar"><i></i></span><span class="rw-ut"><i></i><i></i><i></i><i></i></span></div></div><div class="rw-c"><span class="rw-w"></span><span class="rw-mn"></span></div></div><div class="rw t" data-p="juno"><b class="rw-hp"></b><div class="rw-m"><div class="rw-l1"><span class="rw-n">juno</span><span class="rw-kd"><b class="rw-k">0</b><i>/</i><b class="rw-d">0</b></span></div><div class="rw-l2"><span class="rw-bar"><i class="rw-fill"></i><i class="rw-tk"></i></span><span class="rw-ar"><i></i></span><span class="rw-ut"><i></i><i></i><i></i><i></i></span></div></div><div class="rw-c"><span class="rw-w"></span><span class="rw-mn"></span></div></div></div>
+
+    <!-- focus panel -->
+    <div class="fp" aria-hidden="true">
+      <i class="fp-ed"></i>
+      <div class="fp-id"><i class="mono fp-m">K</i><div><b class="fp-n">kite</b><span class="lbl fp-t">KES</span></div></div>
+      <div class="fp-st"><span class="fp-v fp-hp"></span><span class="lbl"><span class="le">HEALTH</span><span class="lz">生命</span></span></div>
+      <div class="fp-st"><span class="fp-v fp-ar"></span><span class="lbl"><span class="le">ARMOR</span><span class="lz">护甲</span></span></div>
+      <div class="fp-st fp-am"><b class="fp-mag">25</b><i>/</i><b class="fp-res">90</b><span class="lbl"><span class="le">AMMO</span><span class="lz">弹药</span></span></div>
+      <div class="fp-kl"><span class="fp-kp"><i></i><i></i><i></i><i></i><i></i></span><span class="lbl"><span class="le">KILLS</span><span class="lz">击杀</span></span></div>
+      <span class="fp-bar"><i class="fp-fill"></i></span>
     </div>
 
-    <!-- economy -->
-    <div class="bc-eco">
-      <div class="eco-r eco-ct" style="--p:.697">
-        <span class="lbl eco-tag">KES</span>
-        <span class="eco-bar"><i class="eco-fill"></i></span>
-        <b class="eco-v">$11,400</b>
-      </div>
-      <div class="eco-r eco-t" style="--p:.447">
-        <span class="lbl eco-tag">LAN</span>
-        <span class="eco-bar"><i class="eco-fill"></i></span>
-        <b class="eco-v">$7,600</b>
-      </div>
-      <div class="eco-s" aria-hidden="true">
-        <i class="tk" style="left:0"></i><i class="tk" style="left:21.05%"></i><i class="tk" style="left:47.37%"></i><i class="tk" style="left:73.68%"></i><i class="tk" style="left:100%"></i>
-        <span class="lbl tl tl-a">$800</span><span class="lbl tl tl-m">$8K</span><span class="lbl tl tl-z"><span class="f">$16,000</span><span class="s">$16K</span></span>
-      </div>
+    <!-- <!-- economy (freeze) -->
+    <div class="eco">
+      <div class="lbl eco-h"><span></span><span><span class="le">MONEY</span><span class="lz">资金</span></span><span></span><span><span class="le">LOSS BONUS</span><span class="lz">连败</span></span><span><span class="le">EQUIP</span><span class="lz">装备</span></span></div>
+      <div class="eco-r ct"><b class="eco-tag">KES</b><span class="eco-bar"><i class="eco-fill"></i></span><b class="eco-v"></b><span class="eco-lp"><i></i><i></i><i></i><i></i><i></i></span><b class="eco-e"></b></div>
+      <div class="eco-r t"><b class="eco-tag">LAN</b><span class="eco-bar"><i class="eco-fill"></i></span><b class="eco-v"></b><span class="eco-lp"><i></i><i></i><i></i><i></i><i></i></span><b class="eco-e"></b></div>
     </div>
 
-    <!-- map veto -->
-    <ol class="bc-veto" aria-label="Map veto">
-      <li class="vt ban" data-s="ct"><span class="vt-n"><span class="le"><span class="f">ATRIUM</span><span class="s">ATR</span></span><span class="lz">中庭</span></span><span class="lbl vt-s"><span class="vt-st"><span class="le"><span class="f">BAN</span><span class="s">BAN</span></span><span class="lz">禁用</span></span><span class="vt-by">KES</span></span></li>
-      <li class="vt ban" data-s="t"><span class="vt-n"><span class="le"><span class="f">QUAD</span><span class="s">QUA</span></span><span class="lz">方院</span></span><span class="lbl vt-s"><span class="vt-st"><span class="le"><span class="f">BAN</span><span class="s">BAN</span></span><span class="lz">禁用</span></span><span class="vt-by">LAN</span></span></li>
-      <li class="vt pick" data-s="ct"><span class="vt-n"><span class="le"><span class="f">CLOISTER</span><span class="s">CLO</span></span><span class="lz">回廊</span></span><span class="lbl vt-s"><span class="vt-st"><span class="le"><span class="f">PICK</span><span class="s">PICK</span></span><span class="lz">选择</span></span><span class="vt-by">KES</span></span></li>
-      <li class="vt pick" data-s="t"><span class="vt-n"><span class="le"><span class="f">ARCHIVE</span><span class="s">ARC</span></span><span class="lz">档案馆</span></span><span class="lbl vt-s"><span class="vt-st"><span class="le"><span class="f">PICK</span><span class="s">PICK</span></span><span class="lz">选择</span></span><span class="vt-by">LAN</span></span></li>
-      <li class="vt ban" data-s="ct"><span class="vt-n"><span class="le"><span class="f">REFECTORY</span><span class="s">REF</span></span><span class="lz">膳堂</span></span><span class="lbl vt-s"><span class="vt-st"><span class="le"><span class="f">BAN</span><span class="s">BAN</span></span><span class="lz">禁用</span></span><span class="vt-by">KES</span></span></li>
-      <li class="vt ban" data-s="t"><span class="vt-n"><span class="le"><span class="f">OBSERVATORY</span><span class="s">OBS</span></span><span class="lz">观星台</span></span><span class="lbl vt-s"><span class="vt-st"><span class="le"><span class="f">BAN</span><span class="s">BAN</span></span><span class="lz">禁用</span></span><span class="vt-by">LAN</span></span></li>
-      <li class="vt decider" data-s="x"><span class="vt-n"><span class="le"><span class="f">BOATHOUSE</span><span class="s">BOA</span></span><span class="lz">船坞</span></span><span class="lbl vt-s"><span class="vt-st"><span class="le"><span class="f">DECIDER</span><span class="s">DEC</span></span><span class="lz">决胜</span></span></span></li>
+    <!-- map veto recap (freeze) -->
+    <ol class="vtr" aria-label="Map veto">
+      <li class="vt ban ct"><span class="vt-n"><span class="le"><span class="f">QUAD</span><span class="s">QUA</span></span><span class="lz">方院</span></span><span class="lbl vt-s"><span class="le">BAN · KES</span><span class="lz">禁用 · KES</span></span></li>
+      <li class="vt ban t"><span class="vt-n"><span class="le"><span class="f">ARCHIVE</span><span class="s">ARC</span></span><span class="lz">档案馆</span></span><span class="lbl vt-s"><span class="le">BAN · LAN</span><span class="lz">禁用 · LAN</span></span></li>
+      <li class="vt pick ct"><span class="vt-n"><span class="le"><span class="f">CLOISTER</span><span class="s">CLO</span></span><span class="lz">回廊</span></span><span class="lbl vt-s"><span class="le">PICK · KES</span><span class="lz">选择 · KES</span></span></li>
+      <li class="vt pick t now"><span class="vt-n"><span class="le"><span class="f">ATRIUM</span><span class="s">ATR</span></span><span class="lz">中庭</span></span><span class="lbl vt-s"><span class="le">PICK · LAN</span><span class="lz">选择 · LAN</span></span></li>
+      <li class="vt ban ct"><span class="vt-n"><span class="le"><span class="f">REFECTORY</span><span class="s">REF</span></span><span class="lz">膳堂</span></span><span class="lbl vt-s"><span class="le">BAN · KES</span><span class="lz">禁用 · KES</span></span></li>
+      <li class="vt ban t"><span class="vt-n"><span class="le"><span class="f">OBSERVATORY</span><span class="s">OBS</span></span><span class="lz">观星台</span></span><span class="lbl vt-s"><span class="le">BAN · LAN</span><span class="lz">禁用 · LAN</span></span></li>
+      <li class="vt decider x"><span class="vt-n"><span class="le"><span class="f">BOATHOUSE</span><span class="s">BOA</span></span><span class="lz">船坞</span></span><span class="lbl vt-s"><span class="le">DECIDER</span><span class="lz">决胜</span></span></li>
     </ol>
 
-    <!-- stinger -->
-    <div class="bc-stinger" aria-hidden="true">
-      <div class="st-run">
-        <i class="st-b st-t4"></i><i class="st-b st-t3"></i><i class="st-b st-t2"></i><i class="st-b st-t1"></i><i class="st-b st-m"></i>
-        <div class="st-tag"><div class="st-win">KES</div><div class="lbl st-sub"></div></div>
+    <!-- lower third -->
+    <div class="l3 t">
+      <i class="l3-ed"></i>
+      <div class="l3-h"></div>
+      <div class="lbl l3-sub"><span class="l3-a"></span></div>
+      <div class="l3-stats">
+        <div><b class="l3-k"></b><span class="lbl"><span class="le">K</span><span class="lz">击杀</span></span></div>
+        <div><b class="l3-d"></b><span class="lbl"><span class="le">D</span><span class="lz">死亡</span></span></div>
+        <div><b class="l3-adr"></b><span class="lbl"><span class="le">ADR</span><span class="lz">场均伤害</span></span></div>
       </div>
     </div>
 
+    <!-- round-win banner -->
+    <div class="bn ct">
+      <i class="bn-ed"></i>
+      <span class="lbl bn-t"><span class="le"></span><span class="lz"></span></span>
+      <b class="bn-m"><span class="le"></span><span class="lz"></span></b>
+    </div>
+
+    <!-- stinger -->
+    <div class="stg ct" aria-hidden="true">
+      <i class="stg-b stg-4"></i><i class="stg-b stg-3"></i><i class="stg-b stg-2"></i><i class="stg-b stg-1"></i>
+      <div class="stg-m"><div class="stg-tx"><b class="stg-w">KES</b><span class="lbl stg-s"><span class="le"></span><span class="lz"></span></span></div></div>
+    </div>
   </div>
 </div>

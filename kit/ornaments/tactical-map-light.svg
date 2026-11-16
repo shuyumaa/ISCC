@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400" role="img">
+<title>ISCC tactical map, light arena</title>
+<path fill="none" stroke="#14161C" stroke-width="1" stroke-opacity=".14" d="M0 66.5H400M0 133.5H400M0 200.5H400M0 266.5H400M0 333.5H400M66.5 0V400M133.5 0V400M200.5 0V400M266.5 0V400M333.5 0V400"/>
+<path fill="none" stroke="#5B6470" stroke-width="34" stroke-opacity=".34" stroke-linejoin="miter" stroke-linecap="butt" d="M200 336V92"/>
+<path fill="none" stroke="#5B6470" stroke-width="28" stroke-opacity=".34" stroke-linejoin="miter" stroke-linecap="butt" d="M246 356H338V128"/>
+<path fill="none" stroke="#5B6470" stroke-width="28" stroke-opacity=".34" stroke-linejoin="miter" stroke-linecap="butt" d="M154 356H72V146"/>
+<path fill="none" stroke="#5B6470" stroke-width="22" stroke-opacity=".34" stroke-linejoin="miter" stroke-linecap="butt" d="M200 196H306V128M200 246H110V146"/>
+<path fill="none" stroke="#5B6470" stroke-width="24" stroke-opacity=".34" stroke-linejoin="miter" stroke-linecap="butt" d="M248 66H292M152 66H118"/>
+<path fill="#5B6470" fill-rule="nonzero" fill-opacity=".34" d="M150 330H250V378H150ZM156 38H244V94H156ZM288 54H372V132H288ZM32 66H120V150H32Z"/>
+<path fill="none" stroke="#7A5D22" stroke-width="2" stroke-linejoin="miter" d="M300 66H360V120H300ZM44 78H108V138H44Z"/>
+<path fill="#E9E1CD" fill-rule="nonzero" d="M316 84H330V98H316ZM62 104H78V116H62ZM190 150H210V162H190ZM330 220H344V242H330ZM66 250H78V270H66Z"/>
+</svg>

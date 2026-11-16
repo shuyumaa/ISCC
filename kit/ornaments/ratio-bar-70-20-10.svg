@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 120" width="1000" height="120" role="img">
+<title>ISCC 70 / 20 / 10 ratio bar: Arena Black, Legacy Blue, Cup Gold</title>
+<path fill="#0B0D10" fill-rule="nonzero" d="M0 0H700V120H0Z"/>
+<path fill="#15294E" fill-rule="nonzero" d="M700 0H900V120H700Z"/>
+<path fill="#C9A44C" fill-rule="nonzero" d="M900 0H1000V120H900Z"/>
+<path fill="#9AA3B2" fill-rule="evenodd" fill-opacity=".4" d="M0 0H1000V120H0ZM1 1H999V119H1Z"/>
+</svg>

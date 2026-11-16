@@ -1,0 +1,818 @@
+// =====================================================================
+// ISCC_Lib.jsxinc  -  shared library for the ISCC After Effects template builders
+// International Schools CS2 Championships / 国际学校CS2锦标赛
+//
+// ExtendScript (ES3) only. No JSON, no Array.map/forEach/indexOf, no let/const.
+// INSTALL THE FONTS IN kit/fonts/ BEFORE RUNNING ANYTHING (see README.md).
+// Fonts are addressed by PostScript name: edit ISCC.CFG.fonts below, or drop a
+// kit/fonts/postscript-names.json next to the kit and it is read automatically.
+// =====================================================================
+var ISCC;
+if (typeof ISCC === "undefined") {
+ISCC = {};
+ISCC.VERSION = "1.0.0";
+
+// ---------------------------------------------------------------------
+// 1. CONFIG  (the one place to change fps / sizes / fonts / easing)
+// ---------------------------------------------------------------------
+ISCC.CFG = {
+    fps: 60,                    // 60 | 50 | 30   (or call ISCC.setFps(n) before building)
+    W: 1920,
+    H: 1080,
+    logoCompName: "LOGO (replace me)",
+    hairline: 2,                // px at 1080p
+    margin: 96,                 // outer grid margin at 1080p
+    slantDeg: 18,               // diagonal band angle
+    // PostScript names. Keys match kit/fonts/postscript-names.json
+    fonts: {
+        display900: "BigShouldersDisplay-Black",
+        display800: "BigShouldersDisplay-ExtraBold",
+        body400: "Archivo-Regular",
+        body600: "Archivo-SemiBold",
+        body700: "Archivo-Bold",
+        cnDisplay900: "NotoSerifSC-Black",
+        cnBody400: "NotoSansSC-Regular",
+        cnBody600: "NotoSansSC-SemiBold"
+    },
+    // expo-out cubic-bezier(.16,1,.3,1) as KeyframeEase influences
+    easeOutInfluence: 16,       // outgoing influence of a key
+    easeInInfluence: 70,        // incoming influence of the next key (1 - 0.3)
+    maxExposed: 14              // max Essential Graphics properties per comp
+};
+
+ISCC.hex = function (h) {
+    return [parseInt(h.substr(0, 2), 16) / 255, parseInt(h.substr(2, 2), 16) / 255, parseInt(h.substr(4, 2), 16) / 255];
+};
+// Brand palette. Nothing else is ever used.
+ISCC.COL = {
+    gold: ISCC.hex("C9A44C"),
+    goldLight: ISCC.hex("E4CF9A"),
+    blue: ISCC.hex("15294E"),
+    blueLit: ISCC.hex("4868A4"),
+    black: ISCC.hex("0B0D10"),
+    stage: ISCC.hex("07090D"),
+    parchment: ISCC.hex("EFE9DA"),
+    silver: ISCC.hex("9AA3B2")
+};
+ISCC.FONTKEY = { d9: "display900", d8: "display800", b4: "body400", b6: "body600", b7: "body700", c9: "cnDisplay900", c4: "cnBody400", c6: "cnBody600" };
+ISCC.CNMAP = { d9: "c9", d8: "c9", b4: "c4", b6: "c6", b7: "c6", c9: "c9", c4: "c4", c6: "c6" };
+ISCC.FOLDERS = { ctl: "00 CONTROL", trans: "01 TRANSITIONS", lt: "02 LOWER THIRDS", ig: "03 IN-GAME", fs: "04 FULL SCREENS", ad: "05 ADS & SOCIAL", el: "06 ELEMENTS", plates: "99 PLATES" };
+
+// fictional demo data (no real schools / teams / sponsors)
+ISCC.DEMO = {
+    a: { name: "KESTRELS", cn: "红隼队", tag: "KES", school: "Kestrel Hall (demo)", schoolCn: "红隼书院（示例）", side: "CT" },
+    b: { name: "LANTERNS", cn: "灯笼队", tag: "LAN", school: "Lantern Court (demo)", schoolCn: "灯笼学堂（示例）", side: "T" },
+    pa: ["kite", "ninefold", "mossglass", "odd1", "quill"],
+    pb: ["ember", "tallow", "wick", "sable", "juno"],
+    maps: ["ATRIUM", "QUAD", "CLOISTER", "ARCHIVE", "REFECTORY", "OBSERVATORY", "BOATHOUSE"],
+    mapsCn: ["中庭", "方庭", "回廊", "档案馆", "食堂", "观星台", "船坞"],
+    ptag: ["KITE", "NINEFOLD", "MOSSGLASS", "ODD1", "QUILL"]
+};
+ISCC.SIDE = 'thisComp.layer("CONTROL").effect("Side Colour")("Color")';
+
+ISCC.built = [];     // registry of comps built in this run
+ISCC.notes = [];     // fallbacks / warnings, reported in the final alert
+ISCC._folders = {};
+ISCC._setupDone = false;
+ISCC.logoComp = null;
+ISCC.plates = [];
+
+ISCC.log = function (m) { ISCC.notes.push(m); try { $.writeln("[ISCC] " + m); } catch (e) {} };
+ISCC.setFps = function (n) { ISCC.CFG.fps = n; };
+ISCC.F = function (n) { return n / ISCC.CFG.fps; };          // frames -> seconds
+ISCC.up = function (s) { return String(s).toUpperCase(); };
+ISCC.each = function (L, fn) {
+    var i;
+    if (L === null || L === undefined) { return; }
+    if (typeof L.length === "number" && typeof L.name !== "string") {
+        for (i = 0; i < L.length; i++) { ISCC.each(L[i], fn); }
+    } else { fn(L, 0); }
+};
+ISCC.here = function () {
+    try { return new File($.fileName).parent.fsName; } catch (e) { return ""; }
+};
+ISCC.loadFontNames = function () {
+    var f, s, o, k;
+    try {
+        f = new File(ISCC.here() + "/../fonts/postscript-names.json");
+        if (f.exists) {
+            f.open("r"); s = f.read(); f.close();
+            // ExtendScript has no JSON object; eval of a local, user-supplied font-name map (our own kit file) is the standard workaround.
+            o = eval("(" + s + ")");
+            for (k in o) {
+                if (o.hasOwnProperty(k) && typeof o[k] === "string" && ISCC.CFG.fonts.hasOwnProperty(k)) { ISCC.CFG.fonts[k] = o[k]; }
+            }
+        }
+    } catch (e) { ISCC.log("postscript-names.json not read: " + e); }
+};
+ISCC.font = function (k) { return ISCC.CFG.fonts[ISCC.FONTKEY[k] || "body600"]; };
+
+// ---------------------------------------------------------------------
+// 2. EXPRESSION SNIPPETS
+// ---------------------------------------------------------------------
+ISCC.sl = function (n) { return 'thisComp.layer("CONTROL").effect("' + n + '")("Slider")'; };
+ISCC.cbx = function (n) { return 'thisComp.layer("CONTROL").effect("' + n + '")("Checkbox")'; };
+// cubic-bezier(.16,1,.3,1) solved exactly (binary search on x)
+ISCC.EXPO_FN = "function isccE(p){var lo=0,hi=1,s=0.5,i,x;for(i=0;i<24;i++){s=(lo+hi)/2;x=3*(1-s)*(1-s)*s*0.16+3*(1-s)*s*s*0.3+s*s*s;if(x<p){lo=s;}else{hi=s;}}return 3*(1-s)*(1-s)*s+3*(1-s)*s*s+s*s*s;}";
+ISCC.js = function (v) {
+    var i, s;
+    if (typeof v === "number") { return String(v); }
+    if (typeof v === "string") { return '"' + v + '"'; }
+    s = "[";
+    for (i = 0; i < v.length; i++) { s += (i ? "," : "") + v[i]; }
+    return s + "]";
+};
+// exact expo-out as an expression: value goes from -> to over [t0, t0+d]
+ISCC.exprEase = function (prop, t0, d, from, to) {
+    prop.expression = ISCC.EXPO_FN + "\nvar p=Math.min(1,Math.max(0,(time-" + t0 + ")/" + d + "));\nlinear(isccE(p),0,1," + ISCC.js(from) + "," + ISCC.js(to) + ");";
+};
+ISCC.langExpr = function (isCn) {
+    var chk = ISCC.cbx("Lang CN");
+    return "var cn = " + chk + ".value;\n" + (isCn ? "cn == 1 ? value : 0;" : "cn == 1 ? 0 : value;");
+};
+
+// ---------------------------------------------------------------------
+// 3. PROJECT STRUCTURE
+// ---------------------------------------------------------------------
+ISCC.folder = function (key) {
+    var nm = ISCC.FOLDERS[key], i, it, f;
+    if (ISCC._folders[key]) { return ISCC._folders[key]; }
+    for (i = 1; i <= app.project.numItems; i++) {
+        it = app.project.item(i);
+        if ((it instanceof FolderItem) && it.name === nm) { ISCC._folders[key] = it; return it; }
+    }
+    f = app.project.items.addFolder(nm);
+    ISCC._folders[key] = f;
+    return f;
+};
+
+ISCC.importFile = function (f) {
+    var io, item;
+    try {
+        io = new ImportOptions(f);
+        io.importAs = ImportAsType.FOOTAGE;
+        item = app.project.importFile(io);
+        return item;
+    } catch (e) {
+        ISCC.log("import failed: " + (f && f.fsName ? f.fsName : f));
+        return null;
+    }
+};
+ISCC.findFiles = function (folder, re, depth, out) {
+    var list, i, it;
+    if (depth < 0 || !folder || !folder.exists) { return out; }
+    try { list = folder.getFiles(); } catch (e) { return out; }
+    if (!list) { return out; }
+    for (i = 0; i < list.length; i++) {
+        it = list[i];
+        if (it instanceof Folder) { ISCC.findFiles(it, re, depth - 1, out); }
+        else if (re.test(it.name)) { out.push(it); }
+    }
+    return out;
+};
+
+// Build folders, the single LOGO precomp and the plate items. Idempotent.
+ISCC.setup = function () {
+    var k, files, i, it, pc, sol, t;
+    if (ISCC._setupDone) { return; }
+    ISCC._setupDone = true;
+    ISCC.loadFontNames();
+    for (k in ISCC.FOLDERS) { if (ISCC.FOLDERS.hasOwnProperty(k)) { ISCC.folder(k); } }
+    // plates ../plates/*.png
+    files = ISCC.findFiles(new Folder(ISCC.here() + "/../plates"), /\.png$/i, 0, []);
+    for (i = 0; i < files.length && i < 16; i++) {
+        it = ISCC.importFile(files[i]);
+        if (it) { it.parentFolder = ISCC.folder("plates"); ISCC.plates.push(it); }
+    }
+    if (ISCC.plates.length === 0) {
+        ISCC.log("no ../plates/*.png found: using labelled placeholder plate comps");
+        for (i = 1; i <= 2; i++) {
+            pc = app.project.items.addComp("PLATE_placeholder_0" + i, ISCC.CFG.W, ISCC.CFG.H, 1, 10, ISCC.CFG.fps);
+            pc.parentFolder = ISCC.folder("plates");
+            sol = pc.layers.addSolid(i === 1 ? ISCC.COL.stage : ISCC.COL.blue, "PLATE PLACEHOLDER " + i, ISCC.CFG.W, ISCC.CFG.H, 1);
+            t = pc.layers.addText("PLATE PLACEHOLDER " + i + "  -  drop PNGs in kit/plates/");
+            t.name = "label";
+            t.property("ADBE Transform Group").property("ADBE Position").setValue([96, 1000]);
+            ISCC.plates.push(pc);
+        }
+    }
+    ISCC.ensureLogo();
+};
+
+// ---------------------------------------------------------------------
+// 4. COMP FACTORY
+// ---------------------------------------------------------------------
+// o: w,h,dur, side ("CT"|"T"|"N"), alpha (default true), note, ctrl, sliders [[name,val],...], guides(default true)
+ISCC.newComp = function (name, fk, o) {
+    var w, h, dur, comp, c, side, col, i, g1, g2;
+    o = o || {};
+    w = o.w || ISCC.CFG.W; h = o.h || ISCC.CFG.H; dur = o.dur || 5;
+    comp = app.project.items.addComp(name, w, h, 1, dur, ISCC.CFG.fps);
+    comp.parentFolder = ISCC.folder(fk);
+    try { comp.comment = o.note || ""; } catch (e0) {}
+    c = { comp: comp, name: name, w: w, h: h, dur: dur, fk: fk, side: o.side || "N", alpha: (o.alpha === false) ? false : true,
+          note: o.note || "", ctrl: o.ctrl || "", eg: [], sx: w / 1920, sy: h / 1080 };
+    ISCC.control(c, o.sliders || []);
+    if (!c.alpha) {
+        c.bg = comp.layers.addSolid(ISCC.COL.stage, "STAGE", w, h, 1);
+        c.bg.moveToEnd();
+    }
+    if (o.guides !== false) { ISCC.guides(c); }
+    return c;
+};
+
+// CONTROL null: Side Colour, Progress, Lang CN + comp specific sliders
+ISCC.addCtl = function (c, name, type, val) {
+    var fx = c.ctl.property("ADBE Effect Parade").addProperty(type);
+    fx.name = name;
+    if (type === "ADBE Color Control") { fx.property("ADBE Color Control-0001").setValue([val[0], val[1], val[2], 1]); }
+    else if (type === "ADBE Slider Control") { fx.property("ADBE Slider Control-0001").setValue(val); }
+    else if (type === "ADBE Checkbox Control") { fx.property("ADBE Checkbox Control-0001").setValue(val); }
+    return fx;
+};
+ISCC.control = function (c, sliders) {
+    var L = c.comp.layers.addNull(c.dur), col, i;
+    L.name = "CONTROL";
+    c.ctl = L;
+    col = (c.side === "T") ? ISCC.COL.gold : ISCC.COL.blue;
+    ISCC.addCtl(c, "Side Colour", "ADBE Color Control", col);
+    ISCC.addCtl(c, "Progress", "ADBE Slider Control", 0);
+    ISCC.addCtl(c, "Lang CN", "ADBE Checkbox Control", 0);
+    for (i = 0; i < sliders.length; i++) { ISCC.addCtl(c, sliders[i][0], "ADBE Slider Control", sliders[i][1]); }
+    return L;
+};
+// guide layers: action-safe 93 %, title-safe 90 %
+ISCC.guides = function (c) {
+    var a, t, w = c.w, h = c.h;
+    a = ISCC.shapeLayer(c, "GUIDE action-safe 93%");
+    ISCC.addRect(a, w * 0.035, h * 0.035, w * 0.93, h * 0.93, { stroke: ISCC.COL.silver, sw: 1 });
+    a.guideLayer = true;
+    t = ISCC.shapeLayer(c, "GUIDE title-safe 90%");
+    ISCC.addRect(t, w * 0.05, h * 0.05, w * 0.90, h * 0.90, { stroke: ISCC.COL.gold, sw: 1 });
+    t.guideLayer = true;
+};
+
+ISCC.mark = function (c, t, label) {
+    var mv = new MarkerValue(label);
+    try { c.comp.markerProperty.setValueAtTime(t, mv); }
+    catch (e) { try { c.ctl.property("ADBE Marker").setValueAtTime(t, mv); } catch (e2) { ISCC.log("marker failed " + label); } }
+};
+
+// Essential Graphics exposure (AE 15.1+ API, fully guarded)
+ISCC.expose = function (c) {
+    var n = 0, i, p, e, fx, names, k;
+    if (typeof c.comp.openInEssentialGraphics === "function") { try { c.comp.openInEssentialGraphics(); } catch (e0) {} }
+    try { c.comp.motionGraphicsTemplateName = c.name; } catch (e1) {}
+    function add(prop, label) {
+        if (n >= ISCC.CFG.maxExposed) { return; }
+        try {
+            if (typeof prop.addToMotionGraphicsTemplateAs === "function" && prop.canAddToMotionGraphicsTemplate(c.comp)) {
+                if (prop.addToMotionGraphicsTemplateAs(c.comp, label)) { n++; }
+            }
+        } catch (e) {}
+    }
+    fx = c.ctl.property("ADBE Effect Parade");
+    add(fx.property("Side Colour").property("ADBE Color Control-0001"), "Side Colour");
+    add(fx.property("Lang CN").property("ADBE Checkbox Control-0001"), "Language CN");
+    for (i = 0; i < c.eg.length; i++) {
+        e = c.eg[i];
+        add(e.layer.property("ADBE Text Properties").property("ADBE Text Document"), e.label);
+    }
+    c.exposed = n;
+};
+
+// markers + work area + EG, then register
+ISCC.finish = function (c, m) {
+    m = m || {};
+    ISCC.mark(c, (m.inT === undefined) ? 0 : m.inT, "IN");
+    if (m.hold !== undefined) { ISCC.mark(c, m.hold, "HOLD"); }
+    if (m.cut !== undefined) { ISCC.mark(c, m.cut, "CUT"); }
+    ISCC.mark(c, (m.outT === undefined) ? Math.max(0, c.dur - 0.5) : m.outT, "OUT");
+    c.comp.workAreaStart = 0;
+    c.comp.workAreaDuration = c.dur;
+    ISCC.expose(c);
+    ISCC.built.push({ name: c.name, family: c.fk, w: c.w, h: c.h, dur: c.dur, alpha: c.alpha, note: c.note, ctrl: c.ctrl });
+    return c;
+};
+
+// ---------------------------------------------------------------------
+// 5. PROPERTY / KEYFRAME / EASE HELPERS
+// ---------------------------------------------------------------------
+ISCC.P = function (L, k) {
+    var m = { pos: "ADBE Position", sc: "ADBE Scale", op: "ADBE Opacity", rot: "ADBE Rotate Z", anc: "ADBE Anchor Point" };
+    return L.property("ADBE Transform Group").property(m[k]);
+};
+ISCC.vec = function (p, a) {
+    var cur = p.value;
+    if (cur && cur.length === 3 && a.length === 2) { return [a[0], a[1], cur[2]]; }
+    return a;
+};
+ISCC._dims = function (p) {
+    var t = p.propertyValueType;
+    if (t === PropertyValueType.TwoD_SPATIAL || t === PropertyValueType.ThreeD_SPATIAL) { return 1; }
+    if (t === PropertyValueType.ThreeD) { return 3; }
+    if (t === PropertyValueType.TwoD) { return 2; }
+    if (t === PropertyValueType.COLOR) { return 4; }
+    return 1;
+};
+// expo-out on every key of a property
+ISCC.easeProp = function (p) {
+    var n = p.numKeys, i, d, a, b, j, ei, eo;
+    for (i = 1; i <= n; i++) {
+        try { p.setInterpolationTypeAtKey(i, KeyframeInterpolationType.BEZIER, KeyframeInterpolationType.BEZIER); } catch (e1) {}
+        d = ISCC._dims(p);
+        a = []; b = [];
+        for (j = 0; j < d; j++) {
+            a.push(new KeyframeEase(0, ISCC.CFG.easeInInfluence));
+            b.push(new KeyframeEase(0, ISCC.CFG.easeOutInfluence));
+        }
+        try { p.setTemporalEaseAtKey(i, a, b); }
+        catch (e2) {
+            try { p.setTemporalEaseAtKey(i, [a[0]], [b[0]]); } catch (e3) { ISCC.log("ease failed on " + p.name); }
+        }
+    }
+};
+// keyframe a property: pairs [[t, v], ...] then expo-out
+ISCC.keys = function (p, pairs) {
+    var i;
+    for (i = 0; i < pairs.length; i++) { p.setValueAtTime(pairs[i][0], pairs[i][1]); }
+    ISCC.easeProp(p);
+};
+// ENTRANCE. o: dx,dy (start offset), fade (default true), sx,sy (start scale %), op (resting opacity), rot
+ISCC.inFrom = function (L, t, d, o) {
+    o = o || {};
+    ISCC.each(L, function (l) {
+        var pp, ps, po, b, s, ob, fd;
+        if (o.dx || o.dy) {
+            pp = ISCC.P(l, "pos"); b = pp.value;
+            pp.setValueAtTime(t, [b[0] + (o.dx || 0), b[1] + (o.dy || 0)]);
+            pp.setValueAtTime(t + d, [b[0], b[1]]);
+            ISCC.easeProp(pp);
+        }
+        if (o.sx !== undefined || o.sy !== undefined) {
+            ps = ISCC.P(l, "sc"); s = ps.value;
+            ps.setValueAtTime(t, ISCC.vec(ps, [(o.sx === undefined ? 100 : o.sx), (o.sy === undefined ? 100 : o.sy)]));
+            ps.setValueAtTime(t + d, [s[0], s[1], s[2]].slice(0, s.length));
+            ISCC.easeProp(ps);
+        }
+        if (o.fade !== false) {
+            po = ISCC.P(l, "op"); ob = (o.op === undefined) ? po.value : o.op;
+            fd = Math.min(d, 0.25);
+            po.setValueAtTime(t, 0); po.setValueAtTime(t + fd, ob);
+            ISCC.easeProp(po);
+        }
+    });
+};
+// EXIT (faster). o: dx,dy, fade (default true), sx,sy (end scale %)
+ISCC.outTo = function (L, t, d, o) {
+    o = o || {};
+    ISCC.each(L, function (l) {
+        var pp, ps, po, b, s, ob;
+        if (o.dx || o.dy) {
+            pp = ISCC.P(l, "pos"); b = pp.valueAtTime(t, true);
+            pp.setValueAtTime(t, [b[0], b[1]]);
+            pp.setValueAtTime(t + d, [b[0] + (o.dx || 0), b[1] + (o.dy || 0)]);
+            ISCC.easeProp(pp);
+        }
+        if (o.sx !== undefined || o.sy !== undefined) {
+            ps = ISCC.P(l, "sc"); s = ps.valueAtTime(t, true);
+            ps.setValueAtTime(t, [s[0], s[1], s[2]].slice(0, s.length));
+            ps.setValueAtTime(t + d, ISCC.vec(ps, [(o.sx === undefined ? 100 : o.sx), (o.sy === undefined ? 100 : o.sy)]));
+            ISCC.easeProp(ps);
+        }
+        if (o.fade !== false) {
+            po = ISCC.P(l, "op"); ob = po.valueAtTime(t, true);
+            po.setValueAtTime(t, ob); po.setValueAtTime(t + d, 0);
+            ISCC.easeProp(po);
+        }
+    });
+};
+// stagger helper: i-th item starts i * frames later
+ISCC.st = function (t, i, frames) { return t + i * ISCC.F(frames === undefined ? 3 : frames); };
+
+// ---------------------------------------------------------------------
+// 6. SHAPES
+// ---------------------------------------------------------------------
+ISCC.shapeLayer = function (c, name) {
+    var L = c.comp.layers.addShape();
+    L.name = name;
+    return L;
+};
+ISCC._setCol = function (prop, col) {
+    if (col === "side") { prop.expression = ISCC.SIDE; }
+    else { prop.setValue([col[0], col[1], col[2], 1]); }
+};
+ISCC._grp = function (L, nm) {
+    var g = L.property("ADBE Root Vectors Group").addProperty("ADBE Vector Group");
+    g.name = nm || "Group";
+    return { g: g, ct: g.property("ADBE Vectors Group") };
+};
+// o: fill, fo (fill opacity), stroke, sw, so (stroke opacity), dash, gap, cap (1 butt, 2 round, 3 square)
+ISCC._paint = function (ct, o) {
+    var s, f, d;
+    if (o.stroke) {
+        s = ct.addProperty("ADBE Vector Graphic - Stroke");
+        ISCC._setCol(s.property("ADBE Vector Stroke Color"), o.stroke);
+        s.property("ADBE Vector Stroke Width").setValue(o.sw || ISCC.CFG.hairline);
+        if (o.so !== undefined) { s.property("ADBE Vector Stroke Opacity").setValue(o.so); }
+        if (o.cap) { s.property("ADBE Vector Stroke Line Cap").setValue(o.cap); }
+        if (o.dash) {
+            d = s.property("ADBE Vector Stroke Dashes");
+            d.addProperty("ADBE Vector Stroke Dash 1").setValue(o.dash);
+            d.addProperty("ADBE Vector Stroke Gap 1").setValue(o.gap || o.dash);
+        }
+    }
+    if (o.fill) {
+        f = ct.addProperty("ADBE Vector Graphic - Fill");
+        ISCC._setCol(f.property("ADBE Vector Fill Color"), o.fill);
+        if (o.fo !== undefined) { f.property("ADBE Vector Fill Opacity").setValue(o.fo); }
+    }
+};
+ISCC.addRect = function (L, x, y, w, h, o) {
+    var G = ISCC._grp(L, o.gname || "Rect"), r;
+    r = G.ct.addProperty("ADBE Vector Shape - Rect");
+    r.property("ADBE Vector Rect Size").setValue([w, h]);
+    r.property("ADBE Vector Rect Position").setValue([x + w / 2, y + h / 2]);
+    ISCC._paint(G.ct, o);
+    return G;
+};
+ISCC.addEllipse = function (L, cx, cy, d, o) {
+    var G = ISCC._grp(L, o.gname || "Ellipse"), e;
+    e = G.ct.addProperty("ADBE Vector Shape - Ellipse");
+    e.property("ADBE Vector Ellipse Size").setValue([d, d]);
+    e.property("ADBE Vector Ellipse Position").setValue([cx, cy]);
+    ISCC._paint(G.ct, o);
+    return G;
+};
+// generic path; o.trim = true adds Trim Paths (G.trim)
+ISCC.addPath = function (L, pts, closed, o) {
+    var G = ISCC._grp(L, o.gname || "Path"), p, s, z1 = [], z2 = [], i, tr;
+    p = G.ct.addProperty("ADBE Vector Shape - Group");
+    s = new Shape();
+    s.vertices = pts;
+    for (i = 0; i < pts.length; i++) { z1.push([0, 0]); z2.push([0, 0]); }
+    s.inTangents = z1; s.outTangents = z2;
+    s.closed = closed;
+    p.property("ADBE Vector Shape").setValue(s);
+    if (o.trim) {
+        tr = G.ct.addProperty("ADBE Vector Filter - Trim");
+        G.trim = tr;
+    }
+    ISCC._paint(G.ct, o);
+    return G;
+};
+// absolute rect layer. layer origin = top-left of the rect (o.center -> centre anchor)
+ISCC.rect = function (c, name, x, y, w, h, fill, o) {
+    var L, oo, k;
+    o = o || {};
+    L = ISCC.shapeLayer(c, name);
+    oo = { fill: fill, fo: o.fo, stroke: o.stroke, sw: o.sw, so: o.so };
+    ISCC.addRect(L, 0, 0, w, h, oo);
+    if (o.center) {
+        ISCC.P(L, "anc").setValue([w / 2, h / 2]);
+        ISCC.P(L, "pos").setValue([x + w / 2, y + h / 2]);
+    } else { ISCC.P(L, "pos").setValue([x, y]); }
+    if (o.op !== undefined) { ISCC.P(L, "op").setValue(o.op); }
+    return L;
+};
+ISCC.hairH = function (c, name, x, y, len, col, o) {
+    o = o || {}; o.center = false;
+    return ISCC.rect(c, name, x, y, len, ISCC.CFG.hairline, col || ISCC.COL.gold, o);
+};
+ISCC.hairV = function (c, name, x, y, len, col, o) {
+    o = o || {};
+    return ISCC.rect(c, name, x, y, ISCC.CFG.hairline, len, col || ISCC.COL.gold, o);
+};
+// parallelogram with the brand diagonal (top edge shifted right by h*tan(18deg)). Layer origin = comp origin.
+ISCC.slantPts = function (x, y, w, h) {
+    var s = h * Math.tan(ISCC.CFG.slantDeg * Math.PI / 180);
+    return [[x + s, y], [x + s + w, y], [x + w, y + h], [x, y + h]];
+};
+ISCC.band = function (c, name, x, y, w, h, fill, o) {
+    var L;
+    o = o || {};
+    L = ISCC.shapeLayer(c, name);
+    ISCC.addPath(L, ISCC.slantPts(x, y, w, h), true, { fill: fill, fo: o.fo });
+    if (o.op !== undefined) { ISCC.P(L, "op").setValue(o.op); }
+    return L;
+};
+ISCC.poly = function (c, name, pts, fill, o) {
+    var L;
+    o = o || {};
+    L = ISCC.shapeLayer(c, name);
+    ISCC.addPath(L, pts, true, { fill: fill, fo: o.fo, stroke: o.stroke, sw: o.sw });
+    return L;
+};
+ISCC.line = function (c, name, a, b, col, sw, o) {
+    var L;
+    o = o || {};
+    L = ISCC.shapeLayer(c, name);
+    ISCC.addPath(L, [a, b], false, { stroke: col, sw: sw || ISCC.CFG.hairline, so: o.so, dash: o.dash, gap: o.gap });
+    return L;
+};
+ISCC.dot = function (c, name, cx, cy, d, fill) {
+    var L = ISCC.shapeLayer(c, name);
+    ISCC.addEllipse(L, cx, cy, d, { fill: fill });
+    return L;
+};
+ISCC.ring = function (c, name, cx, cy, d, col, sw) {
+    var L = ISCC.shapeLayer(c, name);
+    ISCC.addEllipse(L, 0, 0, d, { stroke: col, sw: sw || 3 });
+    ISCC.P(L, "pos").setValue([cx, cy]);
+    return L;
+};
+// four corner crop marks in one layer
+ISCC.cropMarks = function (c, m, len, col) {
+    var L = ISCC.shapeLayer(c, "CROP MARKS"), w = c.w, h = c.h, t = ISCC.CFG.hairline, k = col || ISCC.COL.silver, o = { fill: k };
+    ISCC.addRect(L, m, m, len, t, o); ISCC.addRect(L, m, m, t, len, o);
+    ISCC.addRect(L, w - m - len, m, len, t, o); ISCC.addRect(L, w - m - t, m, t, len, o);
+    ISCC.addRect(L, m, h - m - t, len, t, o); ISCC.addRect(L, m, h - m - len, t, len, o);
+    ISCC.addRect(L, w - m - len, h - m - t, len, t, o); ISCC.addRect(L, w - m - t, h - m - len, t, len, o);
+    return L;
+};
+
+// ---------------------------------------------------------------------
+// 7. ORNAMENT BUILDERS
+// ---------------------------------------------------------------------
+// Bullet tracer: thin bright line with a fading tail (3 stacked trim windows).
+// returns layer; head arrives at b at t+d.
+ISCC.tracer = function (c, name, a, b, t, d, o) {
+    var L, i, G, lags = [0.06, 0.20, 0.42], ops = [100, 55, 22], sws = [3, 2, 2], col, tr, s, e;
+    o = o || {};
+    col = o.color || ISCC.COL.parchment;
+    L = ISCC.shapeLayer(c, name);
+    for (i = 0; i < 3; i++) {
+        G = ISCC.addPath(L, [a, b], false, { stroke: (i === 0 ? col : (o.tail || ISCC.COL.goldLight)), sw: (o.sw || sws[i]), so: ops[i], trim: true, gname: "Trail " + (i + 1) });
+        tr = G.trim;
+        e = tr.property("ADBE Vector Trim End");
+        s = tr.property("ADBE Vector Trim Start");
+        tr.property("ADBE Vector Trim Offset").setValue(0);
+        e.setValueAtTime(t, 0); e.setValueAtTime(t + d, 100);
+        s.setValueAtTime(t, 0); s.setValueAtTime(t + d * (1 + lags[i]), 100);
+        s.setValueAtTime(t + d * lags[i], 0);
+        ISCC.easeProp(e); ISCC.easeProp(s);
+    }
+    return L;
+};
+// Grenade utility arc: dashed parabola from a to b with apex lift h, trim-in, then landing ring scale-in.
+ISCC.arc = function (c, name, a, b, h, t, d, o) {
+    var pts = [], i, n = 28, u, x, y, L, G, ring, col;
+    o = o || {};
+    col = o.color || ISCC.COL.goldLight;
+    for (i = 0; i <= n; i++) {
+        u = i / n;
+        x = a[0] + (b[0] - a[0]) * u;
+        y = a[1] + (b[1] - a[1]) * u - 4 * h * u * (1 - u);
+        pts.push([x, y]);
+    }
+    L = ISCC.shapeLayer(c, name + " path");
+    G = ISCC.addPath(L, pts, false, { stroke: col, sw: 4, dash: 4, gap: 14, trim: true });
+    ISCC.keys(G.trim.property("ADBE Vector Trim End"), [[t, 0], [t + d, 100]]);
+    ring = ISCC.ring(c, name + " ring", b[0], b[1], 120, col, 3);
+    ISCC.keys(ISCC.P(ring, "sc"), [[t + d * 0.9, ISCC.vec(ISCC.P(ring, "sc"), [0, 0])], [t + d * 0.9 + 0.5, ISCC.vec(ISCC.P(ring, "sc"), [100, 100])]]);
+    ISCC.keys(ISCC.P(ring, "op"), [[t + d * 0.9, 0], [t + d * 0.9 + 0.12, 100]]);
+    return [L, ring];
+};
+// Spray-pattern dot column. 30 dots firing in sequence, each dot pops then settles.
+ISCC.SPRAY = [[0, 0], [1, -9], [-1, -19], [2, -30], [0, -42], [3, -54], [1, -66], [-4, -76], [-12, -83], [-21, -88], [-30, -91], [-38, -92], [-30, -96], [-18, -98], [-4, -99], [10, -98], [23, -99], [35, -97], [45, -99], [38, -102], [27, -103], [15, -102], [3, -104], [-9, -103], [-20, -105], [-12, -107], [0, -106], [12, -108], [22, -107], [30, -109]];
+// o: scale, color, stepFrames, dotD, hold (seconds the dot stays), fadeAfter
+ISCC.spray = function (c, name, ox, oy, t, o) {
+    var L, i, G, tp, op, sc, p, k, d, step, tt;
+    o = o || {};
+    sc = o.scale || 4; d = o.dotD || 12; step = ISCC.F(o.stepFrames || 2);
+    L = ISCC.shapeLayer(c, name);
+    for (i = 0; i < ISCC.SPRAY.length; i++) {
+        p = ISCC.SPRAY[i];
+        G = ISCC.addEllipse(L, ox + p[0] * sc, oy + p[1] * sc, d, { fill: o.color || ISCC.COL.goldLight, gname: "dot " + (i + 1) });
+        op = G.g.property("ADBE Vector Transform Group").property("ADBE Vector Group Opacity");
+        tt = t + i * step;
+        op.setValueAtTime(0, 0); op.setValueAtTime(tt, 0); op.setValueAtTime(tt + 0.05, 100);
+        if (o.hold) { op.setValueAtTime(tt + o.hold, 100); op.setValueAtTime(tt + o.hold + 0.3, 25); }
+        else { op.setValueAtTime(tt + 0.4, 40); }
+    }
+    return L;
+};
+
+// ---------------------------------------------------------------------
+// 8. TEXT
+// ---------------------------------------------------------------------
+ISCC.JUST = function (j) {
+    if (j === "C") { return ParagraphJustification.CENTER_JUSTIFY; }
+    if (j === "R") { return ParagraphJustification.RIGHT_JUSTIFY; }
+    return ParagraphJustification.LEFT_JUSTIFY;
+};
+// o: x,y (baseline origin), size, f (font key), color, track, lead (factor), just (L|C|R), op, keep (no uppercase), eg (label)
+ISCC.text = function (c, name, str, o) {
+    var s, L, prop, td, size, f, ld, isCn;
+    o = o || {};
+    f = o.f || "b6"; size = o.size || 32;
+    isCn = (f.charAt(0) === "c");
+    s = (o.keep || isCn) ? String(str) : ISCC.up(str);
+    s = s.replace(/\n/g, "\r");
+    L = c.comp.layers.addText(s);
+    L.name = name;
+    prop = L.property("ADBE Text Properties").property("ADBE Text Document");
+    td = prop.value;
+    try { td.resetCharStyle(); } catch (e0) {}
+    td.fontSize = size;
+    td.font = ISCC.font(f);
+    td.applyFill = true;
+    td.fillColor = o.color || ISCC.COL.parchment;
+    td.applyStroke = false;
+    td.justification = ISCC.JUST(o.just);
+    td.tracking = (o.track === undefined) ? 0 : o.track;
+    ld = (o.lead === undefined) ? ((f === "d9" || f === "d8" || f === "c9") ? 0.9 : 1.2) : o.lead;
+    try { td.autoLeading = false; td.leading = size * ld; } catch (e1) {}
+    prop.setValue(td);
+    ISCC.P(L, "pos").setValue([o.x || 0, o.y || 0]);
+    if (o.op !== undefined) { ISCC.P(L, "op").setValue(o.op); }
+    if (o.expr) { prop.expression = o.expr; }
+    else if (o.eg !== false && c.eg.length < ISCC.CFG.maxExposed) { c.eg.push({ layer: L, label: o.eg || name }); }
+    return L;
+};
+// bilingual pair: EN layer + 中文 layer, opacity switched by CONTROL "Lang CN"
+ISCC.pair = function (c, name, en, cn, o) {
+    var oc, a, b, f, k;
+    o = o || {};
+    f = o.f || "b6";
+    a = ISCC.text(c, name + " EN", en, o);
+    oc = {};
+    for (k in o) { if (o.hasOwnProperty(k)) { oc[k] = o[k]; } }
+    oc.f = ISCC.CNMAP[f];
+    oc.size = Math.round((o.size || 32) * (o.cnScale || 0.94));
+    oc.track = (o.track === undefined) ? 0 : Math.min(o.track, 80);
+    oc.lead = (o.lead === undefined) ? undefined : Math.max(o.lead, 1.1);
+    if (o.expr) { oc.expr = o.cnExpr || o.expr; }
+    b = ISCC.text(c, name + " CN", cn, oc);
+    ISCC.P(a, "op").expression = ISCC.langExpr(false);
+    ISCC.P(b, "op").expression = ISCC.langExpr(true);
+    var r = [a, b];
+    r.en = a; r.cn = b;
+    return r;
+};
+// small tracked uppercase label (silver by default)
+ISCC.label = function (c, name, en, cn, x, y, o) {
+    var oo = { x: x, y: y, size: 22, f: "b6", track: 240, color: ISCC.COL.silver, just: "L" }, k;
+    if (o) { for (k in o) { if (o.hasOwnProperty(k)) { oo[k] = o[k]; } } }
+    return ISCC.pair(c, name, en, cn, oo);
+};
+
+// ---------------------------------------------------------------------
+// 9. TRACK MATTES / CLIPS
+// ---------------------------------------------------------------------
+// matteLayer above target; luma or alpha. Uses setTrackMatte (AE 23+) with trackMatteType fallback.
+ISCC.matte = function (target, matteLayer, kind) {
+    var ty = (kind === "luma") ? TrackMatteType.LUMA : TrackMatteType.ALPHA;
+    try { matteLayer.moveBefore(target); } catch (e0) {}
+    if (typeof target.setTrackMatte === "function") {
+        try { target.setTrackMatte(matteLayer, ty); return true; } catch (e1) {}
+    }
+    try { target.trackMatteType = ty; matteLayer.enabled = false; return true; }
+    catch (e2) { ISCC.log("track matte failed for " + target.name); return false; }
+};
+// text/shape rises from below inside a clip window (alpha matte rect)
+ISCC.clipRise = function (c, L, x, y, w, h, t, d, rise) {
+    var m = ISCC.rect(c, L.name + " clip", x, y, w, h, ISCC.COL.parchment);
+    ISCC.matte(L, m, "alpha");
+    ISCC.inFrom(L, t, d, { dy: rise || h, fade: false });
+    return m;
+};
+
+// ---------------------------------------------------------------------
+// 10. LOGO PRECOMP + PLATES + BACKGROUND DRESSING
+// ---------------------------------------------------------------------
+// four-bar crosshair-gap placeholder mark on a 240 grid: four 22x70 bars around a centre gap
+ISCC.markBars = function (L, k, col, gap, ox, oy) {
+    var o = { fill: col }, g = gap === undefined ? 24 : gap;
+    ox = ox || 0; oy = oy || 0;
+    ISCC.addRect(L, ox + (120 - 11) * k, oy + (120 - g - 70) * k, 22 * k, 70 * k, o);   // top
+    ISCC.addRect(L, ox + (120 - 11) * k, oy + (120 + g) * k, 22 * k, 70 * k, o);         // bottom
+    ISCC.addRect(L, ox + (120 - g - 70) * k, oy + (120 - 11) * k, 70 * k, 22 * k, o);   // left
+    ISCC.addRect(L, ox + (120 + g) * k, oy + (120 - 11) * k, 70 * k, 22 * k, o);         // right
+};
+ISCC.ensureLogo = function () {
+    var i, it, lc, c, L, files, imp, fl, sc;
+    if (ISCC.logoComp) { return ISCC.logoComp; }
+    for (i = 1; i <= app.project.numItems; i++) {
+        it = app.project.item(i);
+        if ((it instanceof CompItem) && it.name === ISCC.CFG.logoCompName) { ISCC.logoComp = it; return it; }
+    }
+    lc = app.project.items.addComp(ISCC.CFG.logoCompName, 1080, 1080, 1, 60, ISCC.CFG.fps);
+    lc.parentFolder = ISCC.folder("ctl");
+    try { lc.comment = "SWAP THE LOGO HERE ONCE: every ISCC template references this precomp. Drop your mark above PLACEHOLDER MARK and disable the placeholder."; } catch (e0) {}
+    c = { comp: lc, w: 1080, h: 1080, dur: 60, eg: [] };
+    L = ISCC.shapeLayer(c, "PLACEHOLDER MARK (four bars, crosshair gap)");
+    ISCC.markBars(L, 4.5, ISCC.COL.gold, 24);
+    files = ISCC.findFiles(new Folder(ISCC.here() + "/../logos"), /^mark-gold-2048.*\.png$/i, 4, []);
+    // prefer logos/placeholder/ (the neutral mark) when several directions are present
+    for (i = 0; i < files.length; i++) { if (/placeholder/i.test(files[i].fsName)) { fl = files[0]; files[0] = files[i]; files[i] = fl; break; } }
+    if (files.length > 0) {
+        imp = ISCC.importFile(files[0]);
+        if (imp) {
+            imp.parentFolder = ISCC.folder("plates");
+            fl = lc.layers.add(imp);
+            fl.name = "LOGO IMPORTED";
+            sc = 1080 / imp.width * 100;
+            ISCC.P(fl, "sc").setValue(ISCC.vec(ISCC.P(fl, "sc"), [sc, sc]));
+            ISCC.P(fl, "pos").setValue([540, 540]);
+            L.enabled = false;
+        }
+    }
+    if (files.length === 0 || !imp) {
+        ISCC.log("no ../logos/**/mark-gold-2048*.png imported: LOGO precomp shows the four-bar placeholder mark");
+        c.dur = 60;
+        ISCC.text(c, "REPLACE ME label", "LOGO (replace me)", { x: 540, y: 1040, size: 36, f: "b6", track: 240, color: ISCC.COL.silver, just: "C", eg: false });
+    }
+    ISCC.logoComp = lc;
+    return lc;
+};
+// logo instance, centred at cx,cy, size px
+ISCC.logo = function (c, name, cx, cy, size, o) {
+    var L, sc;
+    o = o || {};
+    ISCC.ensureLogo();
+    L = c.comp.layers.add(ISCC.logoComp, c.dur);
+    L.name = name;
+    sc = size / 1080 * 100;
+    ISCC.P(L, "sc").setValue(ISCC.vec(ISCC.P(L, "sc"), [sc, sc]));
+    ISCC.P(L, "pos").setValue([cx, cy]);
+    if (o.op !== undefined) { ISCC.P(L, "op").setValue(o.op); }
+    return L;
+};
+// plate: imported PNG (best aspect match whose name contains key, e.g. "beams-dark") or the labelled placeholder comp
+ISCC.plate = function (c, key, op) {
+    var it = null, best = 1e9, i, p, d, L, sc;
+    for (i = 0; i < ISCC.plates.length; i++) {
+        p = ISCC.plates[i];
+        if (String(p.name).indexOf(key) >= 0) {
+            d = Math.abs(p.width / p.height - c.w / c.h);
+            if (d < best) { best = d; it = p; }
+        }
+    }
+    if (!it) { it = ISCC.plates[0]; }
+    if (!it) { return null; }
+    L = c.comp.layers.add(it, c.dur);
+    L.name = "PLATE " + key;
+    sc = Math.max(c.w / it.width, c.h / it.height) * 100;
+    ISCC.P(L, "sc").setValue(ISCC.vec(ISCC.P(L, "sc"), [sc, sc]));
+    ISCC.P(L, "pos").setValue([c.w / 2, c.h / 2]);
+    ISCC.P(L, "op").setValue(op === undefined ? 100 : op);
+    if (c.bg) { L.moveAfter(c.bg); }
+    return L;
+};
+// diagonal light-beam pair: blue from the left, gold from the right. Static tone, slow drift.
+ISCC.beams = function (c, o) {
+    var w = c.w, h = c.h, bw, out = [], L, s;
+    o = o || {};
+    s = h * Math.tan(ISCC.CFG.slantDeg * Math.PI / 180);
+    bw = w * 0.30;
+    L = ISCC.band(c, "BEAM blue wide", -s - 80, 0, bw, h, ISCC.COL.blue, { fo: 100, op: o.blueOp || 85 });
+    out.push(L);
+    L = ISCC.band(c, "BEAM blue lit", -s + bw * 0.55, 0, bw * 0.22, h, ISCC.COL.blueLit, { fo: 100, op: 22 });
+    out.push(L);
+    L = ISCC.band(c, "BEAM gold", w - bw * 0.62 - s, 0, bw * 0.16, h, ISCC.COL.gold, { fo: 100, op: o.goldOp || 20 });
+    out.push(L);
+    if (o.drift !== false) {
+        ISCC.each(out, function (l) { ISCC.P(l, "pos").expression = "value + [Math.sin(time * 0.35) * 36, 0];"; });
+    }
+    return out;
+};
+// header strip for full screens: label left, hairline, small logo right
+ISCC.header = function (c, en, cn, o) {
+    var m = ISCC.CFG.margin * c.sx, out = [];
+    o = o || {};
+    out.push(ISCC.label(c, "HEADER", en, cn, m, 96 * c.sy + 8, { size: 24 * c.sx }));
+    out.push(ISCC.hairH(c, "HEADER rule", m, 120 * c.sy, c.w - 2 * m, ISCC.COL.gold, { so: 100 }));
+    out.push(ISCC.logo(c, "LOGO", c.w - m - 36 * c.sx, 84 * c.sy, 72 * c.sx));
+    return out;
+};
+
+// full-height slanted band that slides in (dir +1: from the left, -1: from the right) and out the far side
+ISCC.sweep = function (c, name, x, w, fill, dir, tIn, dIn, tOut, dOut, o) {
+    var s = c.h * Math.tan(ISCC.CFG.slantDeg * Math.PI / 180), D = c.w + s + w + 200, L;
+    L = ISCC.band(c, name, x, 0, w, c.h, fill, o);
+    ISCC.inFrom(L, tIn, dIn, { dx: -dir * D, fade: false });
+    if (tOut !== null && tOut !== undefined) { ISCC.outTo(L, tOut, dOut, { dx: dir * D, fade: false }); }
+    return L;
+};
+
+// ---------------------------------------------------------------------
+// 11. STANDALONE RUNNER
+// ---------------------------------------------------------------------
+ISCC.runStandalone = function (fn, label) {
+    var n0, msg;
+    app.beginUndoGroup("ISCC " + label);
+    try {
+        ISCC.setup();
+        n0 = ISCC.built.length;
+        fn();
+        msg = "ISCC " + label + ": built " + (ISCC.built.length - n0) + " comps.";
+        if (ISCC.notes.length) { msg += "\n\nNotes:\n- " + ISCC.notes.join("\n- "); }
+        alert(msg);
+    } catch (e) {
+        alert("ISCC " + label + " failed: " + e.toString() + (e.line ? " (line " + e.line + ")" : ""));
+        if (typeof ISCC_DEBUG_RETHROW !== "undefined") { app.endUndoGroup(); throw e; }
+    }
+    app.endUndoGroup();
+};
+}
