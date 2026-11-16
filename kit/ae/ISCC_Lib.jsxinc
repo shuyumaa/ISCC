@@ -68,6 +68,15 @@ ISCC.DEMO = {
     mapsCn: ["中庭", "方庭", "回廊", "档案馆", "食堂", "观星台", "船坞"],
     ptag: ["KITE", "NINEFOLD", "MOSSGLASS", "ODD1", "QUILL"]
 };
+ISCC.TEAMA = 'thisComp.layer("CONTROL").effect("Team A Colour")("Color")';
+ISCC.TEAMB = 'thisComp.layer("CONTROL").effect("Team B Colour")("Color")';
+ISCC.CLOCK = function (sl) { return 'var s = Math.max(0, Math.round(' + sl + ')); var m = Math.floor(s / 60); var r = s % 60; m + ":" + (r < 10 ? "0" : "") + r;'; };
+ISCC.MONEYFN = 'function isccM(n){var s = "" + Math.round(n), o = "", i; for (i = 0; i < s.length; i++) { if (i > 0 && (s.length - i) % 3 === 0) { o += ","; } o += s.charAt(i); } return "$" + o;}\n';
+// team colour controls for in-game comps (A = CT blue, B = T gold by default)
+ISCC.teamCtl = function (c) {
+    ISCC.addCtl(c, "Team A Colour", "ADBE Color Control", ISCC.COL.blue);
+    ISCC.addCtl(c, "Team B Colour", "ADBE Color Control", ISCC.COL.gold);
+};
 ISCC.SIDE = 'thisComp.layer("CONTROL").effect("Side Colour")("Color")';
 
 ISCC.built = [];     // registry of comps built in this run
@@ -400,6 +409,7 @@ ISCC.shapeLayer = function (c, name) {
 };
 ISCC._setCol = function (prop, col) {
     if (col === "side") { prop.expression = ISCC.SIDE; }
+    else if (typeof col === "string") { prop.expression = col; }      // any other string = raw expression
     else { prop.setValue([col[0], col[1], col[2], 1]); }
 };
 ISCC._grp = function (L, nm) {
@@ -774,6 +784,27 @@ ISCC.beams = function (c, o) {
     out.push(L);
     if (o.drift !== false) {
         ISCC.each(out, function (l) { ISCC.P(l, "pos").expression = "value + [Math.sin(time * 0.35) * 36, 0];"; });
+    }
+    return out;
+};
+// full-screen dressing: plate + beams + crop marks. returns array of layers
+ISCC.fullBg = function (c, o) {
+    var out = [], p;
+    o = o || {};
+    if (o.plate !== false) { p = ISCC.plate(c, "beams-dark", (o.plateOp === undefined) ? 30 : o.plateOp); if (p) { out.push(p); } }
+    out.push(ISCC.beams(c, o));
+    out.push(ISCC.cropMarks(c, 48 * c.sx, 40 * c.sx, ISCC.COL.silver));
+    return out;
+};
+// tabular digits: five fixed cells (d d : d d) so the timer never jitters. secExpr = expression text evaluating to seconds.
+ISCC.digits = function (c, name, cx, y, size, cell, secExpr, col) {
+    var out = [], i, xs, st, ex, L;
+    xs = [-1.75, -0.75, 0, 0.75, 1.75];
+    st = "var sec = Math.max(0, Math.ceil(" + secExpr + ")); var m = Math.floor(sec / 60) % 100; var r = sec % 60; var d = [Math.floor(m / 10), m % 10, 0, Math.floor(r / 10), r % 10];\n";
+    for (i = 0; i < 5; i++) {
+        ex = (i === 2) ? '":";' : (st + '"" + d[' + i + '];');
+        L = ISCC.text(c, name + " " + (i === 2 ? "colon" : "digit " + (i < 2 ? i + 1 : i)), "0", { x: cx + xs[i] * cell, y: y, size: size, f: "d8", just: "C", color: col || ISCC.COL.parchment, expr: ex });
+        out.push(L);
     }
     return out;
 };

@@ -216,10 +216,10 @@
       var delays = [240, 180, 120, 60, 0];
       bands.forEach(function (b, i) {
         var q = s - delays[i], x;
-        if (q < 0) x = -125;
-        else if (q < 720) x = -125 * (1 - EASE_OUT(q / 720));
+        if (q < 0) x = -170;
+        else if (q < 720) x = -170 * (1 - EASE_OUT(q / 720));
         else if (q < 1500) x = 0;
-        else { var u = Math.min(1, (q - 1500) / 420); x = 125 * u * u; }
+        else { var u = Math.min(1, (q - 1500) / 420); x = 170 * u * u; }
         b.style.transform = 'translateX(' + x.toFixed(2) + '%) skewX(-18deg)';
       });
     }
