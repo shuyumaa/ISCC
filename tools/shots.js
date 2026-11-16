@@ -16,7 +16,7 @@ const path = require('path');
   const ov = await p.evaluate(() => document.documentElement.scrollWidth - innerWidth);
   if (ov > 0) console.log('H-OVERFLOW', ov);
   for (const id of ids) {
-    await p.evaluate(i => { const e = i === 'foot' ? document.querySelector('.foot') : document.getElementById(i); const r = e.getBoundingClientRect(); scrollTo(0, r.top + scrollY - (i === 'cover' ? 0 : 60)); }, id);
+    await p.evaluate(i => { const e = i === 'foot' ? document.querySelector('.foot') : document.getElementById(i); const r = e.getBoundingClientRect(); scrollTo(0, r.top + scrollY); }, id);
     await p.waitForTimeout(id === 'cover' ? 2600 : id === 'live' ? 9000 : 1800);
     if (id === 'smoke') { await p.mouse.click(W * 0.45, H * 0.7); await p.waitForTimeout(700); }
     await p.screenshot({ path: path.join(out, `${id}-${w}-${theme}-${lang}.png`), timeout: 120000 });

@@ -1,0 +1,26 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "flat-type-hierarchy",
+        "value": "*",
+        "files": [
+          "src/page.html"
+        ],
+        "createdAt": "2026-11-16T14:26:20.441Z",
+        "reason": "agent: page.html is an unstyled source fragment; the type scale lives in src/page.css (96px display vs 15px body) and is assembled by tools/build.py"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "tools/test-cup.html"
+        ],
+        "createdAt": "2026-11-16T14:26:20.448Z",
+        "reason": "agent: worker test fixture for the cup renderer, not a shipped surface"
+      }
+    ]
+  }
+}

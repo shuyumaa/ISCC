@@ -10,6 +10,7 @@
 <!--@css-->
 </head>
 <body data-theme="dark" data-lang="en">
+<script>try{var b=document.body,m=document.querySelector('meta[name=theme-color]');if(localStorage.getItem('iscc-theme')==='light'){b.dataset.theme='light';m.content='#F2EEE3'}if(localStorage.getItem('iscc-lang')==='zh')b.dataset.lang='zh'}catch(e){}</script>
 
 <svg width="0" height="0" class="defs" aria-hidden="true" focusable="false">
   <defs>
@@ -40,6 +41,7 @@
     </symbol>
     <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M18.7 5.3l-2.1 2.1M7.4 16.6l-2.1 2.1"/></symbol>
     <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.2A8.2 8.2 0 0 1 9.8 4 8.2 8.2 0 1 0 20 14.2Z"/></symbol>
+    <symbol id="i-map" viewBox="0 0 24 24"><path d="M4 4h16v16H4zM12 4v7M4 15h8M16 11v9"/></symbol>
     <symbol id="i-copy" viewBox="0 0 24 24"><path d="M9 9h11v11H9zM5 15H4V4h11v1"/></symbol>
     <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5M4 20h16"/></symbol>
   </defs>
@@ -51,12 +53,13 @@
     <span>{{Visual concept · 26||视觉概念 · 二六}}</span>
   </a>
   <div class="bar-act">
+    <button class="btn" id="t-map" type="button" aria-expanded="false" aria-controls="radar"><svg class="ic"><use href="#i-map"/></svg><span>{{Map||地图}}</span></button>
     <button class="btn sq" id="t-theme" type="button" aria-label="Switch arena"><svg class="ic"><use href="#i-sun" class="on-dark"/><use href="#i-moon" class="on-light"/></svg></button>
     <button class="btn" id="t-lang" type="button" aria-label="Switch language"><span class="le">中文</span><span class="lz">EN</span></button>
   </div>
 </header>
 
-<nav class="radar" aria-label="Sections">
+<nav class="radar" id="radar" aria-label="Sections">
   <svg viewBox="0 0 400 400" aria-hidden="true"><use href="#map"/></svg>
   <button data-go="cover" style="--x:50%;--y:88%"><span>{{Cover||封面}}</span></button>
   <button data-go="mark" style="--x:50%;--y:66%"><span>{{Mark||徽}}</span></button>
@@ -96,7 +99,7 @@
     </svg>
     <i class="logo-slot big" aria-hidden="true"></i>
     <span class="mark-gap tag">{{The gap · 236 u||留白 · 236 u}}</span>
-    <label class="btn solid mark-load"><svg class="ic"><use href="#i-up"/></svg>{{Load your logo||载入标志}}<input type="file" id="logo-file" accept="image/svg+xml,image/png,image/webp" hidden></label>
+    <label class="btn solid mark-load"><svg class="ic"><use href="#i-up"/></svg>{{Load your logo||载入标志}}<input type="file" id="logo-file" accept="image/svg+xml,image/png,image/webp,image/jpeg" hidden></label>
     <button class="btn mark-reset" id="logo-reset" type="button" hidden>{{Reset||复位}}</button>
   </div>
   <div class="mark-side">
@@ -112,8 +115,7 @@
       <figure><i class="logo-slot" style="--s:16px"></i><figcaption>16</figcaption></figure>
       <figure><i class="logo-slot" style="--s:32px"></i><figcaption>32</figcaption></figure>
       <figure><i class="logo-slot" style="--s:64px"></i><figcaption>64</figcaption></figure>
-      <figure><i class="logo-slot" style="--s:96px"></i><figcaption>96</figcaption></figure>
-    </div>
+          </div>
     <div class="brief">
       <span class="tag">{{Brief for the image model||给生成模型的简报}}</span>
       <p id="brief-text">Flat vector emblem for a school esports championship. One solid shape, one colour: gold #C9A44C on black #0B0D10. Idea: a crosshair of four bars whose centre gap holds a trophy cup. Heavy condensed geometry, optical curves, visible stroke contrast. No gradients, no lettering, no 3D, no shadows, no weapons, no game logos. Legible at 16 px. Square canvas, centred, wide margin.</p>
@@ -131,19 +133,19 @@
     <div class="rig-read tag"><span>{{Rig||灯架}}</span><b id="rig-deg">+00.0°</b></div>
     <div class="rig-sides tag"><span class="s-ct">CT · {{Legacy Blue||藏蓝}}</span><span class="s-t">T · {{Cup Gold||鎏金}}</span></div>
     <h2>{{Light takes<br>sides.||光，<br>分两路。}}</h2>
-    <p class="rig-how tag">{{Move to steer · click to flash||移动控光 · 点击闪光}}</p>
+    <p class="rig-how tag"><span class="rm-off">{{Move to steer · click to flash||移动控光 · 点击闪光}}</span><span class="rm-on">{{Static frame · reduced motion||静态画面 · 减弱动效}}</span></p>
   </div>
 </section>
 
 <!-- ───────────── SMOKE / GLASS ───────────── -->
 <section id="smoke" class="sec smoke">
   <svg class="arc" id="arc-smoke" viewBox="0 0 1200 420" aria-hidden="true">
-    <mask id="arc-m1" maskUnits="userSpaceOnUse" x="0" y="-200" width="1200" height="700"><path class="arc-mask" pathLength="1" d="M470 150 Q 760 -110 880 300"/></mask>
-    <mask id="arc-m2" maskUnits="userSpaceOnUse" x="0" y="-200" width="1200" height="700"><path class="arc-mask" pathLength="1" d="M880 300 Q 940 236 1010 352"/></mask>
-    <path class="arc-line" mask="url(#arc-m1)" pathLength="1" d="M470 150 Q 760 -110 880 300"/>
-    <path class="arc-line" mask="url(#arc-m2)" pathLength="1" d="M880 300 Q 940 236 1010 352"/>
-    <g class="arc-ring"><circle cx="1010" cy="352" r="26"/><circle cx="1010" cy="352" r="5"/></g>
-    <circle class="arc-bounce" cx="880" cy="300" r="5"/>
+    <mask id="arc-m1" maskUnits="userSpaceOnUse" x="0" y="-200" width="1200" height="700"><path class="arc-mask" pathLength="1" d="M150 372 Q 420 -90 700 200"/></mask>
+    <mask id="arc-m2" maskUnits="userSpaceOnUse" x="0" y="-200" width="1200" height="700"><path class="arc-mask" pathLength="1" d="M700 200 Q 750 150 800 262"/></mask>
+    <path class="arc-line" mask="url(#arc-m1)" pathLength="1" d="M150 372 Q 420 -90 700 200"/>
+    <path class="arc-line" mask="url(#arc-m2)" pathLength="1" d="M700 200 Q 750 150 800 262"/>
+    <g class="arc-ring"><circle cx="800" cy="262" r="26"/><circle cx="800" cy="262" r="5"/></g>
+    <circle class="arc-bounce" cx="700" cy="200" r="5"/>
   </svg>
   <div class="smoke-head">
     <h2>{{Shoot the<br>smoke.||破雾<br>见金。}}</h2>
@@ -184,26 +186,28 @@
 
 <!-- ───────────── LIVE ───────────── -->
 <section id="live" class="sec live">
-  <div class="live-head">
-    <h2>{{Live from<br>the final.||决赛，<br>直播中。}}</h2>
-    <p class="lead">{{One scripted round, looping. Kestrels defend in blue; Lanterns attack in gold.||一局循环演示。Kestrels 蓝方防守，Lanterns 金方进攻。}}</p>
-  </div>
-  <div class="live-frame">
+  <div class="live-stage">
+    <div class="live-head"><h2>{{Live from<br>the final.||决赛，<br>直播中。}}</h2></div>
+    <div class="live-frame">
 <!--@hud-->
+    </div>
   </div>
-  <ul class="live-kit tag">
-    <li>{{Scorebug||比分条}}</li><li>{{Killfeed||击杀信息}}</li><li>{{Lower third||人名条}}</li><li>{{Veto strip||禁选条}}</li><li>{{Economy||经济}}</li><li>{{Round history||回合记录}}</li><li>{{Stinger||转场}}</li>
-  </ul>
+  <div class="live-foot">
+    <p class="lead">{{One scripted round, looping. Kestrels defend in blue; Lanterns attack in gold.||一局循环演示。Kestrels 蓝方防守，Lanterns 金方进攻。}}</p>
+    <ul class="live-kit tag">
+      <li>{{Scorebug||比分条}}</li><li>{{Killfeed||击杀信息}}</li><li>{{Lower third||人名条}}</li><li>{{Veto strip||禁选条}}</li><li>{{Economy||经济}}</li><li>{{Round history||回合记录}}</li><li>{{Stinger||转场}}</li>
+    </ul>
+  </div>
 </section>
 
 <!-- ───────────── COLOR ───────────── -->
 <section id="color" class="sec color">
-  <div class="color-head">
+  <div class="ratio">
+    <div class="r-k">
+      <div class="color-head">
     <h2>{{Blue defends.<br>Gold attacks.||蓝守，<br>金攻。}}</h2>
     <p class="lead">{{The plate below is the ratio: 70 arena, 20 depth, 10 metal.||下方版面即比例：七成场、二成深、一成金。}}</p>
   </div>
-  <div class="ratio">
-    <div class="r-k">
       <button class="sw sw-k" data-hex="#0B0D10" type="button"><span class="tag">70</span><b>{{Arena Black||玄黑}}</b><code>#0B0D10</code></button>
       <div class="r-n">
         <button class="sw sw-p" data-hex="#EFE9DA" type="button"><b>{{Parchment||素绢}}</b><code>#EFE9DA</code></button>
@@ -246,16 +250,16 @@
       <i class="logo-slot"></i>
       <b class="po-v" lang="zh-Hans">百炼成徽</b>
       <div class="po-f"><span>GRAND FINAL</span><span>26</span></div>
-      <span class="po-l tl">{{Key art||主视觉}}</span>
     </article>
     <article class="po po-team">
       <div class="po-big" aria-hidden="true">KES</div>
       <svg class="po-spray" viewBox="0 0 120 300" aria-hidden="true"></svg>
+      <i class="logo-slot po-slot"></i>
       <div class="po-t"><b>KESTRELS</b><span>Harbour Collegiate <i lang="zh-Hans">海港书院</i></span></div>
       <ol><li>kite</li><li>ninefold</li><li>mossglass</li><li>odd1</li><li>quill</li></ol>
-      <span class="po-l tl">CT · {{Team card||战队卡}}</span>
     </article>
     <article class="po po-veto">
+      <i class="logo-slot po-slot"></i>
       <div class="po-vh"><b>{{VETO||禁选}}</b><span>BO3 · {{Semi-final||半决赛}}</span></div>
       <ul>
         <li class="ban"><b>REFECTORY</b><i lang="zh-Hans">膳堂</i><em>KES</em></li>
@@ -266,13 +270,11 @@
         <li class="ban"><b>OBSERVATORY</b><i lang="zh-Hans">观星台</i><em>LAN</em></li>
         <li class="dec"><b>QUAD</b><i lang="zh-Hans">方院</i><em>{{DECIDER||决胜}}</em></li>
       </ul>
-      <span class="po-l tl">{{Map veto||地图禁选}}</span>
     </article>
     <article class="po po-cn">
       <svg class="po-arc" viewBox="0 0 300 400" aria-hidden="true"><path pathLength="1" d="M20 380 Q 150 -120 262 250"/><circle cx="262" cy="250" r="16"/><circle cx="262" cy="250" r="3.5"/></svg>
       <b class="po-v2" lang="zh-Hans"><span>金杯为证</span><span>万国同场</span></b>
-      <div class="po-f"><span>ONE CUP. EVERY NATION.</span></div>
-      <span class="po-l tl">{{Couplet||对联}}</span>
+      <div class="po-f"><span>ONE CUP. EVERY NATION.</span><i class="logo-slot"></i></div>
     </article>
   </div>
 </section>
@@ -285,7 +287,7 @@
     <p>{{Concept only. Every school, team, player, map and result on this page is invented. Not affiliated with or endorsed by Valve.||纯属概念设计。页面中的学校、战队、选手、地图与赛果均为虚构，与 Valve 无任何关联。}}</p>
     <button class="btn" id="tok-copy" type="button"><svg class="ic"><use href="#i-copy"/></svg>{{Copy tokens||复制色板变量}}</button>
   </div>
-  <div class="foot-r tag"><span>ISCC · 26</span><span lang="zh-Hans">百炼成徽</span><span>Big Shoulders · Archivo · Noto Serif SC · Noto Sans SC — OFL</span></div>
+  <div class="foot-r tag"><i class="logo-slot"></i><span>ISCC · 26</span><span lang="zh-Hans">百炼成徽</span><span>Big Shoulders · Archivo · Noto Serif SC · Noto Sans SC — OFL</span></div>
 </footer>
 
 <div class="stinger" aria-hidden="true"><i></i><i></i><i></i><i></i></div>

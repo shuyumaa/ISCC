@@ -151,7 +151,6 @@
     var E = endAt(), cw = ctWins();
     events = [
       [60, function () { frame.classList.add('is-in'); }],
-      [350, function () { tw(800, function (p) { setNum(el$.nCt, Math.round(scoreCt * ease(p))); setNum(el$.nT, Math.round(scoreT * ease(p))); }); }],
       [LIVE_AT, function () { }]
     ];
     KILLS.forEach(function (k) { events.push([k[0], function () { addKill(k, true); }]); });
@@ -177,7 +176,7 @@
     el$.run.classList.remove('go');
     rows.forEach(function (r) { r.node.remove(); }); rows = []; tweens = [];
     scoreCt = 7; scoreT = 6;
-    setNum(el$.nCt, 0); setNum(el$.nT, 0);
+    setNum(el$.nCt, 7); setNum(el$.nT, 6);
     el$.nCt.classList.remove('bump'); el$.nT.classList.remove('bump');
     lastClk = ''; setClock(TIMER0);
     lastRing = ''; setRing(40);

@@ -9,7 +9,7 @@ const srv = http.createServer((req, res) => {
   res.writeHead(200, { 'content-type': MIME[path.extname(f)] || 'application/octet-stream' });
   fs.createReadStream(f).pipe(res);
 });
-const shots = [
+const shots = process.env.ONLY ? [[390,'dark','zh']] : [
   [1440, 'dark', 'en'], [1440, 'light', 'zh'], [960, 'dark', 'en'], [960, 'light', 'zh'],
   [700, 'dark', 'zh'], [390, 'dark', 'zh'], [390, 'light', 'en'],
 ];
@@ -37,6 +37,7 @@ const moments = [[4000, 'live'], [10000, 'bomb'], [14350, 'stinger'], [17500, 'a
     console.log(w, theme, lang, 'console errors:', errs.length ? errs : 'none');
     await ctx.close();
   }
+  if (process.env.ONLY) { await b.close(); srv.close(); return; }
   // layout stability: toggle lang + theme, compare rects (frozen frame)
   for (const w of [1160, 700, 390]) {
     const ctx = await b.newContext({ viewport: { width: w, height: 800 } });

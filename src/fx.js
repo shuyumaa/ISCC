@@ -49,9 +49,9 @@
     '  vec3 I=base*vec3(mR,mG,mB);',
     '  float isB=1.-step(.5,K.x);float isG=step(.5,K.x)*(1.-step(1.5,K.x));float isA=step(1.5,K.x);',
     '  vec3 c=isB*vec3(.282,.408,.643)+isG*vec3(.788,.643,.298)+isA*vec3(.604,.639,.698);',
-    '  vec3 tn=isB*vec3(.46,.56,.76)+isG*vec3(.50,.38,.10)+isA*vec3(.66,.68,.74);',
+    '  vec3 tn=isB*vec3(.36,.48,.74)+isG*vec3(.56,.43,.17)+isA*vec3(.72,.74,.78);',
     '  acc+=c*I;',
-    '  mul*=1.-(1.-tn)*clamp(I,0.,1.2)*.72;',
+    '  mul*=pow(tn,clamp(I,0.,1.3)*.85);',
     '  bS+=isB*I.g;gS+=isG*I.g;aS+=isA*I.g;',
     ' }',
     ' float ov=clamp(2.*bS*gS/(bS+gS+.05),0.,1.5);',
@@ -87,8 +87,9 @@
     /* light: multiply light on porcelain */
     ' vec3 G=vec3(.914,.882,.804);',
     ' vec3 lcol=G*mul;',
-    ' float w=clamp(smoothstep(.0,2.2,ov)*.4+halo*.9,0.,1.);',
-    ' lcol=mix(lcol,vec3(.972,.953,.90),w*w*.8);',
+    ' float h2=(exp(-r*r*9.)*.95+exp(-r*2.2)*.2)*(.35+.65*meet);',
+    ' float w=clamp(smoothstep(.0,2.4,ov)*.45+h2*1.25,0.,1.);',
+    ' lcol=mix(lcol,vec3(.985,.972,.935),w);',
     ' lcol=mix(lcol,vec3(1.,.98,.94),clamp(dv2*.7,0.,.7));',
     ' lcol=mix(lcol,vec3(.99,.97,.92),uFlash*.45*(.4+meet));',
     ' lcol*=1.-.14*dot(vv,vv);',
@@ -286,7 +287,7 @@
     var intensity = opts.intensity == null ? 1 : opts.intensity;
     var goal = [home[0], home[1]], cur = [home[0], home[1]];
     var themeGoal = themeVal(opts.theme), themeMix = themeGoal;
-    var flashT0 = -1;
+    var flashT0 = -1, flashPrev = 0, flashLock = 0;
     /* x, y (normalised, above/outside top), tan half-width, phase | type, strength */
     var SH = [
       [-0.08, -0.30, 0.085, 0.0, 0, 1.0], [0.20, -0.42, 0.060, 1.9, 0, 0.9],
@@ -310,8 +311,11 @@
         if (Math.abs(themeGoal - themeMix) < 0.002) themeMix = themeGoal;
         if (flashT0 >= 0) {
           var d = (performance.now() - flashT0) / 1000;
-          if (d < 0.08) { var x = d / 0.08; flashV = x * x * (3 - 2 * x); }
-          else { flashV = Math.exp(-(d - 0.08) * 4.6); if (flashV < 0.01) { flashV = 0; flashT0 = -1; } }
+          var env;
+          if (d < 0.08) { var x = d / 0.08; env = x * x * (3 - 2 * x); }
+          else env = Math.exp(-(d - 0.08) * 4.6);
+          flashV = Math.max(env, flashPrev * Math.exp(-d * 4.6));
+          if (d > 0.08 && flashV < 0.01) { flashV = 0; flashT0 = -1; flashPrev = 0; }
         }
       },
       set: function (gl, loc, aspect) {
@@ -325,9 +329,14 @@
     });
     if (!rt.ok) return noopCtl('beams');
     return {
-      pointer: function (nx, ny) { goal[0] = clamp01(nx); goal[1] = clamp01(ny); rt.request(); },
-      release: function () { goal[0] = home[0]; goal[1] = home[1]; rt.request(); },
-      flash: function () { if (rt.reduced) return; flashT0 = performance.now(); rt.request(); },
+      pointer: function (nx, ny) { if (rt.reduced) return; goal[0] = clamp01(nx); goal[1] = clamp01(ny); rt.request(); },
+      release: function () { if (rt.reduced) return; goal[0] = home[0]; goal[1] = home[1]; rt.request(); },
+      flash: function () {
+        if (rt.reduced) return;
+        var n = performance.now();
+        if (n < flashLock) return;
+        flashLock = n + 700; flashPrev = flashV; flashT0 = n; rt.request();
+      },
       theme: function (n) { themeGoal = themeVal(n); rt.request(); },
       destroy: function () { rt.destroy(); }
     };
@@ -382,6 +391,7 @@
         rt.request();
       },
       pointer: function (nx, ny) {
+        if (rt.reduced) return;
         var on = nx >= 0 && nx <= 1 && ny >= 0 && ny <= 1;
         if (on && !ptrOn) { cur[0] = nx; cur[1] = ny; }
         ptrOn = on; if (on) { goal[0] = nx; goal[1] = ny; }

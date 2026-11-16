@@ -15,8 +15,7 @@ function copy(text,en,zh){
 /* arena + tongue */
 function setTheme(t){B.dataset.theme=t;store.set('iscc-theme',t);$('meta[name=theme-color]').content=t==='light'?'#F2EEE3':'#0B0D10';fx.forEach(function(c){if(c&&c.theme)c.theme(t)})}
 function setLang(l){B.dataset.lang=l;store.set('iscc-lang',l);document.documentElement.lang=l==='zh'?'zh-Hans':'en';document.title=l==='zh'?'ISCC — 视觉概念':'ISCC — Visual Concept'}
-setLang(store.get('iscc-lang')==='zh'?'zh':'en');
-B.dataset.theme=store.get('iscc-theme')==='light'?'light':'dark';
+setLang(B.dataset.lang==='zh'?'zh':'en');
 $('#t-theme').onclick=function(){setTheme(B.dataset.theme==='dark'?'light':'dark')};
 $('#t-lang').onclick=function(){setLang(B.dataset.lang==='en'?'zh':'en')};
 
@@ -28,7 +27,7 @@ function norm(e,el){var r=el.getBoundingClientRect();return [(e.clientX-r.left)/
     fx.push(F.beams($('#fx-cover'),{target:[.5,.74],theme:th,intensity:1}));
     var rig=$('#rig'),rb=F.beams($('#fx-rig'),{target:[.5,.8],theme:th,intensity:1.1}),deg=$('#rig-deg');fx.push(rb);
     var read=function(v){deg.textContent=(v<0?'−':'+')+('0'+Math.abs(v).toFixed(1)).slice(-4)+'°'};
-    rig.addEventListener('pointermove',function(e){var p=norm(e,rig);rb.pointer(p[0],p[1]);read((p[0]-.5)*26)});
+    rig.addEventListener('pointermove',function(e){if(RM)return;var p=norm(e,rig);rb.pointer(p[0],p[1]);read((p[0]-.5)*26)});
     rig.addEventListener('pointerleave',function(){rb.release();read(0)});
     rig.addEventListener('click',function(){rb.flash()});
     F.beams($('#fx-poster'),{target:[.5,.6],theme:'dark',intensity:1.15});
@@ -48,7 +47,7 @@ function norm(e,el){var r=el.getBoundingClientRect();return [(e.clientX-r.left)/
 
 /* tactical feed behind the HUD: authored map, never a real one */
 var feed=$('.bc-feed');
-if(feed){feed.innerHTML='<svg class="feed-map" viewBox="-190 -30 780 460" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#map" width="400" height="400"/>'
+if(feed){feed.innerHTML='<svg class="feed-map" viewBox="-330 -160 1060 596" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#map" width="400" height="400"/>'
  +'<g class="feed-lbl"><text x="330" y="48">A · ATRIUM</text><text x="34" y="60">B · ARCHIVE</text><text x="212" y="214">QUAD</text><text x="352" y="250">CLOISTER</text><text x="18" y="300">STACKS</text><text x="166" y="394">GATE</text><text x="170" y="30">HALL</text></g>'
  +'<g class="feed-ct"><path d="M312 100h9v9h-9zM346 72h9v9h-9zM196 112h9v9h-9zM70 96h9v9h-9zM92 124h9v9h-9z"/></g>'
  +'<g class="feed-t"><circle cx="338" cy="262" r="5"/><circle cx="330" cy="300" r="5"/><circle cx="200" cy="262" r="5"/><circle cx="214" cy="300" r="5"/><circle cx="74" cy="316" r="5"/></g>'
@@ -57,9 +56,29 @@ if(feed){feed.innerHTML='<svg class="feed-map" viewBox="-190 -30 780 460" preser
 
 /* the logo slot */
 function setLogo(url){if(url){B.style.setProperty('--logo','url("'+url+'")');B.classList.add('has-logo')}else{B.style.removeProperty('--logo');B.classList.remove('has-logo')}$('#logo-reset').hidden=!url}
-function readLogo(f){if(!f||!/^image\/(svg\+xml|png|webp)$/.test(f.type)){toast('Use an SVG or a transparent PNG','请使用 SVG 或透明 PNG');return}
-  if(f.size>700000){toast('Keep the file under 700 KB','文件请小于 700 KB');return}
-  var r=new FileReader();r.onload=function(){setLogo(r.result);store.set('iscc-logo',r.result);toast('Logo loaded','标志已载入')};r.readAsDataURL(f)}
+/* An image model returns an opaque picture; the slot is an alpha mask. So every file is
+   redrawn: background keyed out when the corners are opaque, trimmed, scaled to 512. */
+function prepLogo(img){
+  var S=512,k=Math.min(1,S/Math.max(img.naturalWidth||S,img.naturalHeight||S)),w=Math.max(1,Math.round((img.naturalWidth||S)*k)),h=Math.max(1,Math.round((img.naturalHeight||S)*k));
+  var c=document.createElement('canvas');c.width=w;c.height=h;var x=c.getContext('2d');x.drawImage(img,0,0,w,h);
+  var d=x.getImageData(0,0,w,h),q=d.data,i,cs=[0,(w-1)*4,(h-1)*w*4,(h*w-1)*4],opaque=cs.every(function(o){return q[o+3]>250});
+  if(opaque){var br=0,bg=0,bb=0;cs.forEach(function(o){br+=q[o]/4;bg+=q[o+1]/4;bb+=q[o+2]/4});
+    for(i=0;i<q.length;i+=4){var dr=q[i]-br,dg=q[i+1]-bg,db=q[i+2]-bb,dist=Math.sqrt(dr*dr+dg*dg+db*db)/255;q[i+3]=Math.max(0,Math.min(1,(dist-.1)/.22))*255}}
+  var x0=w,y0=h,x1=-1,y1=-1,px,py;
+  for(py=0;py<h;py++)for(px=0;px<w;px++){if(q[(py*w+px)*4+3]>24){if(px<x0)x0=px;if(px>x1)x1=px;if(py<y0)y0=py;if(py>y1)y1=py}}
+  if(x1<0)return null;
+  x.putImageData(d,0,0);
+  var bw=x1-x0+1,bh=y1-y0+1,m=Math.max(bw,bh),o=document.createElement('canvas');o.width=o.height=m;
+  o.getContext('2d').drawImage(c,x0,y0,bw,bh,(m-bw)/2,(m-bh)/2,bw,bh);
+  return o.toDataURL('image/png');
+}
+function readLogo(f){if(!f||!/^image\/(svg\+xml|png|webp|jpeg)$/.test(f.type)){toast('Use an SVG, PNG, WebP or JPEG','请使用 SVG、PNG、WebP 或 JPEG');return}
+  var r=new FileReader();r.onload=function(){var img=new Image();
+    img.onload=function(){var url=null;try{url=prepLogo(img)}catch(e){}
+      if(!url){toast('That file has no visible shape','文件中没有可见图形');return}
+      setLogo(url);store.set('iscc-logo',url);toast('Logo loaded','标志已载入')};
+    img.onerror=function(){toast('That file could not be read','文件无法读取')};img.src=r.result};
+  r.readAsDataURL(f)}
 var saved=store.get('iscc-logo');if(saved)setLogo(saved);
 $('#logo-file').onchange=function(e){readLogo(e.target.files[0]);e.target.value=''};
 $('#logo-reset').onclick=function(){setLogo(null);store.set('iscc-logo',null)};
@@ -79,6 +98,7 @@ var sprays=$$('.spray');
 sprays.forEach(function(el){SPRAY.forEach(function(p){var d=document.createElement('i');d.style.left='calc(50% + '+(p[0]*2.2)+'px)';d.style.top=(118+p[1])+'px';el.appendChild(d)})});
 var ps=$('.po-spray');if(ps){ps.innerHTML=SPRAY.map(function(p,i){return '<circle cx="'+(60+p[0])+'" cy="'+(290+p[1]*2.5)+'" r="'+(i<7?3.6:2.8)+'"/>'}).join('')}
 
+B.classList.add('js');
 /* scroll: arcs draw, spray fires, type slides, radar tracks */
 var arc=$('#arc-smoke'),la=arc?$$('.arc-mask',arc):[],tya=$('.ty-a'),tyb=$('.ty-b'),secs=$$('main>section'),dots=$$('.radar button'),ratio=$('.ratio');
 function prog(el,a,b){var r=el.getBoundingClientRect(),vh=innerHeight;return Math.max(0,Math.min(1,(vh*a-r.top)/(vh*(a-b))))}
@@ -95,11 +115,19 @@ function onScroll(){
 var tick=false;addEventListener('scroll',function(){if(!tick){tick=true;requestAnimationFrame(function(){tick=false;onScroll()})}},{passive:true});
 addEventListener('resize',onScroll);onScroll();
 
+/* radar */
+var tmap=$('#t-map');
+function radar(open){B.classList.toggle('radar-open',open);tmap.setAttribute('aria-expanded',open)}
+tmap.onclick=function(e){e.stopPropagation();radar(!B.classList.contains('radar-open'))};
+document.addEventListener('click',function(e){if(B.classList.contains('radar-open')&&!e.target.closest('.radar'))radar(false)});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&B.classList.contains('radar-open')){radar(false);tmap.focus()}});
+
 /* stinger between plates */
-var st=$('.stinger');
-function go(id){var t=document.getElementById(id);if(!t)return;var y=t.getBoundingClientRect().top+scrollY-(id==='cover'?0:20);
+var st=$('.stinger'),stA,stB;
+function go(id){var t=document.getElementById(id);if(!t)return;radar(false);var y=t.getBoundingClientRect().top+scrollY;
   if(RM){scrollTo(0,y);return}
+  clearTimeout(stA);clearTimeout(stB);
   st.classList.remove('go');void st.offsetWidth;st.classList.add('go');
-  setTimeout(function(){scrollTo(0,y)},430);setTimeout(function(){st.classList.remove('go')},1300)}
+  stA=setTimeout(function(){scrollTo(0,y)},260);stB=setTimeout(function(){st.classList.remove('go')},1300)}
 $$('[data-go]').forEach(function(b){b.addEventListener('click',function(e){e.preventDefault();go(b.dataset.go)})});
 })();
