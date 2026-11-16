@@ -1,0 +1,111 @@
+<div class="bc" id="broadcast" role="img" aria-label="ISCC broadcast HUD kit: scorebug, killfeed, lower third, map veto, economy, round history, stinger">
+  <div class="bc-frame">
+
+    <!-- host inserts tactical map / canvas here -->
+    <div class="bc-feed" aria-hidden="true"></div>
+
+    <!-- round history: MR12, two halves of 12 -->
+    <div class="bc-hist" aria-hidden="true">
+      <span class="lbl h-l"><span class="le">1H</span><span class="lz">上半</span></span>
+      <span class="h-pips"><i class="hp c"></i><i class="hp t"></i><i class="hp c"></i><i class="hp c"></i><i class="hp t"></i><i class="hp t"></i><i class="hp c"></i><i class="hp t"></i><i class="hp c"></i><i class="hp t"></i><i class="hp t"></i><i class="hp c"></i></span>
+      <i class="h-div"></i>
+      <span class="h-pips"><i class="hp c"></i><i class="hp now"></i><i class="hp"></i><i class="hp"></i><i class="hp"></i><i class="hp"></i><i class="hp"></i><i class="hp"></i><i class="hp"></i><i class="hp"></i><i class="hp"></i><i class="hp"></i></span>
+      <span class="lbl h-l h-r"><span class="le">2H</span><span class="lz">下半</span></span>
+    </div>
+
+    <!-- scorebug -->
+    <div class="bc-sb">
+      <div class="sb-team sb-ct">
+        <div class="sb-main">
+          <div class="sb-meta">
+            <div class="lbl sb-name"><span class="le">KESTRELS</span><span class="lz">红隼</span></div>
+            <div class="sb-school"><span class="le">Harbour Collegiate</span><span class="lz">海港书院</span></div>
+          </div>
+          <div class="sb-tag">KES</div>
+        </div>
+        <div class="sb-pips"><i class="pip"></i><i class="pip"></i><i class="pip"></i><i class="pip"></i><i class="pip"></i></div>
+      </div>
+
+      <div class="sb-mid">
+        <div class="sb-lbl">
+          <span class="lbl l l-def"><span>MR12 · </span><span class="le">ROUND 14</span><span class="lz">第14局</span></span>
+          <span class="lbl l l-bomb"><span class="le">BOMB PLANTED</span><span class="lz">炸弹已安放</span></span>
+        </div>
+        <div class="sb-score"><b class="n n-ct">7</b><i>:</i><b class="n n-t">6</b></div>
+        <div class="sb-clock">
+          <span class="clk">1:55</span>
+          <span class="ring-w">
+            <svg viewBox="0 0 48 48" aria-hidden="true"><circle class="rg-track" cx="24" cy="24" r="21"/><circle class="rg-arc" cx="24" cy="24" r="21"/></svg>
+            <span class="ring-n">40</span>
+          </span>
+        </div>
+      </div>
+
+      <div class="sb-team sb-t">
+        <div class="sb-main">
+          <div class="sb-tag">LAN</div>
+          <div class="sb-meta">
+            <div class="lbl sb-name"><span class="le">LANTERNS</span><span class="lz">灯笼</span></div>
+            <div class="sb-school"><span class="le">Northgate Academy</span><span class="lz">北门学堂</span></div>
+          </div>
+        </div>
+        <div class="sb-pips"><i class="pip"></i><i class="pip"></i><i class="pip"></i><i class="pip"></i><i class="pip"></i></div>
+      </div>
+    </div>
+
+    <!-- killfeed -->
+    <div class="bc-kf" aria-hidden="true"></div>
+
+    <!-- lower third -->
+    <div class="bc-l3 t" data-player="ember">
+      <i class="l3-bar"></i>
+      <div class="l3-in">
+        <div class="l3-h">ember</div>
+        <div class="lbl l3-sub"><span class="l3-sc"><span class="f"><span class="le">Northgate Academy</span><span class="lz">北门学堂</span></span><span class="s">LAN</span></span><span> · </span><span class="l3-role"><span class="le">ENTRY</span><span class="lz">突破手</span></span></div>
+        <div class="l3-stats">
+          <div class="l3-st"><b class="l3-k">17</b><span class="lbl"><span class="le">K</span><span class="lz">击杀</span></span></div>
+          <div class="l3-st"><b class="l3-d">11</b><span class="lbl"><span class="le">D</span><span class="lz">死亡</span></span></div>
+          <div class="l3-st"><b class="l3-a">81.4</b><span class="lbl"><span class="le">ADR</span><span class="lz">场均伤害</span></span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- economy -->
+    <div class="bc-eco">
+      <div class="eco-r eco-ct" style="--p:.697">
+        <span class="lbl eco-tag">KES</span>
+        <span class="eco-bar"><i class="eco-fill"></i></span>
+        <b class="eco-v">$11,400</b>
+      </div>
+      <div class="eco-r eco-t" style="--p:.447">
+        <span class="lbl eco-tag">LAN</span>
+        <span class="eco-bar"><i class="eco-fill"></i></span>
+        <b class="eco-v">$7,600</b>
+      </div>
+      <div class="eco-s" aria-hidden="true">
+        <i class="tk" style="left:0"></i><i class="tk" style="left:21.05%"></i><i class="tk" style="left:47.37%"></i><i class="tk" style="left:73.68%"></i><i class="tk" style="left:100%"></i>
+        <span class="lbl tl tl-a">$800</span><span class="lbl tl tl-m">$8K</span><span class="lbl tl tl-z"><span class="f">$16,000</span><span class="s">$16K</span></span>
+      </div>
+    </div>
+
+    <!-- map veto -->
+    <ol class="bc-veto" aria-label="Map veto">
+      <li class="vt ban" data-s="ct"><span class="vt-n"><span class="le"><span class="f">ATRIUM</span><span class="s">ATR</span></span><span class="lz">中庭</span></span><span class="lbl vt-s"><span class="vt-st"><span class="le"><span class="f">BAN</span><span class="s">BAN</span></span><span class="lz">禁用</span></span><span class="vt-by">KES</span></span></li>
+      <li class="vt ban" data-s="t"><span class="vt-n"><span class="le"><span class="f">QUAD</span><span class="s">QUA</span></span><span class="lz">方院</span></span><span class="lbl vt-s"><span class="vt-st"><span class="le"><span class="f">BAN</span><span class="s">BAN</span></span><span class="lz">禁用</span></span><span class="vt-by">LAN</span></span></li>
+      <li class="vt pick" data-s="ct"><span class="vt-n"><span class="le"><span class="f">CLOISTER</span><span class="s">CLO</span></span><span class="lz">回廊</span></span><span class="lbl vt-s"><span class="vt-st"><span class="le"><span class="f">PICK</span><span class="s">PICK</span></span><span class="lz">选择</span></span><span class="vt-by">KES</span></span></li>
+      <li class="vt pick" data-s="t"><span class="vt-n"><span class="le"><span class="f">ARCHIVE</span><span class="s">ARC</span></span><span class="lz">档案馆</span></span><span class="lbl vt-s"><span class="vt-st"><span class="le"><span class="f">PICK</span><span class="s">PICK</span></span><span class="lz">选择</span></span><span class="vt-by">LAN</span></span></li>
+      <li class="vt ban" data-s="ct"><span class="vt-n"><span class="le"><span class="f">REFECTORY</span><span class="s">REF</span></span><span class="lz">膳堂</span></span><span class="lbl vt-s"><span class="vt-st"><span class="le"><span class="f">BAN</span><span class="s">BAN</span></span><span class="lz">禁用</span></span><span class="vt-by">KES</span></span></li>
+      <li class="vt ban" data-s="t"><span class="vt-n"><span class="le"><span class="f">OBSERVATORY</span><span class="s">OBS</span></span><span class="lz">观星台</span></span><span class="lbl vt-s"><span class="vt-st"><span class="le"><span class="f">BAN</span><span class="s">BAN</span></span><span class="lz">禁用</span></span><span class="vt-by">LAN</span></span></li>
+      <li class="vt decider" data-s="x"><span class="vt-n"><span class="le"><span class="f">BOATHOUSE</span><span class="s">BOA</span></span><span class="lz">船坞</span></span><span class="lbl vt-s"><span class="vt-st"><span class="le"><span class="f">DECIDER</span><span class="s">DEC</span></span><span class="lz">决胜</span></span></span></li>
+    </ol>
+
+    <!-- stinger -->
+    <div class="bc-stinger" aria-hidden="true">
+      <div class="st-run">
+        <i class="st-b st-t4"></i><i class="st-b st-t3"></i><i class="st-b st-t2"></i><i class="st-b st-t1"></i><i class="st-b st-m"></i>
+        <div class="st-tag"><div class="st-win">KES</div><div class="lbl st-sub"></div></div>
+      </div>
+    </div>
+
+  </div>
+</div>

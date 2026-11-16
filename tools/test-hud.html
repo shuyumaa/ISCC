@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ISCC HUD test</title>
+<link rel="stylesheet" href="../src/tokens.css">
+<link rel="stylesheet" href="fonts-v1.css">
+<link rel="stylesheet" href="../src/hud.css">
+<style>
+  html{background:var(--ground)}
+  body{margin:0;padding:24px 16px;background:var(--ground);color:var(--ink);font-family:var(--fb)}
+  .wrap{max-width:1160px;margin:0 auto}
+  .ph{position:absolute;inset:0;width:100%;height:100%;fill:none;stroke:var(--edge);stroke-width:1}
+  .ph .k{stroke:var(--hair)}
+</style>
+</head>
+<body>
+<div class="wrap" id="mount"></div>
+<script>
+  var q = new URLSearchParams(location.search);
+  document.body.dataset.theme = q.get('theme') === 'light' ? 'light' : 'dark';
+  document.body.dataset.lang = q.get('lang') === 'zh' ? 'zh' : 'en';
+  document.documentElement.lang = document.body.dataset.lang === 'zh' ? 'zh-CN' : 'en';
+  // serve over http (file:// blocks fetch)
+  fetch('../src/hud.html').then(function (r) { return r.text(); }).then(function (h) {
+    document.getElementById('mount').innerHTML = h;
+    // test-only placeholder for the host's tactical canvas: abstract hairline schematic
+    var feed = document.querySelector('.bc-feed');
+    feed.innerHTML = '<svg class="ph" viewBox="0 0 160 90" preserveAspectRatio="xMidYMid slice" aria-hidden="true">' +
+      '<path d="M20 20h50v20h-20v30h-30zM90 14h52v24h-14v14h-38zM84 56h58v22h-58z"/>' +
+      '<path class="k" d="M20 20l30 20M90 38l38 18M70 40l14 16"/><circle class="k" cx="112" cy="46" r="3"/></svg>';
+    var s = document.createElement('script'); s.src = '../src/hud.js'; document.body.appendChild(s);
+  });
+</script>
+</body>
+</html>

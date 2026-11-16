@@ -1,0 +1,5 @@
+tools/.fontcache/
+node_modules/
+tools/.scan.html
+tools/test-*.png
+.impeccable/review/

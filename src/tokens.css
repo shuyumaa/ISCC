@@ -1,0 +1,20 @@
+:root{
+  --metal:#C9A44C;--metal-lit:#E4CF9A;--ct:#15294E;--ct-lit:#4868A4;
+  --black:#0B0D10;--parch:#EFE9DA;--silver:#9AA3B2;
+  --fd:'Big Shoulders Display',sans-serif;--fb:'Archivo',sans-serif;
+  --fcd:'Noto Serif SC',serif;--fcb:'Noto Sans SC',sans-serif;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+body,body[data-theme="dark"]{
+  --ground:#0B0D10;--plate:#0B0D10;--stage:#07090D;--ink:#EFE9DA;--ink2:#9AA3B2;
+  --gold:#C9A44C;--side-ct:#4868A4;--side-t:#C9A44C;
+  --hair:rgba(201,164,76,.28);--edge:rgba(154,163,178,.16);
+  --glass:rgba(11,13,16,.62);--glass-edge:rgba(239,233,218,.16);
+}
+body[data-theme="light"]{
+  --ground:#F2EEE3;--plate:#FAF7EF;--stage:#E9E1CD;--ink:#14161C;--ink2:#5B6470;
+  --gold:#7A5D22;--side-ct:#15294E;--side-t:#7A5D22;
+  --hair:rgba(122,93,34,.35);--edge:rgba(20,22,28,.14);
+  --glass:rgba(250,247,239,.68);--glass-edge:rgba(20,22,28,.12);
+}
+body[data-lang="en"] .lz,body[data-lang="zh"] .le{display:none}

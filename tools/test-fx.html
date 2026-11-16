@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>ISCC FX test</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="../src/fx.css">
+<style>
+ body{margin:0;padding:24px;background:#444;font-family:system-ui,sans-serif;color:#eee}
+ h2{font:600 12px/1 system-ui;letter-spacing:.12em;text-transform:uppercase;margin:24px 0 8px;color:#9AA3B2}
+ .box{position:relative;width:1200px;aspect-ratio:16/9;overflow:hidden}
+ .dark{--stage:#07090D;--metal:#C9A44C;--ct-lit:#4868A4;background:#07090D}
+ .light{--stage:#E9E1CD;--metal:#C9A44C;--ct-lit:#4868A4;background:#E9E1CD}
+ .txt{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:900 190px/0.9 Impact,'Arial Black',sans-serif;text-align:center;color:#C9A44C;letter-spacing:.02em}
+ .light .txt{color:#B8902F}
+ .box canvas{position:absolute;inset:0}
+</style></head><body>
+<h2>beams dark</h2><div class="box dark" data-fx="beams"><canvas id="b1"></canvas></div>
+<h2>beams light</h2><div class="box light" data-fx="beams"><canvas id="b2"></canvas></div>
+<h2>smoke dark</h2><div class="box dark" data-fx="smoke"><div class="txt">ISCC<br>CS2</div><canvas id="s1"></canvas></div>
+<h2>smoke light</h2><div class="box light" data-fx="smoke"><div class="txt">ISCC<br>CS2</div><canvas id="s2"></canvas></div>
+<script src="../src/fx.js"></script>
+<script>
+ var q=new URLSearchParams(location.search);
+ var b1=ISCCFX.beams(document.getElementById('b1'),{theme:'dark'});
+ var b2=ISCCFX.beams(document.getElementById('b2'),{theme:'light'});
+ var s1=ISCCFX.smoke(document.getElementById('s1'),{theme:'dark'});
+ var s2=ISCCFX.smoke(document.getElementById('s2'),{theme:'light'});
+ s1.punch(0.5,0.5,0.14); s2.punch(0.5,0.5,0.14);
+ window.fx={b1:b1,b2:b2,s1:s1,s2:s2};
+</script></body></html>

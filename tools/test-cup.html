@@ -1,0 +1,25 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>cup test</title>
+<style>
+body{margin:0;background:#07090D;font:12px monospace;color:#9AA3B2}
+.row{display:flex;gap:0;flex-wrap:nowrap}
+.cell{position:relative;width:420px;height:520px;background:#07090D}
+.cell canvas{width:420px;height:520px;display:block}
+.cell span{position:absolute;left:10px;top:8px}
+.light{background:#E9E1CD;color:#15294E;display:flex}
+.light .cell{background:#E9E1CD}
+</style></head><body>
+<div class="row">
+  <div class="cell"><span>polished</span><canvas data-f="polished"></canvas></div>
+  <div class="cell"><span>brushed</span><canvas data-f="brushed"></canvas></div>
+  <div class="cell"><span>chrome</span><canvas data-f="chrome"></canvas></div>
+  <div class="cell"><span>steel</span><canvas data-f="steel"></canvas></div>
+</div>
+<div class="light"><div class="cell"><span>polished / light</span><canvas data-f="polished" data-t="light"></canvas></div></div>
+<script src="../src/cup.js"></script>
+<script>
+window.cups=[].map.call(document.querySelectorAll('canvas'),function(c){
+  return ISCCCUP.mount(c,{finish:c.dataset.f,theme:c.dataset.t||'dark',spin:true});
+});
+</script>
+</body></html>
