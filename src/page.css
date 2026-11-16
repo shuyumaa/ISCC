@@ -382,3 +382,5 @@ h2{font-size:clamp(44px,min(6.6vw,11.4vh),96px)}
 .smoke-count i{font-style:normal;color:var(--ink2);margin-left:14px}
 .smoke-count b{display:inline-block;min-width:2ch;text-align:right}
 .smoke-plate{touch-action:none;user-select:none;-webkit-user-select:none}
+.smoke-count{background:var(--stage);padding:8px 12px;bottom:16px}
+@media(min-width:901px){.smoke-head .lead{max-width:24ch}.smoke-count{left:16px}}
