@@ -43,7 +43,7 @@ async function open(b, base, w, theme, lang, extra = {}) {
     await p.evaluate(() => { ISCCHUD.stop(); document.querySelector('.bc-frame').classList.add('is-in'); });
     for (const [ms, name] of moments) {
       await p.evaluate(t => ISCCHUD.seek(t), ms);
-      await p.waitForTimeout(650);
+      await p.waitForTimeout(1400);
       await p.locator('#broadcast').screenshot({ path: path.join(OUT, `test-hud-${w}-${theme}-${lang}-${name}.png`) });
     }
     console.log(w, theme, lang, 'console errors:', errs.length ? errs : 'none');
@@ -65,7 +65,7 @@ async function open(b, base, w, theme, lang, extra = {}) {
   for (const w of [1440, 960, 390]) {
     const { ctx, p } = await open(b, base, w, 'dark', 'en');
     await p.evaluate(() => { ISCCHUD.stop(); document.querySelector('.bc-frame').classList.add('is-in'); ISCCHUD.seek(4200); });
-    await p.waitForTimeout(900);
+    await p.waitForTimeout(1500);
     const sels = ['.sb', '.sb-bar', '.sb-t.ct', '.sb-t.t', '.sb-tab', '.sb-lb', '.hist', '.rws-ct', '.rws-t', '.rws-ct .rw:nth-child(1)', '.rws-ct .rw:nth-child(5)', '.rws-t .rw:nth-child(1)', '.rws-t .rw:nth-child(5)', '.rws-ct .rw:nth-child(1) .rw-n', '.rws-t .rw:nth-child(3) .rw-hp', '.fp', '.fp-st:nth-of-type(2)', '.rd-fr', '.rd', '.kf'];
     const measure = () => p.evaluate(s => s.map(q => { const e = document.querySelector(q); if (!e) return null; const r = e.getBoundingClientRect(); return [r.x, r.y, r.width, r.height]; }), sels);
     const base0 = await measure();

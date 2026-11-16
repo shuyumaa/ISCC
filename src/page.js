@@ -51,6 +51,8 @@ if(feed){feed.innerHTML='<svg class="feed-map" viewBox="-330 -160 1060 596" pres
  +'<path class="feed-arc" pathLength="1" d="M338 262Q372 150 326 104"/><circle class="feed-ring" cx="326" cy="104" r="20"/>'
  +'<path class="feed-arc" pathLength="1" d="M200 262Q150 190 196 150"/><circle class="feed-ring" cx="196" cy="150" r="14"/></svg>'}
 
+var rslot=$('.bc-radar-slot');
+if(rslot){rslot.innerHTML='<svg viewBox="0 0 400 400" aria-hidden="true" style="display:block;width:100%;height:100%"><use href="#map" width="400" height="400"/><g class="feed-ct"><path d="M310 98h13v13h-13zM344 70h13v13h-13zM194 110h13v13h-13zM68 94h13v13H68zM90 122h13v13H90z"/></g><g class="feed-t"><circle cx="338" cy="262" r="7"/><circle cx="330" cy="300" r="7"/><circle cx="200" cy="262" r="7"/><circle cx="214" cy="300" r="7"/><circle cx="74" cy="316" r="7"/></g></svg>'}
 /* the logo slot */
 function setLogo(url){if(url){B.style.setProperty('--logo','url("'+url+'")');B.classList.add('has-logo')}else{B.style.removeProperty('--logo');B.classList.remove('has-logo')}$('#logo-reset').hidden=!url}
 /* An image model returns an opaque picture; the slot is an alpha mask. So every file is

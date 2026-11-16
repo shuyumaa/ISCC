@@ -18,7 +18,7 @@
   var SIDE = { kite: 'ct', ninefold: 'ct', mossglass: 'ct', odd1: 'ct', quill: 'ct', ember: 't', tallow: 't', wick: 't', sable: 't', juno: 't' };
   var NAMES = ['kite', 'ninefold', 'mossglass', 'odd1', 'quill', 'ember', 'tallow', 'wick', 'sable', 'juno'];
   var KD = { kite: [21, 8], ninefold: [15, 10], mossglass: [13, 12], odd1: [9, 11], quill: [11, 9], ember: [17, 11], tallow: [12, 13], wick: [10, 13], sable: [14, 12], juno: [8, 12] };
-  var WPN = { kite: 'RIFLE', ninefold: 'SNIPER', mossglass: 'RIFLE', odd1: 'SMG', quill: 'PISTOL', ember: 'RIFLE', tallow: 'SHOTGUN', wick: 'RIFLE', sable: 'RIFLE', juno: 'SMG' };
+  var WPN = { kite: 'RIFLE', ninefold: 'SNIPER', mossglass: 'RIFLE', odd1: 'SMG', quill: 'PISTOL', ember: 'RIFLE', tallow: 'PISTOL', wick: 'RIFLE', sable: 'RIFLE', juno: 'SMG' };
   var UTIL = { kite: 3, ninefold: 4, mossglass: 2, odd1: 3, quill: 2, ember: 4, tallow: 2, wick: 3, sable: 2, juno: 3 };
   var ARM = { kite: 1, ninefold: 1, mossglass: 1, odd1: 0, quill: 1, ember: 1, tallow: 1, wick: 0, sable: 1, juno: 1 };
   var MONEY = [

@@ -384,3 +384,15 @@ h2{font-size:clamp(44px,min(6.6vw,11.4vh),96px)}
 .smoke-plate{touch-action:none;user-select:none;-webkit-user-select:none}
 .smoke-count{background:var(--stage);padding:8px 12px;bottom:16px}
 @media(min-width:901px){.smoke-head .lead{max-width:24ch}.smoke-count{left:16px}}
+.bc .feed-map{opacity:.5}
+
+/* live plate: the observer HUD owns the frame; the heading sits beside the kit list */
+@media(min-width:901px){
+  .live{display:grid;grid-template-columns:auto 1fr;column-gap:48px;align-content:start}
+  .live-stage{display:contents}
+  .live-frame{grid-column:1/-1;grid-row:1;width:min(100%,calc((100svh - 290px)*16/9))}
+  .live-head{position:static;grid-row:2;grid-column:1;margin-top:22px;pointer-events:auto}
+  .live-head h2{font-size:clamp(34px,min(4.4vw,7.6vh),64px)}
+  .live-foot{grid-row:2;grid-column:2;flex-direction:column;align-items:flex-end;justify-content:center;margin-top:22px;gap:14px;text-align:right}
+  .live-kit{justify-content:flex-end}
+}
