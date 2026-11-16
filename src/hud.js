@@ -8,7 +8,7 @@
   var $$ = function (s) { return Array.prototype.slice.call(root.querySelectorAll(s)); };
   var RM = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-  var LOOP = 22000, LIVE_AT = 1800, PLANT_AT = 9000, TIMER0 = 115, TIMER_RATE = 10, RING_RATE = 8, KILL_TTL = 3400;
+  var LOOP = 18500, EXIT_MS = 300, LIVE_AT = 1800, PLANT_AT = 9000, TIMER0 = 115, TIMER_RATE = 10, RING_RATE = 8, KILL_TTL = 3400;
   var RING_C = 131.95;
 
   function bi(e, z) { return '<span class="le">' + e + '</span><span class="lz">' + z + '</span>'; }
@@ -59,7 +59,7 @@
     stinger: $('.bc-stinger'), run: $('.st-run'), win: $('.st-win'), sub: $('.st-sub')
   };
 
-  var running = false, inView = false, raf = 0, last = 0, el = 0, idx = 0, lap = 0;
+  var needIntro = true, running = false, inView = false, raf = 0, last = 0, el = 0, idx = 0, lap = 0;
   var events = [], tweens = [], rows = [], runAnim = null, lastClk = '', lastRing = '';
   var scoreCt = 7, scoreT = 6;
 
@@ -147,16 +147,22 @@
   }
 
   /* ---------- timeline ---------- */
-  function buildEvents() {
+  function buildEvents(full) {
     var E = endAt(), cw = ctWins();
-    events = [
-      [60, function () { frame.classList.add('is-in'); }],
-      [LIVE_AT, function () { }]
-    ];
+    events = [];
+    if (full) events.push([60, function () { frame.classList.add('is-in'); }]);
+    events.push([LIVE_AT, function () { }]);
+    events.push([LOOP - EXIT_MS, function () { frame.classList.add('rx'); }]);
     KILLS.forEach(function (k) { events.push([k[0], function () { addKill(k, true); }]); });
     events.push([PLANT_AT, function () { frame.classList.add('is-bomb'); }]);
-    events.push([E, function () { frame.classList.add('is-ended'); runStinger(); }]);
-    events.push([E + 480, function () {
+    events.push([E, function () {
+      frame.classList.add('is-ended'); runStinger();
+      var tg = cw ? 'KES' : 'LAN';
+      $('.l-res').innerHTML = cw
+        ? bi('<span class="f">' + tg + ' WIN · DEFUSED</span><span class="s">' + tg + ' WIN</span>', '<span class="f">' + tg + ' 胜 · 拆除</span><span class="s">' + tg + ' 胜</span>')
+        : bi('<span class="f">' + tg + ' WIN · DETONATED</span><span class="s">' + tg + ' WIN</span>', '<span class="f">' + tg + ' 胜 · 引爆</span><span class="s">' + tg + ' 胜</span>');
+    }]);
+    events.push([E + 880, function () {
       if (cw) { scoreCt++; setNum(el$.nCt, scoreCt, true); } else { scoreT++; setNum(el$.nT, scoreT, true); }
     }]);
     events.push([E + 650, function () {
@@ -169,9 +175,8 @@
     events.sort(function (a, b) { return a[0] - b[0]; });
   }
 
-  function clearDom() {
-    frame.classList.add('nt');
-    frame.classList.remove('is-in', 'is-bomb', 'is-ended');
+  function roundReset(eco) {
+    frame.classList.remove('is-bomb', 'is-ended');
     if (runAnim) { runAnim.cancel(); runAnim = null; }
     el$.run.classList.remove('go');
     rows.forEach(function (r) { r.node.remove(); }); rows = []; tweens = [];
@@ -182,14 +187,32 @@
     lastRing = ''; setRing(40);
     setPips([], []);
     histBase();
-    setEco(ECO.start, false);
+    if (eco) setEco(ECO.start, false);
     el$.l3.classList.remove('swap');
     setPlayer('ember');
+  }
+  function clearDom() {
+    frame.classList.add('nt');
+    frame.classList.remove('is-in', 'rx');
+    roundReset(true);
     void frame.offsetWidth;
     requestAnimationFrame(function () { frame.classList.remove('nt'); });
   }
+  function softReset() {
+    frame.classList.add('nt');
+    roundReset(false);
+    void frame.offsetWidth;
+    requestAnimationFrame(function () {
+      frame.classList.remove('nt');
+      requestAnimationFrame(function () { frame.classList.remove('rx'); setEco(ECO.start, true); });
+    });
+  }
 
-  function resetState() { el = 0; idx = 0; lastClk = ''; clearDom(); buildEvents(); }
+  function resetState(full) {
+    el = 0; idx = 0; lastClk = '';
+    if (full === false) softReset(); else { clearDom(); full = true; }
+    buildEvents(!!full);
+  }
 
   /* ---------- reduced-motion static frame ---------- */
   function staticFrame() {
@@ -233,7 +256,7 @@
     if (!running) return;
     var dt = Math.min(100, now - last); last = now;
     el += dt;
-    if (el >= LOOP) { lap++; resetState(); }
+    if (el >= LOOP) { lap++; resetState(false); }
     step();
     raf = requestAnimationFrame(loop);
   }
@@ -242,27 +265,27 @@
     if (RM.matches) { staticFrame(); return; }
     if (running) return;
     running = true;
-    if (el === 0 && idx === 0 && !events.length) resetState();
+    if (needIntro || !events.length) { resetState(true); needIntro = false; }
     last = performance.now();
     raf = requestAnimationFrame(loop);
   }
   function stop() { running = false; if (raf) cancelAnimationFrame(raf); raf = 0; }
   function reset() {
     if (RM.matches) { staticFrame(); return; }
-    resetState();
+    resetState(true); needIntro = false;
     if (running) step();
   }
 
   /* ---------- wiring ---------- */
   frame.classList.add('js');
-  if (RM.matches) staticFrame(); else resetState();
+  if (RM.matches) staticFrame(); else { resetState(true); needIntro = false; }
 
-  function sync() { if (inView && !document.hidden) start(); else stop(); }
+  function sync() { if (inView && !document.hidden) start(); else { stop(); if (!inView) needIntro = true; } }
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(function (es) { inView = es[es.length - 1].isIntersecting; sync(); }, { threshold: 0.15 }).observe(root);
   } else { inView = true; sync(); }
   document.addEventListener('visibilitychange', sync);
-  var onRM = function () { if (RM.matches) staticFrame(); else { resetState(); sync(); } };
+  var onRM = function () { if (RM.matches) staticFrame(); else { resetState(true); needIntro = false; sync(); } };
   if (RM.addEventListener) RM.addEventListener('change', onRM); else if (RM.addListener) RM.addListener(onRM);
 
   window.ISCCHUD = { start: start, stop: stop, reset: reset };

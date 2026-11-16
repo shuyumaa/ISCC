@@ -122,10 +122,17 @@ body.has-logo .con-bar{opacity:.0}
 /* ── smoke / glass ── */
 .smoke{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:0 clamp(24px,4vw,64px);align-items:end}
 .arc{position:absolute;left:0;right:0;top:24px;width:100%;height:auto;aspect-ratio:1200/420;pointer-events:none;z-index:3;overflow:visible}
-.arc-line{fill:none;stroke:var(--gold);stroke-width:3.4;stroke-linecap:round;stroke-dasharray:.0001 .017}
+.arc-line{fill:none;stroke:var(--gold);stroke-width:1.6}
+.arc-plan{fill:none;stroke:var(--ink2);stroke-width:1;stroke-dasharray:2 7;opacity:.55}
+.arc-ticks path{stroke:var(--gold);stroke-width:1.2}
+.arc-origin path,.arc-bounce path,.arc-ring path{fill:none;stroke:var(--gold);stroke-width:1.4}
+.arc-ring .r2{stroke-dasharray:3 6;opacity:.6}
+.arc-head{fill:var(--metal-lit);opacity:0}
+.arc-note text{font:600 10px var(--fb);letter-spacing:.22em;fill:var(--ink2)}
+.arc-note{opacity:0;transition:opacity .5s var(--ease)}body:not(.js) .arc-note,.arc.landed .arc-note{opacity:1}
 .arc-mask{fill:none;stroke:#fff;stroke-width:22;stroke-dasharray:1;stroke-dashoffset:0}
 body.js .arc-mask{stroke-dashoffset:1}
-.arc-ring circle{fill:none;stroke:var(--gold);stroke-width:1.5}.arc-ring circle+circle,.arc-bounce{fill:var(--gold);stroke:none}
+.arc-ring circle{fill:none;stroke:var(--gold);stroke-width:1.5}
 body.js .arc-ring,body.js .arc-bounce{opacity:0;transition:opacity .5s var(--ease)}
 body.js .arc.landed .arc-ring,body.js .arc.b1 .arc-bounce{opacity:1}
 .smoke-head{padding-bottom:40px}
@@ -271,7 +278,7 @@ body[data-lang="zh"] .sw-g b{transform:none}
 /* ── stinger + toast ── */
 .stinger{position:fixed;inset:0;z-index:80;pointer-events:none;overflow:hidden;visibility:hidden}
 .stinger i{position:absolute;top:-10%;bottom:-10%;left:0;width:60vw;transform:translateX(calc(-200vw - 80vh)) skewX(-18deg)}
-.stinger i:nth-child(1){background:var(--ct);width:calc(150vw + 40vh)}.stinger i:nth-child(2){background:var(--metal);width:calc(150vw + 40vh)}
+.stinger i:nth-child(1){background:linear-gradient(90deg,var(--ct) 0 90%,var(--ct-lit) 98%,var(--parch) 100%);width:calc(150vw + 40vh)}.stinger i:nth-child(2){background:linear-gradient(90deg,var(--metal) 0 92%,var(--metal-lit) 99%,var(--parch) 100%);width:calc(150vw + 40vh)}
 .stinger i:nth-child(3){background:var(--parch);width:5vw}.stinger i:nth-child(4){background:var(--ct-lit);width:2vw}
 .stinger.go{visibility:visible}
 .stinger.go i{animation:wipe .95s var(--ease) both}
@@ -369,3 +376,9 @@ h2{font-size:clamp(44px,min(6.6vw,11.4vh),96px)}
   .smoke-plate{height:72svh}.g-ticket{bottom:-40px}
   .arc{display:none}
 }
+
+/* ── tracers over the smoke ── */
+#tracers{position:absolute;inset:0;z-index:1;pointer-events:none}
+.smoke-count i{font-style:normal;color:var(--ink2);margin-left:14px}
+.smoke-count b{display:inline-block;min-width:2ch;text-align:right}
+.smoke-plate{touch-action:none;user-select:none;-webkit-user-select:none}

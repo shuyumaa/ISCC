@@ -13,7 +13,7 @@ const shots = process.env.ONLY ? [[390,'dark','zh']] : [
   [1440, 'dark', 'en'], [1440, 'light', 'zh'], [960, 'dark', 'en'], [960, 'light', 'zh'],
   [700, 'dark', 'zh'], [390, 'dark', 'zh'], [390, 'light', 'en'],
 ];
-const moments = [[4000, 'live'], [10000, 'bomb'], [14350, 'stinger'], [17500, 'after']];
+const moments = [[4000, 'live'], [10000, 'bomb'], [14350, 'stinger'], [17000, 'after'], [18900, 'reset']];
 (async () => {
   await new Promise(r => srv.listen(0, r));
   const base = 'http://127.0.0.1:' + srv.address().port + '/tools/test-hud.html';
