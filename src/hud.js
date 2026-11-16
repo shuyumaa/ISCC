@@ -208,7 +208,7 @@
       $('.stg-w').textContent = ctWin ? 'KES' : 'LAN';
       $('.stg-s .le').textContent = 'ROUND WIN'; $('.stg-s .lz').textContent = '本局获胜';
     }
-    var s = lt - E - 300, stOn = ended && s >= 0 && s < 2500;
+    var s = lt - E - 300, stOn = ended && s >= 0 && s < 2200;
     cls(h.stg, 'on', stOn, 'stg');
     if (stOn) {
       var bands = $$('.stg-b, .stg-m', h.stg);
