@@ -10,6 +10,7 @@ All content is concept material: the teams, schools, players and maps are invent
 | `tokens/` | Colour, type, spacing and motion tokens as CSS, JSON and SCSS; swatches for Adobe (`.ase`) and GIMP/Inkscape (`.gpl`). | `tokens/iscc-tokens.css` |
 | `plates/` | Rendered backgrounds: 4K beam plates in both arenas and three ratios, transparent smoke plates, transparent cup renders in four finishes. | `plates/beams-dark-16x9.png` |
 | `ornaments/` | Spray pattern, utility arcs, tactical map, crop marks, film-grain tile, the 70/20/10 ratio bar. SVG and PNG. | `ornaments/png/` |
+| `poster/` | A4 landscape promotion poster, dark and light arena: self-contained HTML (click the date to edit), print PDFs with and without 3 mm bleed, 300 dpi PNGs. Rebuild with `python3 tools/poster_build.py` then `node tools/poster.js`. | `poster/ISCC-A4-landscape-dark.pdf` |
 | `overlays/` | Eleven 1920×1080 transparent pages for OBS browser sources: scoreboard, player rows, killfeed, lower third, map veto, round win, stinger, matchup, starting soon, break, full HUD. Driven by URL parameters or a live update call. | `overlays/README.md` |
 | `ae/` | After Effects scripts that build 62 template comps: transitions, lower thirds, in-game graphics, full screens, ads and social, elements. | `ae/README.md` |
 
