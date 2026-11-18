@@ -20,7 +20,7 @@
   ];
   var SAMPLE_T = [
     { name: 'ember', hp: 100, armor: 100, wpn: 'RIFLE', money: 3200, k: 17, d: 11, util: 4 },
-    { name: 'tallow', hp: 0, armor: 0, wpn: 'SHOTGUN', money: 1450, k: 12, d: 13, util: 0 },
+    { name: 'tallow', hp: 0, armor: 0, wpn: 'PISTOL', money: 1450, k: 12, d: 13, util: 0 },
     { name: 'wick', hp: 0, armor: 0, wpn: 'RIFLE', money: 850, k: 10, d: 14, util: 0 },
     { name: 'sable', hp: 100, armor: 100, wpn: 'RIFLE', money: 1100, k: 15, d: 12, util: 2 },
     { name: 'juno', hp: 100, armor: 100, wpn: 'SMG', money: 1000, k: 8, d: 12, util: 3 }
@@ -289,7 +289,7 @@
   C.eco = function (root) {
     root.classList.add('ov');
     function r(s) { return '<div class="eco-r ' + s + '"><b class="eco-tag"></b><span class="eco-bar"><i class="eco-fill"></i></span><b class="eco-v"></b><span class="eco-lp"><i></i><i></i><i></i><i></i><i></i></span><b class="eco-e"></b></div>'; }
-    root.innerHTML = '<div class="eco"><div class="lbl eco-h"><span></span><span>' + bi('MONEY', '资金') + '</span><span></span><span>' + bi('LOSS BONUS', '连败') + '</span><span>' + bi('EQUIP', '装备') + '</span></div>' + r('ct') + r('t') + '</div>';
+    root.innerHTML = '<div class="eco"><div class="lbl eco-h"><span></span><span>' + bi('MONEY', '资金') + '</span><span></span><span>' + bi('LOSS', '连败') + '</span><span>' + bi('EQUIP', '装备') + '</span></div>' + r('ct') + r('t') + '</div>';
     var box = $('.eco', root);
     return {
       render: function () {

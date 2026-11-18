@@ -48,7 +48,7 @@
     --hw:calc(var(--p)*9);--hh:calc(var(--p)*4);--hg:calc(var(--p)*2);
     --rds:calc(var(--p)*112);--kfw:calc(var(--p)*236);--kfh:calc(var(--p)*24);--kfg:calc(var(--p)*2);
     --rww:calc(var(--p)*170);--rwh:calc(var(--p)*42);--rwg:calc(var(--p)*3);--rwt:calc(var(--p)*262);
-    --f-hp:calc(var(--p)*22);--fpw:calc(var(--p)*320);--fph:calc(var(--p)*66);
+    --f-hp:calc(var(--p)*22);--fpw:calc(var(--p)*320);--fph:calc(var(--p)*62);
     --vtw:calc(var(--p)*460);--vth:calc(var(--p)*48);
     --l3w:calc(var(--p)*340);--l3h:calc(var(--p)*92);--f-xl:calc(var(--p)*36);
   }
@@ -101,6 +101,7 @@ body[data-theme="light"] .bc .mono{color:var(--plate)}
 .bc .sb-mp.ct i.on{background:var(--side-ct);border-color:var(--side-ct)}
 .bc .sb-mp.t i.on{background:var(--side-t);border-color:var(--side-t)}
 .bc .sb-clk{font:800 var(--f-clk)/1 var(--fd);color:var(--ink);width:calc(var(--f-clk)*2.6);display:flex;justify-content:center;height:var(--f-clk);flex:none}
+.bc .sb-clk .dg{position:relative;top:calc(var(--f-clk)*.09)}
 .bc .sb[data-st="bomb"] .sb-clk{color:var(--gold)}
 .bc .sb-lb{position:relative;display:grid;width:calc(var(--p)*230);height:var(--lh);flex:none}
 .bc .sb-lb>.lbl{grid-area:1/1;visibility:hidden}
@@ -124,7 +125,6 @@ body[data-theme="light"] .bc .mono{color:var(--plate)}
 .bc .rd-c{position:absolute;width:calc(var(--p)*10);height:calc(var(--p)*10);border:solid var(--gold);border-width:0}
 .bc .rd-c.a{left:-1px;top:-1px;border-width:2px 0 0 2px}.bc .rd-c.b{right:-1px;top:-1px;border-width:2px 2px 0 0}
 .bc .rd-c.c{left:-1px;bottom:-1px;border-width:0 0 2px 2px}.bc .rd-c.d{right:-1px;bottom:-1px;border-width:0 2px 2px 0}
-.bc .rd-t{display:block;color:var(--ink);font-family:var(--fb)}
 .bc .rd-lb{background:var(--plate);border:1px solid var(--edge);border-top:0;padding:calc(var(--p)*5) calc(var(--p)*10);height:calc(var(--lh) + var(--p)*10);color:var(--ink)}
 .bc .rd-t{display:block;color:var(--ink);font-family:var(--fb)}
 
@@ -350,6 +350,8 @@ body[data-theme="light"] .bc .stg .stg-w,body[data-theme="light"] .bc .stg .stg-
   .bc .rd-lb{height:calc(var(--lh) + var(--p)*8);padding:calc(var(--p)*4) calc(var(--p)*6)}
   .bc .fp{grid-template-columns:1.2fr .8fr .8fr;padding:0 calc(var(--p)*10) calc(var(--p)*6) calc(var(--p)*14)}
   .bc .fp-am,.bc .fp-kl{display:none}
+  .bc .fp-st .lbl{display:none}
+  .bc .fp-v{margin-top:calc(var(--p)*2)}
   .bc .fp-n{font-size:var(--fs);letter-spacing:.02em}
   .bc .fp-id{gap:calc(var(--p)*8)}
   .bc .fp-id .lbl{display:none}

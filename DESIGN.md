@@ -1,272 +1,394 @@
 ---
 name: ISCC — International Schools CS2 Championships
-description: One cup, every nation — a championship identity in one metal and five colors, presented as plates under broadcast light, in two arenas.
+description: One cup, every nation — a school championship shown as a broadcast, in five hues, two arenas and two tongues, with CT blue and T gold on opposite sides of everything.
 colors:
   cup-gold: "#C9A44C"
   gold-light: "#E4CF9A"
   legacy-blue: "#15294E"
+  ct-lit: "#4868A4"
   arena-black: "#0B0D10"
+  beam-stage: "#07090D"
   parchment: "#EFE9DA"
   engraving-silver: "#9AA3B2"
   hairline-gold: "rgba(201,164,76,.28)"
   plate-edge: "rgba(154,163,178,.16)"
-  arena-deep: "#0E1420"
-  arena-deep-2: "#101A2E"
-  beam-stage: "#07090D"
+  glass-dark: "rgba(11,13,16,.62)"
+  glass-edge-dark: "rgba(239,233,218,.16)"
   porcelain: "#F2EEE3"
   porcelain-plate: "#FAF7EF"
-  porcelain-deep: "#E5DCC4"
-  porcelain-deep-2: "#D9DFEA"
   porcelain-stage: "#E9E1CD"
   ink: "#14161C"
-  ink-mut: "#5B6470"
+  ink-muted: "#5B6470"
   ink-gold: "#7A5D22"
-  glass-dark: "rgba(11,13,16,.62)"
+  hairline-gold-light: "rgba(122,93,34,.35)"
+  plate-edge-light: "rgba(20,22,28,.14)"
   glass-light: "rgba(250,247,239,.68)"
-  glass-edge-dark: "rgba(239,233,218,.16)"
   glass-edge-light: "rgba(20,22,28,.12)"
 typography:
   display:
     fontFamily: "'Big Shoulders Display', sans-serif"
-    fontSize: "clamp(38px, 5.4vw, 68px)"
+    fontSize: "clamp(44px, min(6.6vw, 11.4vh), 96px)"
     fontWeight: 900
-    lineHeight: 0.98
-    letterSpacing: "0.02em"
+    lineHeight: 0.9
+    letterSpacing: "0.01em"
+  cn-display:
+    fontFamily: "'Noto Serif SC', serif"
+    fontSize: "0.8em"
+    fontWeight: 900
+    lineHeight: 1.125
+    letterSpacing: "0.06em"
+  slogan:
+    fontFamily: "'Noto Serif SC', serif"
+    fontSize: "clamp(64px, 13.2vw, 236px)"
+    fontWeight: 900
+    lineHeight: 1
   headline:
     fontFamily: "'Big Shoulders Display', sans-serif"
-    fontSize: "24px"
+    fontSize: "clamp(28px, 3.2vw, 46px)"
     fontWeight: 800
-    letterSpacing: "0.08em"
+    lineHeight: 1
+    letterSpacing: "0.04em"
   lead:
     fontFamily: "'Archivo', sans-serif"
     fontSize: "17px"
     fontWeight: 400
-    lineHeight: 1.7
+    lineHeight: 1.6
   body:
     fontFamily: "'Archivo', sans-serif"
     fontSize: "15px"
     fontWeight: 400
     lineHeight: 1.6
-  label:
-    fontFamily: "'Archivo', sans-serif"
-    fontSize: "11px"
-    fontWeight: 600
-    letterSpacing: "0.22em"
-  cn-display:
-    fontFamily: "'Noto Serif SC', serif"
-    fontSize: "clamp(38px, 5.4vw, 68px)"
-    fontWeight: 900
-    lineHeight: 1.16
-    letterSpacing: "0.08em"
   cn-body:
     fontFamily: "'Noto Sans SC', sans-serif"
     fontSize: "16px"
     fontWeight: 400
-    lineHeight: 1.95
+    lineHeight: 1.8
+  label:
+    fontFamily: "'Archivo', sans-serif"
+    fontSize: "11px"
+    fontWeight: 600
+    lineHeight: 1.3
+    letterSpacing: "0.24em"
+    fontFeature: "tnum"
 rounded:
   plate: "0px"
   glass: "14px"
 spacing:
-  xs: "10px"
+  gutter: "clamp(16px, 4vw, 56px)"
+  xs: "8px"
   sm: "14px"
-  md: "26px"
-  lg: "48px"
-  section: "104px"
+  md: "22px"
+  lg: "28px"
+  xl: "44px"
+  plate-top: "92px"
+  bar: "60px"
+  hud-margin: "48px"
 components:
-  button-solid:
-    backgroundColor: "{colors.cup-gold}"
-    textColor: "{colors.arena-black}"
-    rounded: "{rounded.plate}"
-    padding: "10px 16px"
-  button-solid-hover:
-    backgroundColor: "{colors.gold-light}"
-    textColor: "{colors.arena-black}"
   button-ghost:
     backgroundColor: "transparent"
     textColor: "{colors.cup-gold}"
+    typography: "{typography.label}"
     rounded: "{rounded.plate}"
-    padding: "10px 16px"
+    padding: "0 16px"
+    height: "40px"
   button-ghost-hover:
     backgroundColor: "{colors.cup-gold}"
     textColor: "{colors.arena-black}"
-  swatch-meta:
-    backgroundColor: "{colors.arena-black}"
-    textColor: "{colors.parchment}"
-    padding: "16px 16px 18px"
-  toast:
-    backgroundColor: "{colors.parchment}"
+  button-ghost-active:
+    backgroundColor: "{colors.gold-light}"
     textColor: "{colors.arena-black}"
-    padding: "12px 22px"
-  lang-toggle:
+  button-solid:
+    backgroundColor: "{colors.cup-gold}"
+    textColor: "{colors.arena-black}"
+    typography: "{typography.label}"
+    rounded: "{rounded.plate}"
+    padding: "0 16px"
+    height: "40px"
+  button-solid-hover:
+    backgroundColor: "{colors.gold-light}"
+    textColor: "{colors.arena-black}"
+  button-square:
     backgroundColor: "transparent"
     textColor: "{colors.cup-gold}"
     rounded: "{rounded.plate}"
-    padding: "10px 16px"
-  glass-card:
+    width: "40px"
+    height: "40px"
+  nav-bar:
+    backgroundColor: "{colors.arena-black}"
+    textColor: "{colors.parchment}"
+    height: "60px"
+    padding: "0 clamp(16px, 4vw, 56px)"
+  radar:
+    backgroundColor: "{colors.beam-stage}"
+    textColor: "{colors.parchment}"
+    rounded: "{rounded.plate}"
+    width: "264px"
+  glass-ticket:
     backgroundColor: "{colors.glass-dark}"
     textColor: "{colors.parchment}"
     rounded: "{rounded.glass}"
-    padding: "28px"
+    padding: "26px 28px 24px"
+    width: "340px"
+  swatch:
+    backgroundColor: "{colors.arena-black}"
+    textColor: "{colors.parchment}"
+    rounded: "{rounded.plate}"
+    padding: "22px"
+  toast:
+    backgroundColor: "{colors.parchment}"
+    textColor: "{colors.arena-black}"
+    typography: "{typography.label}"
+    rounded: "{rounded.plate}"
+    padding: "12px 22px"
+  hud-scoreboard:
+    backgroundColor: "{colors.arena-black}"
+    textColor: "{colors.parchment}"
+    rounded: "{rounded.plate}"
+    width: "1020px"
+    height: "70px"
+  poster:
+    backgroundColor: "{colors.beam-stage}"
+    textColor: "{colors.parchment}"
+    rounded: "{rounded.plate}"
 ---
 
 # Design System: ISCC — International Schools CS2 Championships
 
 ## Overview
 
-**Creative North Star: "The Museum Plate, Relit"**
+**Creative North Star: "The Broadcast, Not the Style Guide"**
 
-The identity is still a trophy in a case — but the case now sits under broadcast light. The plate discipline survives (one object, one hairline, generous air, engraved label), and three finishes are added on top of it, in the language of a championship key art and a motion-design studio: **beams** (rigged light that converges on the cup), **metal** (the cup's gold rendered as four physical finishes), and **glass** (frosted overlay panels floating over light). Nothing is decorated for its own sake: every beam, sheen, and frost layer is a specimen of how the brand will look on air, on foil, and on a stream overlay.
+The championship is shown the way a viewer meets it: on air. Light, smoke, metal and a live observer HUD carry the argument, and the tokens, marks and overlays are what you lift off the frame afterwards. The page is ten plates, each sized to one viewport on desktop, each a single screenshot: cover, mark, light, smoke, metal, live, color, type, posters, footer. Prose is one line per plate. The specimens are the case.
 
-The world is derived from the Summoner's Cup discipline of LoL Worlds — one core object (a school championship cup whose bowl is a crosshair), a palette taken from the object's metal and the arena around it, custom condensed lettering cut as pure vector paths — and from the finish-forward language of studios like BUCK: saturated light fields, physical materials, kinetic but controlled motion, and type used as a graphic object. Prose is deliberately scarce; the specimens carry the argument.
+Counter-Strike supplies the grammar and the school championship supplies the dignity. The two brand hues are the two sides: **CT is Legacy Blue, T is Cup Gold**, everywhere two things oppose (beams, scoreboard halves, player rails, stinger bands, poster rails, veto cells). Smoke is the glass material. A grenade lineup diagram and an authored spray pattern are the ornament. An authored fictional tactical map is the section navigator. The crosshair, four bars and a gap, is the construction of the mark: whatever the final logo is, it lives in the gap.
 
-The system runs in **two arenas**: the dark arena (Arena Black ground, parchment ink) and the light arena (Porcelain ground, Ink black). The five brand hues never change; only the ground, the ink, and the text-safe gold swap. The Chinese slogan 百炼成徽 and the couplet 金杯为证,万国同场 remain the public voice in both arenas and both tongues.
+The system runs in two arenas (dark Arena Black, light Porcelain) and two tongues (EN, 中文), both persisted and applied before first paint. The five hues never change between arenas; only ground, ink, secondary ink and the text-safe gold swap. Everything is invented concept material and says so.
 
 **Key Characteristics:**
 
-- One object, one metal: the crosshair-bowl cup emblem is the only illustration; gold is the only accent hue.
-- Three finishes over the plate: beam rigs (screen-blended light in the dark arena, multiply-blended in the light), metal gradients with a travelling specular sweep, and frosted glass with an inner top highlight.
-- Plates stay square; glass alone carries a 14px radius, because glass is a material, not a plate.
-- Font-independent lettering: eight marks — including the Chinese logotype and the four-character seal — are authored or outlined SVG paths, never typed text.
-- Two tongues, one voice: EN/中文 toggle swaps every string; cover, posters, color names, and finish names stay bilingual in both states.
-- Two arenas, one geometry: the theme toggle swaps ground/ink tokens only; marks, stages, posters, and grids never move.
-- Depth by light and tone, never by drop shadow: beams, tonal stages, and inset hairlines do all the work.
+- Five hues at 70/20/10 (arena / depth / metal); CT blue and T gold as the two sides of every opposition.
+- Rendered materials, not CSS diagrams: WebGL god-ray beams, WebGL light-marched smoke, a raymarched cup in four finishes, reeded and moss glass through SVG displacement, zero-mean film grain under everything.
+- Square plates; glass alone is rounded (14px).
+- No drop shadows: depth is light, tone and material.
+- Headings left-set, never under a kicker; one centred line, the cover slogan, split by the cup.
+- One easing, `cubic-bezier(.16,1,.3,1)`; reduced motion yields static final frames, never blank ones.
+- A logo slot instead of a logo: one CSS variable feeds every placement until the user's own mark arrives.
 
 ## Colors
 
-Five brand hues taken from the cup and the arena, two hairline tints, and a fixed set of arena/finish tokens for the two themes. No sixth hue ever enters a composition.
+Five brand hues taken from the cup and the arena at night, one lit tint of the CT blue for light and side markers, and a fixed pair of ground/ink sets for the two arenas. No sixth hue enters a composition.
 
 ### Primary
 
-- **Cup Gold** (#C9A44C): the metal. Emblem, marks on dark stages, rules, solid buttons, the season reversal poster, beam cores. Held to roughly 10% of any composition.
-- **Gold Light** (#E4CF9A): the metal catching light. Solid-control hover, emphasized words in display titles on dark, beam specular cores. Never a field color.
+- **Cup Gold** (`cup-gold`): the metal and the T side. Logo slot fill, rules, solid buttons, hover fills, arc lines, spray dots, T rails, bomb bar, the season reversal (gold veto poster, gold arena test). Held to about 10% of a composition.
+- **Gold Light** (`gold-light`): the metal catching light. Solid-button hover and active state, tracer glow, the arc's flying head. Never a field, except its own swatch.
 
 ### Secondary
 
-- **Legacy Blue** (#15294E): the arena at night. Depth stages, the blue poster, blue steel finish, and the cool beams in every rig.
+- **Legacy Blue** (`legacy-blue`): the arena at depth and the CT side. The 20% plate, the team poster, the blue-steel finish, the CT field in the arena test, the lead stinger band, CT side marker in the light arena.
+- **CT Lit** (`ct-lit`): Legacy Blue as light. Beam shafts from the left, CT side markers and player rails in the dark arena, the trailing stinger band. A tint of the second hue, not a sixth.
 
 ### Neutral
 
-- **Arena Black** (#0B0D10): dark-arena ground, default mark stage, sheet artboard. Slightly cool, never pure black.
-- **Parchment** (#EFE9DA): dark-arena ink and the parchment stage; warm off-white, never pure white.
-- **Engraving Silver** (#9AA3B2): dark-arena secondary text, captions, hex values, plate edges at 16%.
-
-### Arena & Finish Tokens
-
-- **Dark arena:** ground Arena Black; plate Arena Black; ink Parchment; secondary Engraving Silver; text-safe gold Cup Gold; hairline rgba(201,164,76,.28); edge rgba(154,163,178,.16); beam stage #07090D; glass field #0E1420 → #101A2E; glass rgba(11,13,16,.62) with edge rgba(239,233,218,.16).
-- **Light arena:** ground Porcelain #F2EEE3; plate #FAF7EF; ink #14161C; secondary #5B6470; text-safe gold #7A5D22 (Cup Gold stays the graphic metal); hairline rgba(122,93,34,.35); edge rgba(20,22,28,.14); beam stage #E9E1CD; glass field #E5DCC4 → #D9DFEA; glass rgba(250,247,239,.68) with edge rgba(20,22,28,.12).
-- **Beam hues:** gold rgba(201,164,76,.5), blue rgba(72,104,164,.42), silver rgba(154,163,178,.3) in the dark arena; gold rgba(176,138,62,.55), blue rgba(30,58,110,.36), warm silver rgba(140,120,80,.25) in the light. Beams are light, not paint: they blend (screen dark / multiply light) and never carry text.
+- **Arena Black** (`arena-black`): dark-arena ground and plate, the 70% field. Slightly cool, never pure black.
+- **Beam Stage** (`beam-stage`): the deeper black behind every rendered plate (cover, rig, smoke, mark stage, radar, key poster).
+- **Parchment** (`parchment`): dark-arena ink; warm off-white, never pure white.
+- **Engraving Silver** (`engraving-silver`): dark-arena secondary ink: labels, captions, hex values, dead-player names.
+- **Porcelain / Porcelain Plate / Porcelain Stage** (`porcelain`, `porcelain-plate`, `porcelain-stage`): light-arena ground, raised plate, and rendered-plate stage.
+- **Ink / Ink Muted** (`ink`, `ink-muted`): light-arena primary and secondary ink.
+- **Ink Gold** (`ink-gold`): the text-safe gold of the light arena. Cup Gold stays the graphic metal; Ink Gold carries gold words on Porcelain.
+- **Hairlines and edges** (`hairline-gold`, `plate-edge` and their light pairs): 1px boundaries. Gold hairline on buttons and the radar; silver edge on plates, bar and rules.
+- **Glass** (`glass-dark`, `glass-light` with their edges): the smoke-glass field over rendered light.
 
 ### Named Rules
 
-**The One Metal Rule.** Gold is metal, not paint: it marks the cup, the lettering, the rules, and the light — never a background field, except the single season reversal where the whole poster becomes the metal.
+**The Two Sides Rule.** Where two things oppose, blue is CT and sits left or first; gold is T and sits right or second. Beams come blue from the left and gold from the right; rails, scoreboard halves and stinger bands follow. Side is never told by colour alone: position, monogram letter and tag text travel with it.
 
-**The Five Color Rule.** Every composition uses only the five brand hues and their tints. Arena and finish tokens are grounds and light, not new hues; a new hue is a new identity.
+**The Five Hue Rule.** Only the five hues and their tints. CT Lit, the arena grounds and the hairlines are light and ground, not new hues. A sixth hue is a new identity.
 
-**The Two Arenas Rule.** The theme toggle swaps ground, ink, secondary, and text-safe gold only. Mark stages, posters, metal finishes, and the sheet keep their fixed inks in both arenas — they are artwork, not interface.
+**The No Red, No Green Rule.** The HUD never uses red or green. Loss is shown by emptiness: a dead player's bar empties and turns hollow, the name drops to secondary ink and stays legible, never dimmed by opacity.
+
+**The Two Arenas Rule.** The theme switch swaps ground, plate, stage, ink, secondary ink, text-safe gold, hairlines and glass only. Artwork keeps fixed inks in both arenas: the arena-test tiles, the swatches, the posters, the 70/20/10 plate.
 
 ## Typography
 
-**Display Font:** Big Shoulders Display (variable 700–900 woff2 embedded as base64; ships offline).
-**Body Font:** Archivo (variable 400–700 woff2 embedded likewise).
-**Chinese Display Font:** Noto Serif SC 900 (subset woff2 embedded, 136 glyphs covering every string on the page).
-**Chinese Body Font:** Noto Sans SC 400/600 (subset woff2 embedded likewise).
-**Logotype:** custom authored SVG paths on a 100-unit grid; the Chinese logotype and seal are Noto Serif SC 900 glyphs converted to outlines. Not fonts, never substituted by one.
+**Display Font:** Big Shoulders Display (embedded subset, 700–900).
+**Body Font:** Archivo (embedded subset, 400–700).
+**Chinese Display Font:** Noto Serif SC 900 (embedded subset).
+**Chinese Body Font:** Noto Sans SC 400/600 (embedded subset).
 
-**Character:** broadcast gothic beside museum engraving; in Chinese, heavy Song answers the gothic. With prose cut to a line per section, type now works mostly as specimen: five rows show the two tongues at their true sizes instead of describing them.
+**Character:** Broadcast gothic beside heavy Song. The condensed gothic shouts the way a scorebug does; the Song gives the Chinese line the literary weight of a championship slogan. All four families are SIL OFL and ship offline.
 
 ### Hierarchy
 
-- **Display** (900, clamp(38px, 5.4vw, 68px), 0.98, uppercase): section titles and poster headlines; the only voice allowed to shout.
-- **CN Display** (Noto Serif SC 900, same clamp, 1.16, 0.08em): the ZH state of every display title; poster C and the cover slogan are CN Display in both states.
-- **Headline** (800, 24px, uppercase, 0.08em): mark names; ZH sets CN Display at 0.14em.
-- **Lead / Body** (Archivo 400, 17/15px): one-line section statements and type specimens only; max 62ch.
-- **Label** (600, 11px floor, 0.2–0.4em tracking, uppercase): metadata, captions, buttons, hex values, poster lines, rig readout. Chinese labels keep tracking in Noto Sans SC 600.
+- **Slogan** (Noto Serif SC 900, clamp(64px, 13.2vw, 236px), 1): 百炼成徽 on the cover only, split in two by the cup.
+- **Display** (900, clamp(44px, min(6.6vw, 11.4vh), 96px), 0.9, uppercase, 0.01em): one plate heading each, two short lines, `text-wrap: balance`.
+- **CN Display** (Noto Serif SC 900, 0.8em of the display, 1.125, 0.06em): the 中文 state of every heading.
+- **Specimen type** (900, viewport-sized up to 400–760px): GRAND FINAL, 万国同场, the ISCC fragment, the cropped 26, GG. Type as a graphic object, `aria-hidden`.
+- **Headline** (800, clamp(28px, 3.2vw, 46px), uppercase, 0.04em): finish names, swatch names, ticket map name.
+- **Lead / Body** (Archivo 400, 17px/1.6 and 15px/1.6; Noto Sans SC 400 at 16–18px/1.8): one line per plate, max 46ch for leads.
+- **Label** (Archivo 600, 11px, 0.24em, uppercase, tabular numerals): buttons, captions, readouts, radar labels, poster lines. Chinese labels keep tracking at 0.14–0.3em in Noto Sans SC.
 
 ### Named Rules
 
-**The Path Lettering Rule.** The ISCC logotype, the "26" numerals, the emblem, the Chinese logotype, and the seal are pure-path SVG with no `<text>`, no font-family, no currentColor dependency in exports.
+**The Tracked Caps Rule.** Micro-text is Archivo 600 at an 11px floor, uppercase, tracked 0.16–0.26em, in secondary ink or gold. The HUD scales its micro label but clamps it with `max(11px, …)`.
 
-**The Two Tongues Rule.** Every string exists in English and Chinese; the toggle swaps them with no layout shift in marks, stages, or poster geometry. Cover, posters, color names, and finish names are bilingual in both states.
+**The Fixed Digits Rule.** Digits that change sit in fixed-width boxes: tabular Archivo for readouts and hex, fixed `.56em` digit cells for Big Shoulders scores and clocks (the face has no tabular figures). Nothing moves when a number ticks.
 
-**The Tracked Caps Rule.** Micro-text is uppercase Archivo 600 at 0.2–0.4em, in silver or gold — engraved, not whispered. Tabular numerals wherever digits align (rig readout, hex, MR12, scale test).
+**The Two Tongues Rule.** Every string exists in English and Chinese, swapped by one toggle with no layout shift; Chinese HUD labels sit in fixed-height nowrap boxes. The cover slogan, couplet and 金杯为证 stay Chinese in both states; "Earn your crest." stays English in both.
 
 ## Layout
 
-A single 1240px column, 24px side padding, sections at 104px vertical. Order: cover → beam rig → metal finishes → glass field → eight marks → color → type → posters → footer. Mark rows are a 1fr/300px grid (stage left, name + actions right); the marks head pairs the title with a 320px construction plate; metal is four plates in a row (two-up below 960px, one below 560px); glass is three cards (one column below 960px); color is five plates (two-up below 960px, one below 560px) plus a 70/20/10 ratio bar; posters are three 3:4 plates (single column below 960px). The cover foot joins the flow below 640px width or 740px height; vertical Chinese flanks appear only at 1200px and wider. The beam stage is 16:7 (4:3 below 560px) and never transfers its min-height into width.
+Ten full-bleed plates in one scroll, each sized to one viewport at 901px and wider (`100svh` minus the 60px bar; plates open 92px from their top). The page gutter is `clamp(16px, 4vw, 56px)`. Compositions are asymmetric two-column splits (mark 1.12/0.88, smoke 4/8, metal 7/5) and full-bleed stages (cover, rig, ratio plate, type specimens); none is a centred heading over an equal grid. The color plate is the ratio itself: a 70 / 20 / 10 column split of Arena Black, Legacy Blue and Cup Gold. The posters plate is a four-up wall with staggered drops (0, 8%, 20%, 32%). The live plate fits a 16:9 HUD frame to the viewport height with the heading and kit list beneath it.
+
+Below 900px, splits stack, the poster wall becomes a horizontal snap strip at 78vw per poster, the lineup diagram and moss pane drop out, and the HUD switches tier. The HUD frame is authored at 1920 with a 48px margin on an 8px grid and scales by one design pixel (`--p`) through three tiers: L 1920, M 1280, S 480 (4:5 portrait).
+
+Spray rules separate the mark from the light, and the type from the posters: 30 authored dots that fire on scroll.
 
 ## Elevation & Depth
 
-No drop shadows anywhere. Depth comes from three devices, each a material:
+No drop shadows anywhere. Depth is rendered light, tonal stages and materials, and the only `box-shadow` values in the build are 1px inset hairlines and the glass's inset top/bottom edge light.
 
-- **Beams:** masked, blended gradient rays converging on the cup at the stage floor; a radial floor glow; a slow ±2° rig drift. The pointer steers the rig (±13°) with a 0.7s damped follow and a live tabular readout.
-- **Metal:** multi-stop specular gradients (polished, brushed, black chrome, blue steel) with a 1.1s travelling sheen on hover; brushed grain is a 4px SVG pattern, not a CSS repeating gradient.
-- **Glass:** translucent field-color plates with 18px backdrop blur + saturate, a 1px edge, and an inset top highlight — an edge of light, not a shadow.
-
-Plates still lift 4–6px on hover with cubic-bezier(.16,1,.3,1). Scroll reveals remain a 24px slide with no opacity fade, so ink keeps full contrast at every frame. The cover entrance is the one authored opacity sequence. `prefers-reduced-motion` stops drift, sheen travel, and reveals.
+- **Beams** (WebGL): blue shafts from the left, gold from the right, converging on the cup low-centre; drifting haze and dust. The pointer steers the rig and the readout reports ±13°; a click flashes the rig with a 700ms cooldown. In the dark arena light adds onto Beam Stage; in the light arena light multiplies onto Porcelain, and where shafts overlap the paper lifts to a pale core instead of burning to white.
+- **Smoke** (WebGL): drifting fbm volume, light-marched toward a key light, punched open by tracer fire. Tracers follow the authored spray pattern from a 30-round magazine at 96ms per round, reloading after 1.4s; each hit opens a hole with a ring that heals.
+- **Cup** (WebGL): raymarched lathe form on a transparent canvas in four finishes: polished and brushed Cup Gold, black chrome, blue steel. The pointer turns it on the metal plate.
+- **Glass**: smoke-glass field (`glass-*`) with `backdrop-filter` through SVG displacement: reeded (`#reed`, vertical flutes plus a 7px rib overlay) and moss (`#moss`). A noise layer and an inset edge highlight; it lifts 6px on hover.
+- **Grain**: zero-mean film grain in every shader, plus a fixed fractal-noise overlay beneath all content.
+- **Fallback**: without WebGL, beam and smoke hosts paint conic and radial gradients in the same hues on the stage token.
 
 ### Named Rules
 
-**The Flat Plate Rule.** A surface declares its boundary once — a hairline, a tonal stage, or a material's own light. Lift is motion; it is never a shadow.
+**The Flat Plate Rule.** A surface declares its boundary once: a 1px hairline, a tonal stage, or its own material light. Lift is motion (6px), never a shadow.
 
-**The Light Stays Behind Ink Rule.** Beams, glows, and sheens live in background layers or behind content. No positioned light layer may sit above text; footer and caption plates carry a solid ground so readout text always measures against a token, not against light.
+**The Light Behind Ink Rule.** Light sits behind reading text. Smoke may sit over artwork (the 金杯为证 specimen, the map, display type under the smoke plate), never over reading text; readouts that sit on rendered plates (round counter, cover foot, gap dimension) carry a solid stage ground.
 
 ## Shapes
 
-Square corners (0px) for plates, stages, buttons, posters, toast. **Glass alone is rounded at 14px** — the single exception, because frost is a material with a meniscus, not a plate. Circles appear only as authored geometry (bowl, reticle, season ring, palette dots). Hairlines are 1px; the grain overlay is a 140px fractal-noise SVG at 5% in the page background, below all content.
+Square corners (0px) on plates, stages, buttons, bar, radar, toast, swatches, HUD panels and posters. **Glass alone is rounded at 14px**, because frost is a material, not a plate. Circles appear only as authored geometry: construction rings, landing rings, ripple ellipses, T markers on the map. Hairlines are 1px. Side markers are 22×5px bars; spray dots are 5px squares; radar pins are 8px squares that rotate 45° when current. The crosshair (four bars, a 236-unit gap on a 600-unit field) is the master geometry for the mark plate and the slot's default glyph.
 
 ## Components
 
 ### Buttons
 
-- Square, 1px hairline border on ghost; solid = Cup Gold field / Arena Black text; hover inverts or shifts to Gold Light. Theme toggle is a 40px square ghost with a 15px stroke sun/moon icon showing the current arena. Focus: 2px gold outline, 3px offset. Icons are stroke SVG, never glyphs.
+Engraved, not inflated.
 
-### Swatch Plate
-
-- Chip with inset hairline edge above a meta plate (ground token): display name, always-visible Chinese name (鎏金 玄黑 藏蓝 素绢 刻银), tabular hex. Click copies hex; hover lifts 4px. No role prose — the ratio bar below carries the proportion rule visually (70 arena / 20 depth / 10 metal).
-
-### Mark Stage
-
-- min-height 300px flat field in one of four fixed tones, 36px air, mark at true proportion; name + SVG/Copy actions beside it, no description prose. Eight stages; the sheet button exports all eight on one 1160×1020 black artboard. Variant row and 16→96px scale test follow.
-
-### Beam Rig
-
-- 16:7 stage in the arena's beam-stage token; five masked rays (gold, blue, silver) converging at bottom center on a 74px cup; floor glow; tracked readout top-right (`RIG / 灯架` + degrees). Pointer steers; leaving resets to 0.0°. Caption row below states the interaction in both tongues.
-
-### Metal Finish Plate
-
-- 4:3.4 field in one of four finishes, mark centered at 46% width in the finish's contrasting ink (black on golds, parchment on chrome/steel); travelling specular sweep on hover; caption row below pairs EN finish name with its Chinese (抛光 拉丝 玄铬 蓝钢) and hue name.
-
-### Glass Card
-
-- 14px radius, glass token field, 18px backdrop blur, 1px glass edge, inset top highlight; three specimens: lockup (emblem + logotype + season line), palette (five dots + hex stack), ticket (GRAND FINAL / MR12 / couplet / seal / admit line). Cards lift 4px on hover. The field behind them drifts its radial light over 26s.
+- **Shape:** square (0px), 40px tall, 1px gold hairline border.
+- **Ghost (default):** transparent, Cup Gold (Ink Gold in the light arena) label in tracked caps, 15px stroke icon left with a 10px gap.
+- **Hover / Active:** fills with Cup Gold and Arena Black label; active shifts to Gold Light. 0.3s on the system ease.
+- **Solid:** Cup Gold field, Arena Black label; hover Gold Light. Used once per plate at most (Load your logo).
+- **Square:** 40×40 for the arena toggle, showing the current arena's sun or moon.
+- **Focus:** 2px Cup Gold outline at 3px offset, everywhere.
+- **Icons:** stroke SVG at 1.8 width, square caps. Never glyphs.
 
 ### Navigation
 
-- Fixed 68px glass header (arena header token + 14px blur), hairline bottom rule; gold logotype + tracked context left; theme, language, and sheet actions right. Both toggles persist in localStorage (`iscc-theme`, `iscc-lang`) and swap `body[data-theme]` / `body[data-lang]`, `html[lang]`, title, and the theme-color meta.
+- **Bar:** fixed, 60px, ground at 72% with a 14px blur, 1px edge rule below. Left: logo slot at 22px, ISCC in display 26px, a tracked context label behind a 1px divider. Right: Map, arena and language buttons. Below 560px the map button collapses to a square and the context label hides.
+- **Radar:** the Map button opens an authored tactical map (264px square, Beam Stage field, gold hairline border) with a pin per plate, labelled in both tongues. It wipes open by clip-path, closes on outside click or Escape, and the current plate's pin turns gold and rotates. A jump plays the page stinger.
+
+### Logo Slot
+
+- One CSS variable, `--logo`, on `body`; every `.logo-slot` placement masks `currentColor` through it, so the mark takes each placement's ink. The default is the four-bar crosshair. Placements: bar, mark stage (36%), four arena-test tiles, 16/32/64 ladder, key, team, veto and CN posters, footer, the HUD scoreboard centre, and every OBS overlay.
+
+### Swatch
+
+- A flat block of the hue itself with the name in headline type, the Chinese name, a tabular hex and a ratio tag; click copies the hex and toasts. Hover grows the bottom padding (or the flex share in the neutral row) instead of lifting.
+
+### Finish List
+
+- Four ruled rows (Polished, Brushed, Black chrome, Blue steel) in headline type with a tracked caption; the pressed row turns gold and indents 18px. Drives the cup's finish.
+
+### Glass Ticket
+
+- 14px reeded glass over the smoke plate: GRAND FINAL label, MR12 in 92px display, ATRIUM 中庭, and the ticket number behind a glass-edge rule.
+
+### Observer HUD (signature)
+
+- A stack of single-purpose graphics on a 16:9 frame over the tactical map: scoreboard (team halves with side rule, monogram, tag, score; centre logo slot; tab with map-win pips, clock and state label; 24-pip round history), CT and T player rows on the left and right edges, radar, killfeed (max 5, rows expire), focus panel, bomb and defuse bars, freeze-time economy and veto strip, lower third, round-win banner and stinger.
+- A deterministic 20s loop derived from elapsed time: freeze, live, kills, plant at 9.5s, defuse, round win, reset. The shell enters once, then persists; motion only marks change; exits run faster than entrances.
+- Reduced motion paints one static mid-round frame.
+
+### Poster
+
+- 3:4 plates sized in container units: key art (rendered beams, logo slot, vertical 百炼成徽, GRAND FINAL 26), team (Legacy Blue, ghosted KES tag, spray texture, roster), veto (the gold reversal; bans struck, picks plain, decider ruled), CN (Arena Black, lineup arc, vertical couplet). Fixed inks in both arenas.
 
 ### Toast
 
-- Ink-on-ground inversion (parchment/black in dark arena, black/parchment in light), tracked caps, fixed bottom center, rises 16px, holds 1.8s. The system's single confirmation surface.
+- Ink-on-ground inversion, tracked caps, fixed bottom centre; rises 16px and holds 1.8s. The single confirmation surface.
 
-### Poster Plate
+### Motion
 
-- 3:4, three movements (black arena / gold reversal / legacy blue), fixed inks in both arenas. Eight 10×1px crop legs at 35% of the field's own ink. Poster lines are 11px tracked caps in full-strength ink; poster A carries the couplet under its headline, B swaps language with the toggle, C is Chinese-first.
+- **Cover entrance:** per-glyph clip rise on 百炼成徽 (1.1s, staggered 0.25–0.67s), a 1.6s slide on the cropped 26, a 0.9s wipe on "Earn your crest." at 1s.
+- **Page stinger:** four diagonal bands at −18° (Legacy Blue, Cup Gold, a parchment sliver, a CT Lit sliver) cross the screen in 0.95–1.1s on navigator jumps; the scroll happens under the bands at 260ms.
+- **Scroll-drawn:** the lineup arc draws with tick marks and a flying head, the bounce and landing ring appear on arrival; spray rules fire dot by dot; the type specimens slide against each other by 9%.
+- **Easing:** `cubic-bezier(.16,1,.3,1)` for everything.
+- **Reduced motion:** all animation and transition off, the stinger removed, arcs and sprays shown complete, shaders render a static frame, the rig caption reads "Static frame".
+
+## Logo Brief
+
+The final mark is designed by the user with an image-generation model. The system ships the slot, not the mark. Three provisional directions (A Face-off, B The Crest, C Counterlight) exist only as kit files in `kit/logos/` and are not part of the system.
+
+### Slot contract
+
+- **Accepted files:** SVG, PNG, WebP, JPEG, loaded with the Mark plate's button or by drop onto the mark stage.
+- **Keying:** if all four corners are opaque, the corner colour is averaged and every pixel's alpha is set from its distance to that colour, so an image model's flat background drops out. Files that already carry transparency are left as they are.
+- **Trimming:** the visible shape is cropped to its bounds (alpha above 24/255), centred on a square, and stored as a PNG at up to 512px.
+- **Storage and reset:** saved in `localStorage` (`iscc-logo`) and restored on load; Reset returns the crosshair. An empty file is refused with a toast.
+- **Rendering:** the image is a mask. Only its silhouette is used; each placement fills it with its own ink (Cup Gold on the stage, black on the reversal, parchment on CT blue). A mark that depends on internal colour will not survive the slot.
+- **Elsewhere:** OBS overlays take `logo=<url>`; After Effects templates reference the precomp `LOGO (replace me)`.
+
+### Prompt shipped on the Mark plate
+
+> Flat vector emblem for a school esports championship. One solid shape, one colour: gold #C9A44C on black #0B0D10. Idea: a crosshair of four bars whose centre gap holds a trophy cup. Heavy condensed geometry, optical curves, visible stroke contrast. No gradients, no lettering, no 3D, no shadows, no weapons, no game logos. Legible at 16 px. Square canvas, centred, wide margin.
+
+### Craft bar for the final mark
+
+- **Optical overshoot:** round and pointed forms run past the bar edges so they read the same size as the flats.
+- **Stroke contrast:** visible thick–thin contrast, consistent in direction, matching the condensed gothic.
+- **Ink traps:** cut into tight joins so they stay open at small sizes.
+- **Export:** redraw the image-model output as pure-path SVG: no `<text>`, no `font-family`, no `currentColor`, no embedded raster, one fill.
+- **Tests:** 16, 32 and 96px on all four fields: Arena Black, Porcelain, the Cup Gold reversal and the CT Legacy Blue field. The Mark plate shows the four fields and a 16/32/64 ladder.
+
+## Distribution: the Kit
+
+`kit/` lets people make ISCC material without opening the concept page. Everything in it is concept material.
+
+- **logos/:** the three provisional directions and the placeholder crosshair as pure-path SVG and PNG, plus a sheet.
+- **fonts/:** the four OFL families as TTF and woff2 with one stylesheet.
+- **tokens/:** colour, type, spacing and motion tokens as CSS, JSON and SCSS; `.ase` and `.gpl` swatches.
+- **plates/:** 4K rendered beam plates in both arenas and three ratios, transparent smoke plates, transparent cup renders in the four finishes.
+- **ornaments/:** spray, utility arcs, tactical map, crop marks, grain tile, 70/20/10 bar.
+- **poster/:** A4 promotion posters, landscape and portrait, in both arenas (self-contained HTML with an editable date, print PDF with and without 3mm bleed, 300dpi PNG), baked from `kit/poster/a4.src.html` by `tools/poster_build.py`; the light behind the cup is rendered by `tools/poster_rays.py`.
+- **overlays/:** eleven transparent 1920×1080 OBS browser-source pages driven by URL parameters and `ISCC.update`, reading the same tokens as the page HUD.
+- **ae/:** ExtendScript builders for 62 After Effects template comps. They have been validated against a mock runtime only, not inside After Effects.
+
+Broadcast rules adopted for the HUD and overlays are in `docs/broadcast-research.md`.
+
+### A4 poster composition
+
+- **Backlit light.** A bright source sits behind the cup's bowl and is radially blurred outward (volumetric light scattering as a post-process), so the rays grow out from behind the cup and the cup's own silhouette casts the shafts. Blue to the left, gold to the right, warm white straight up. Rendered offline at 300 dpi, not drawn in CSS.
+- **The cup** stands on a liquid floor: a mirrored, turbulence-displaced reflection at 0.3 opacity (0.18 in the light arena). On screen the light grows out from the cup on load; print gets the final frame.
+- **Light tubes** at the left (CT blue) and right (T gold) edges: a hot core, a coloured falloff into the page, uneven output along the length.
+- **A ghost 26** behind everything at about 6% ink.
+- **Reduced copy, nothing else:** the name (EN plus 国际学校CS2锦标赛) top left; 百炼 | 成徽 split by the cup (landscape) or set vertically either side of it (portrait); "Earn your crest." bottom left in gold; the date alone bottom right; one fine-print Valve disclaimer. No labels above the date, no corner brackets, no glass.
 
 ## Do's and Don'ts
 
 ### Do:
 
-- **Do** keep gold at or under 10% of any composition, except the season reversal.
-- **Do** ship every mark as pure-path SVG; verify no `<text>`, font-family, or currentColor survives export.
-- **Do** keep beams and sheens behind ink, and give any plate that overlaps light a solid ground.
-- **Do** set micro-labels at 11px minimum, uppercase, 0.2–0.4em tracked, in silver or gold.
-- **Do** honor prefers-reduced-motion for drift, sheen, reveals, and the cover entrance.
-- **Do** keep both tongues and both arenas in the same geometry: toggles change tokens and strings, never grids or marks.
+- **Do** keep the 70/20/10 ratio: Arena Black field, Legacy Blue depth, Cup Gold at about 10%.
+- **Do** put CT blue on the left or first and T gold on the right or second, and back colour with position, monogram and tag.
+- **Do** show loss by emptiness: hollow bars, secondary ink, legible names.
+- **Do** keep light behind reading ink; smoke may cover artwork, never reading text.
+- **Do** set labels at an 11px floor in tracked Archivo caps with tabular figures.
+- **Do** run every motion on `cubic-bezier(.16,1,.3,1)` and give reduced motion a complete static frame.
+- **Do** route every logo placement through the slot (`--logo`, `.logo-slot`, `logo=`, the AE precomp).
+- **Do** label everything concept and invent every team, school, player, map and result.
 
 ### Don't:
 
-- **Don't** add a sixth hue, gradient text, or a drop shadow — depth is light, tone, or material.
-- **Don't** round anything except glass (14px); plates, buttons, posters stay square.
-- **Don't** set the logotype or numerals in a font, or substitute installed faces for the embedded subsets.
-- **Don't** place a kicker above a heading, number sections for decoration, or write prose where a specimen can speak.
-- **Don't** state event facts (schools, nations, dates) as truth; the footer labels all content as concept.
+- **Don't** add a sixth hue, red or green in the HUD, gradient text, or a drop shadow.
+- **Don't** round anything except glass (14px).
+- **Don't** place a kicker or eyebrow above a heading, or write "N things, one thing" headlines in either language.
+- **Don't** centre plate headings over equal grids; headings are left-set.
+- **Don't** use Valve or other third-party IP: no game logos, weapons, skins, agents or map art.
+- **Don't** set the mark or logotype in a font, or ship it with text, `font-family` or `currentColor`.

@@ -73,6 +73,7 @@ body[data-theme="light"] .ov .mono{color:var(--plate)}
 .ov .sb-mp.ct i.on{background:var(--side-ct);border-color:var(--side-ct)}
 .ov .sb-mp.t i.on{background:var(--side-t);border-color:var(--side-t)}
 .ov .sb-clk{font:800 var(--f-clk)/1 var(--fd);color:var(--ink);width:calc(var(--f-clk)*2.6);display:flex;justify-content:center;height:var(--f-clk);flex:none}
+.ov .sb-clk .dg{position:relative;top:calc(var(--f-clk)*.09)}
 .ov .sb[data-st="bomb"] .sb-clk{color:var(--gold)}
 .ov .sb-lb{position:relative;display:grid;width:calc(var(--p)*230);height:var(--lh);flex:none}
 .ov .sb-lb>.lbl{grid-area:1/1;visibility:hidden}

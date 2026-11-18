@@ -20,6 +20,24 @@
         ],
         "createdAt": "2026-11-16T14:26:20.448Z",
         "reason": "agent: worker test fixture for the cup renderer, not a shipped surface"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          "kit/poster/a4-landscape.src.html"
+        ],
+        "createdAt": "2026-11-18T01:13:44.155Z",
+        "reason": "agent: the flagged text is the decorative aria-hidden ghost '26' at 5-7% alpha; reading text is parchment/ink on stage (fine print 7:1 dark, 5:1 light)"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          "kit/poster/a4.src.html"
+        ],
+        "createdAt": "2026-11-18T01:32:49.768Z",
+        "reason": "agent: flagged text is the decorative aria-hidden ghost '26' at 6% alpha; reading text is parchment/ink on stage"
       }
     ]
   }
