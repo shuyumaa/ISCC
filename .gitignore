@@ -4,3 +4,5 @@ tools/.scan.html
 tools/test-*.png
 .impeccable/review/
 tools/ae_mock/node_modules/
+__pycache__/
+*.pyc
