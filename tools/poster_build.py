@@ -30,7 +30,7 @@ for fmt in ('landscape', 'portrait'):
     for theme in ('dark', 'light'):
         out = (src.replace('/*@fonts*/', css)
                   .replace('{{THEME}}', theme).replace('{{FORMAT}}', fmt)
-                  .replace('{{BEAMS}}', b64(os.path.join(P, 'plates/beams-%s-%s.jpg' % (theme, fmt)), 'image/jpeg'))
+                  .replace('{{RAYS}}', b64(os.path.join(P, 'plates/rays-%s-%s.jpg' % (theme, fmt)), 'image/jpeg'))
                   .replace('{{CUP}}', b64(os.path.join(P, 'plates/cup-%s.png' % theme), 'image/png')))
         dst = os.path.join(P, 'ISCC-A4-%s-%s.html' % (fmt, theme))
         open(dst, 'w', encoding='utf-8').write(out)

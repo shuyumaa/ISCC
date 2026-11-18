@@ -7,100 +7,50 @@
 <style>
 /*@fonts*/
 /* ISCC promotion poster. One source, two formats (A4 landscape / portrait), two arenas.
-   The crosshair (four bars and a gap) is built as moss glass around the cup; the edge strips are light tubes.
-   ?bleed=3 adds 3 mm bleed; ?date=… sets the date line, or click it and type. */
+   Light streams out from behind the cup (rendered offline by tools/poster_rays.py); the edge strips are light tubes.
+   ?bleed=3 adds 3 mm bleed; ?date=… sets the date, or click it and type. */
 :root{--b:0mm;
-  --fd:'Big Shoulders Display',sans-serif;--fb:'Archivo',sans-serif;--fcd:'Noto Serif SC',serif;--fcb:'Noto Sans SC',sans-serif;
-  --stage:#07090D;--ink:#EFE9DA;--ink2:#9AA3B2;--gold:#C9A44C;--lit:#E4CF9A;
-  --ring:rgba(228,207,154,.5);--refl:.34;--bloom:rgba(228,207,154,.30);--floor:#07090D;
-  --gtint:rgba(239,233,218,.05);--gedge:rgba(255,255,255,.22);--gtop:rgba(255,255,255,.5);--gfx:brightness(1.75) saturate(1.3) contrast(1.05);
-  --tube-ct:96,132,206;--tube-t:201,164,76;--tube-core:255,252,240;--tube-blend:screen;--tick:rgba(154,163,178,.55)}
-.light{--stage:#E9E1CD;--ink:#14161C;--ink2:#5B6470;--gold:#7A5D22;--lit:#7A5D22;
-  --ring:rgba(122,93,34,.42);--refl:.2;--bloom:rgba(250,247,239,.8);--floor:#E9E1CD;
-  --gtint:rgba(250,247,239,.38);--gedge:rgba(20,22,28,.14);--gtop:rgba(255,255,255,.9);--gfx:brightness(1.1) saturate(1.15);
-  --tube-ct:21,41,78;--tube-t:176,138,62;--tube-core:21,41,78;--tube-blend:multiply;--tick:rgba(91,100,112,.55)}
-
-/* format geometry, all in mm on the trim */
-.landscape{--W:297mm;--H:210mm;--cx:148.5mm;--cupW:80mm;--cupT:58mm;--floorY:157.2mm;--hy:75.5mm;--hgap:56mm;--vTop:52mm;--vBot:165mm;--bar:17mm}
-.portrait{--W:210mm;--H:297mm;--cx:105mm;--cupW:80mm;--cupT:92mm;--floorY:191.2mm;--hy:109.5mm;--hgap:50mm;--vTop:86mm;--vBot:199mm;--bar:17mm}
+  --fd:'Big Shoulders Display',sans-serif;--fb:'Archivo',sans-serif;--fcd:'Noto Serif SC',serif;
+  --stage:#07090D;--ink:#EFE9DA;--ink2:#9AA3B2;--gold:#C9A44C;--ghost:rgba(239,233,218,.06);--refl:.3;
+  --tube-ct:96,132,206;--tube-t:214,174,84;--tube-core:255,252,240;--tube-blend:screen}
+.light{--stage:#E9E1CD;--ink:#14161C;--ink2:#4B5360;--gold:#7A5D22;--ghost:rgba(20,22,28,.06);--refl:.18;
+  --tube-ct:21,41,78;--tube-t:176,138,62;--tube-core:21,41,78;--tube-blend:multiply}
+.landscape{--W:297mm;--H:210mm;--cx:148.5mm;--cupT:58mm}
+.portrait{--W:210mm;--H:297mm;--cx:105mm;--cupT:92mm}
+body{--cupW:80mm;--cupH:99.2mm}
 
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{background:#2b2e33}
+html,body{background:#24272c}
 body{min-height:100vh;display:grid;place-items:center}
 .sheet{position:relative;width:calc(var(--W) + 2*var(--b));height:calc(var(--H) + 2*var(--b));overflow:hidden;background:var(--stage);color:var(--ink);
   -webkit-print-color-adjust:exact;print-color-adjust:exact;transform-origin:center;isolation:isolate}
-.sheet>*,.scene>*{position:absolute}
-.scene{position:absolute;left:0;top:0;width:calc(var(--W) + 2*var(--b));height:calc(var(--H) + 2*var(--b))}
+.sheet>*{position:absolute}
 
-/* the scene: rendered rays aimed at the cup, a pool of light, the cup and its reflection */
-.plate{inset:0;background:url({{BEAMS}}) 50% 50%/cover no-repeat;
-  -webkit-mask:linear-gradient(#000 0,#000 calc(var(--b) + var(--floorY) - 18mm),rgba(0,0,0,.3) calc(var(--b) + var(--floorY) + 4mm),transparent calc(var(--b) + var(--floorY) + 26mm));
-          mask:linear-gradient(#000 0,#000 calc(var(--b) + var(--floorY) - 18mm),rgba(0,0,0,.3) calc(var(--b) + var(--floorY) + 4mm),transparent calc(var(--b) + var(--floorY) + 26mm))}
-.bloom{left:calc(var(--b) + var(--cx) - 95mm);top:calc(var(--b) + var(--cupT) - 30mm);width:190mm;height:130mm;border-radius:50%;
-  background:radial-gradient(closest-side,var(--bloom),transparent);mix-blend-mode:screen}
-.light .bloom{mix-blend-mode:normal}
-.pool{left:0;right:0;top:calc(var(--b) + var(--floorY));bottom:0;background:linear-gradient(to bottom,transparent,var(--floor) 62%)}
-.ripples{left:calc(var(--b) + var(--cx) - 140mm);top:calc(var(--b) + var(--floorY) - 22mm);width:280mm;height:44mm;overflow:visible;filter:blur(.2mm)}
-.ripples ellipse{fill:none;stroke:var(--ring)}
-.cup{left:calc(var(--b) + var(--cx) - var(--cupW)/2);top:calc(var(--b) + var(--cupT));width:var(--cupW);height:calc(var(--cupW)*1.24);
-  background:url({{CUP}}) center bottom/contain no-repeat;filter:brightness(1.2) contrast(1.06)}
-.refl{left:calc(var(--b) + var(--cx) - var(--cupW)/2);top:calc(var(--b) + var(--floorY) - .4mm);width:var(--cupW);height:calc(var(--cupW)*1.24);
+.rays{inset:0;background:url({{RAYS}}) 50% 50%/cover no-repeat}
+.ghost{font:900 250mm/.8 var(--fd);letter-spacing:-.02em;color:var(--ghost);white-space:nowrap}
+.landscape .ghost{right:calc(var(--b) - 12mm);top:calc(var(--b) - 30mm)}
+.portrait .ghost{right:calc(var(--b) - 18mm);bottom:calc(var(--b) - 40mm);font-size:230mm}
+.refl{left:calc(var(--b) + var(--cx) - var(--cupW)/2);top:calc(var(--b) + var(--cupT) + var(--cupH) - .4mm);width:var(--cupW);height:var(--cupH);
   background:url({{CUP}}) center bottom/contain no-repeat;transform:scaleY(-1);transform-origin:top;opacity:var(--refl);
-  filter:url(#liquid) blur(.35mm) brightness(1.2);-webkit-mask:linear-gradient(to top,#000,transparent 38%);mask:linear-gradient(to top,#000,transparent 38%)}
-.sheen{left:calc(var(--b) + var(--cx) - 110mm);top:calc(var(--b) + var(--floorY) - .2mm);width:220mm;height:.4mm;
-  background:linear-gradient(90deg,transparent,var(--lit) 32%,#fff 50%,var(--lit) 68%,transparent);opacity:.55}
-.light .sheen{background:linear-gradient(90deg,transparent,var(--gold) 32%,#FAF7EF 50%,var(--gold) 70%,transparent);opacity:.4}
+  filter:url(#liquid) blur(.4mm);-webkit-mask:linear-gradient(to top,#000,transparent 34%);mask:linear-gradient(to top,#000,transparent 34%)}
+.cup{left:calc(var(--b) + var(--cx) - var(--cupW)/2);top:calc(var(--b) + var(--cupT));width:var(--cupW);height:var(--cupH);
+  background:url({{CUP}}) center bottom/contain no-repeat;filter:brightness(1.12) contrast(1.06)}
 
-/* the crosshair, cut in moss glass: each bar refracts a copy of the scene behind it */
-.glass{overflow:hidden;border-radius:1.6mm;background:var(--gtint);z-index:2;
-  box-shadow:inset 0 0 0 .2mm var(--gedge),inset .35mm .35mm 0 var(--gtop),inset 0 0 6mm rgba(255,255,255,.08)}
-.glass .scene{filter:url(#moss) blur(1.1mm) var(--gfx)}
-.glass::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;opacity:.5;mix-blend-mode:overlay;background:var(--grain)}
-.glass::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none}
-.glass.v::after{background:repeating-linear-gradient(90deg,rgba(255,255,255,.09) 0 .18mm,transparent .18mm 2.6mm),linear-gradient(90deg,rgba(255,255,255,.22),transparent 18%,transparent 80%,rgba(255,255,255,.12))}
-.glass.h::after{background:repeating-linear-gradient(180deg,rgba(255,255,255,.09) 0 .18mm,transparent .18mm 2.6mm),linear-gradient(180deg,rgba(255,255,255,.24),transparent 22%,transparent 78%,rgba(255,255,255,.1))}
-.light .glass::after{opacity:.55}
-.g-top{left:calc(var(--b) + var(--cx) - var(--bar)/2);top:-3mm;width:var(--bar);height:calc(var(--b) + var(--vTop) + 3mm)}
-.g-bot{left:calc(var(--b) + var(--cx) - var(--bar)/2);top:calc(var(--b) + var(--vBot));width:var(--bar);bottom:-3mm}
-.g-l{left:-3mm;top:calc(var(--b) + var(--hy));height:var(--bar);width:calc(var(--b) + var(--cx) - var(--hgap) + 3mm)}
-.g-r{right:-3mm;top:calc(var(--b) + var(--hy));height:var(--bar);left:calc(var(--b) + var(--cx) + var(--hgap))}
-/* light entering the glass from the tubes and the rig */
-.lit{position:absolute;inset:0;z-index:1;pointer-events:none;mix-blend-mode:screen}
-.light .lit{mix-blend-mode:normal}
-.g-l .lit{background:linear-gradient(90deg,rgba(var(--tube-ct),.8),rgba(var(--tube-ct),.2) 24%,transparent 62%,rgba(228,207,154,.35) 100%)}
-.g-r .lit{background:linear-gradient(270deg,rgba(var(--tube-t),.8),rgba(var(--tube-t),.2) 24%,transparent 62%,rgba(228,207,154,.35) 100%)}
-.g-top .lit{background:linear-gradient(0deg,rgba(228,207,154,.45),transparent 45%)}
-.g-bot .lit{background:linear-gradient(180deg,rgba(228,207,154,.35),transparent 40%)}
-.light .g-l .lit{background:linear-gradient(90deg,rgba(var(--tube-ct),.28),transparent 45%)}
-.light .g-r .lit{background:linear-gradient(270deg,rgba(var(--tube-t),.35),transparent 45%)}
-.light .g-top .lit,.light .g-bot .lit{background:linear-gradient(0deg,rgba(255,255,255,.6),transparent 50%)}
+/* the edge strips are light tubes: hot core, coloured falloff, uneven output along their length */
+.tube{top:0;bottom:0;width:calc(var(--b) + 30mm);mix-blend-mode:var(--tube-blend);pointer-events:none;
+  -webkit-mask:linear-gradient(to bottom,rgba(0,0,0,.5),#000 22%,rgba(0,0,0,.78) 50%,#000 74%,rgba(0,0,0,.55));mask:linear-gradient(to bottom,rgba(0,0,0,.5),#000 22%,rgba(0,0,0,.78) 50%,#000 74%,rgba(0,0,0,.55))}
+.tube.ct{left:0;background:linear-gradient(90deg,rgba(var(--tube-core),.95) 0,rgba(var(--tube-core),.95) calc(var(--b) + .7mm),rgba(var(--tube-ct),.95) calc(var(--b) + 1.5mm),rgba(var(--tube-ct),.4) calc(var(--b) + 4mm),rgba(var(--tube-ct),.12) calc(var(--b) + 12mm),transparent calc(var(--b) + 30mm))}
+.tube.t{right:0;background:linear-gradient(270deg,rgba(var(--tube-core),.95) 0,rgba(var(--tube-core),.95) calc(var(--b) + .7mm),rgba(var(--tube-t),.95) calc(var(--b) + 1.5mm),rgba(var(--tube-t),.4) calc(var(--b) + 4mm),rgba(var(--tube-t),.12) calc(var(--b) + 12mm),transparent calc(var(--b) + 30mm))}
+.light .tube.ct{background:linear-gradient(90deg,rgb(var(--tube-ct)) 0,rgb(var(--tube-ct)) calc(var(--b) + 1.4mm),rgba(var(--tube-ct),.2) calc(var(--b) + 3.5mm),rgba(var(--tube-ct),.06) calc(var(--b) + 12mm),transparent calc(var(--b) + 28mm))}
+.light .tube.t{background:linear-gradient(270deg,rgb(var(--tube-t)) 0,rgb(var(--tube-t)) calc(var(--b) + 1.4mm),rgba(var(--tube-t),.28) calc(var(--b) + 3.5mm),rgba(var(--tube-t),.08) calc(var(--b) + 12mm),transparent calc(var(--b) + 28mm))}
+.grain{inset:0;pointer-events:none;mix-blend-mode:overlay;opacity:.45;background:var(--grain)}
 
-/* the edge strips are light tubes: a hot core, a coloured falloff, and uneven output along their length */
-.tube{top:0;bottom:0;width:calc(var(--b) + 34mm);z-index:3;mix-blend-mode:var(--tube-blend);pointer-events:none;
-  -webkit-mask:linear-gradient(to bottom,rgba(0,0,0,.55),#000 18%,rgba(0,0,0,.8) 46%,#000 70%,rgba(0,0,0,.6));mask:linear-gradient(to bottom,rgba(0,0,0,.55),#000 18%,rgba(0,0,0,.8) 46%,#000 70%,rgba(0,0,0,.6))}
-.tube.ct{left:0;background:linear-gradient(90deg,rgba(var(--tube-core),.95) 0,rgba(var(--tube-core),.95) calc(var(--b) + .7mm),rgba(var(--tube-ct),.95) calc(var(--b) + 1.5mm),rgba(var(--tube-ct),.42) calc(var(--b) + 4mm),rgba(var(--tube-ct),.14) calc(var(--b) + 12mm),transparent calc(var(--b) + 34mm))}
-.tube.t{right:0;background:linear-gradient(270deg,rgba(var(--tube-core),.95) 0,rgba(var(--tube-core),.95) calc(var(--b) + .7mm),rgba(var(--tube-t),.95) calc(var(--b) + 1.5mm),rgba(var(--tube-t),.42) calc(var(--b) + 4mm),rgba(var(--tube-t),.14) calc(var(--b) + 12mm),transparent calc(var(--b) + 34mm))}
-.light .tube.ct{background:linear-gradient(90deg,rgb(var(--tube-ct)) 0,rgb(var(--tube-ct)) calc(var(--b) + 1.4mm),rgba(var(--tube-ct),.22) calc(var(--b) + 3.5mm),rgba(var(--tube-ct),.07) calc(var(--b) + 12mm),transparent calc(var(--b) + 30mm))}
-.light .tube.t{background:linear-gradient(270deg,rgb(var(--tube-t)) 0,rgb(var(--tube-t)) calc(var(--b) + 1.4mm),rgba(var(--tube-t),.3) calc(var(--b) + 3.5mm),rgba(var(--tube-t),.09) calc(var(--b) + 12mm),transparent calc(var(--b) + 30mm))}
-.flare{width:70mm;height:70mm;border-radius:50%;z-index:3;mix-blend-mode:screen;pointer-events:none;top:calc(var(--b) + var(--hy) + var(--bar)/2 - 35mm)}
-.flare.ct{left:calc(-35mm);background:radial-gradient(closest-side,rgba(200,215,245,.55),rgba(var(--tube-ct),.22) 40%,transparent)}
-.flare.t{right:calc(-35mm);background:radial-gradient(closest-side,rgba(250,236,200,.55),rgba(var(--tube-t),.22) 40%,transparent)}
-.light .flare{display:none}
-.streak{left:0;right:0;top:calc(var(--b) + var(--cupT) + 2.6mm);height:7mm;margin-top:-3.5mm;z-index:3;pointer-events:none;mix-blend-mode:screen;
-  background:radial-gradient(50% 50% at 50% 50%,rgba(255,250,235,.9),rgba(228,207,154,.35) 6%,rgba(72,104,164,.12) 30%,transparent 70%);
-  -webkit-mask:linear-gradient(180deg,transparent,#000 46%,#000 54%,transparent);mask:linear-gradient(180deg,transparent,#000 46%,#000 54%,transparent)}
-.light .streak{display:none}
-.grain{inset:0;z-index:4;pointer-events:none;mix-blend-mode:overlay;opacity:.55;background:var(--grain)}
-
-/* type, on the trim, above the glass */
-.trim{position:absolute;left:var(--b);top:var(--b);width:var(--W);height:var(--H);z-index:5}
+/* type */
+.trim{left:var(--b);top:var(--b);width:var(--W);height:var(--H)}
 .trim>*{position:absolute}
-.tick{width:5mm;height:5mm;border:solid var(--tick);border-width:0}
-.tick.tl{left:8mm;top:8mm;border-width:.2mm 0 0 .2mm}.tick.tr{right:8mm;top:8mm;border-width:.2mm .2mm 0 0}
-.tick.bl{left:8mm;bottom:8mm;border-width:0 0 .2mm .2mm}.tick.br{right:8mm;bottom:8mm;border-width:0 .2mm .2mm 0}
 .name{left:16mm;top:15mm;font:800 6mm/1.04 var(--fd);letter-spacing:.1em;text-transform:uppercase}
 .name i{display:block;font:900 3.5mm/1.5 var(--fcd);font-style:normal;letter-spacing:.22em;margin-top:1.4mm;color:var(--gold)}
-.trim>h1{inset:0;margin:0;font-size:inherit}
+.trim>h1{inset:0;font-size:inherit}
 .sl{position:absolute;font:900 44mm/1 var(--fcd);white-space:nowrap}
 .landscape .s1{right:calc(var(--W) - var(--cx) + 46mm);top:62mm}
 .landscape .s2{left:calc(var(--cx) + 46mm);top:62mm}
@@ -108,51 +58,42 @@ body{min-height:100vh;display:grid;place-items:center}
 .portrait .s1{left:13mm}.portrait .s2{right:13mm}
 .cta{left:16mm;bottom:16mm;font:900 13.5mm/.86 var(--fd);letter-spacing:.015em;text-transform:uppercase;color:var(--gold)}
 .portrait .cta{bottom:20mm;font-size:14mm}
-.when{right:16mm;bottom:16mm;text-align:right}
-.portrait .when{bottom:20mm}
-.when small{display:block;font:600 2.4mm/1 var(--fb);letter-spacing:.28em;text-transform:uppercase;color:var(--ink2);margin-bottom:2.6mm}
-.when small i{font-family:var(--fcb);font-style:normal;letter-spacing:.2em;margin-left:1.6mm}
-.when b{display:block;font:900 11.5mm/.9 var(--fd);letter-spacing:.03em;text-transform:uppercase;outline:none;min-width:20mm}
-.when b:focus{box-shadow:0 .4mm 0 var(--gold)}
+.date{right:16mm;bottom:16mm;font:900 11.5mm/.9 var(--fd);letter-spacing:.03em;text-transform:uppercase;text-align:right;outline:none;min-width:20mm}
+.portrait .date{bottom:20mm}
+.date:focus{box-shadow:0 .4mm 0 var(--gold)}
 .fine{left:16mm;bottom:9.5mm;font:400 1.8mm/1 var(--fb);letter-spacing:.06em;color:var(--ink2)}
-.light .fine,.light .when small{color:#4B5360}
 .portrait .fine{bottom:11mm}
 .hint{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);font:600 11px/1 'Archivo',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#cfd3da;white-space:nowrap}
-@media print{html,body{background:none;display:block;min-height:0}.sheet{transform:none!important}.hint{display:none}.when b:focus{box-shadow:none}}
+
+/* on screen the light grows out from behind the cup; print and reduced motion get the final frame */
+@property --r{syntax:'<length>';inherits:false;initial-value:400mm}
+@media screen and (prefers-reduced-motion:no-preference){
+  .grow .rays{animation:grow 2.6s cubic-bezier(.16,1,.3,1) both;
+    -webkit-mask:radial-gradient(circle at var(--cx) calc(var(--cupT) + 26mm),#000 var(--r),transparent calc(var(--r) + 50mm));
+            mask:radial-gradient(circle at var(--cx) calc(var(--cupT) + 26mm),#000 var(--r),transparent calc(var(--r) + 50mm))}
+  .grow .cup,.grow .refl{animation:lift 1.4s cubic-bezier(.16,1,.3,1) both}
+}
+@keyframes grow{from{--r:0mm}to{--r:400mm}}
+@keyframes lift{from{opacity:0}}
+@media print{html,body{background:none;display:block;min-height:0}.sheet{transform:none!important}.hint{display:none}.date:focus{box-shadow:none}}
 </style>
 </head>
 <body class="{{THEME}} {{FORMAT}}">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <filter id="liquid" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency="0.004 0.09" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="14" xChannelSelector="R" yChannelSelector="G"/></filter>
-  <filter id="moss" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB"><feTurbulence type="fractalNoise" baseFrequency="0.012 0.02" numOctaves="3" seed="11"/><feDisplacementMap in="SourceGraphic" scale="70" xChannelSelector="R" yChannelSelector="B"/></filter>
 </svg>
 <div class="sheet" id="sheet">
-  <div class="scene" id="scene">
-    <div class="plate"></div>
-    <div class="bloom"></div>
-    <div class="pool"></div>
-    <svg class="ripples" viewBox="-140 -22 280 44" aria-hidden="true">
-      <ellipse rx="30" ry="3.2" stroke-width=".45" opacity=".85"/><ellipse rx="44" ry="4.6" stroke-width=".3" opacity=".55"/>
-      <ellipse rx="62" ry="6.4" stroke-width=".28" opacity=".38"/><ellipse rx="86" ry="8.8" stroke-width=".22" opacity=".22"/><ellipse rx="116" ry="11.8" stroke-width=".18" opacity=".12"/>
-    </svg>
-    <div class="refl"></div>
-    <div class="sheen"></div>
-    <div class="cup" role="img" aria-label="The championship cup"></div>
-  </div>
-  <div class="glass v g-top"><i class="lit"></i></div>
-  <div class="glass v g-bot"><i class="lit"></i></div>
-  <div class="glass h g-l"><i class="lit"></i></div>
-  <div class="glass h g-r"><i class="lit"></i></div>
+  <div class="rays"></div>
+  <div class="ghost" aria-hidden="true">26</div>
+  <div class="refl" aria-hidden="true"></div>
+  <div class="cup" role="img" aria-label="The championship cup"></div>
   <div class="tube ct"></div><div class="tube t"></div>
-  <div class="flare ct"></div><div class="flare t"></div>
-  <div class="streak"></div>
   <div class="grain"></div>
   <div class="trim">
-    <i class="tick tl"></i><i class="tick tr"></i><i class="tick bl"></i><i class="tick br"></i>
     <p class="name">International Schools<br>CS2 Championships<i lang="zh-Hans">国际学校CS2锦标赛</i></p>
     <h1 lang="zh-Hans" aria-label="百炼成徽"><span class="sl s1">百炼</span><span class="sl s2">成徽</span></h1>
     <p class="cta">Earn your<br>crest.</p>
-    <p class="when"><small>Grand Final <i>总决赛</i></small><b id="date" contenteditable="true" spellcheck="false">Dates TBC</b></p>
+    <p class="date" id="date" contenteditable="true" spellcheck="false">Dates TBC</p>
     <p class="fine">CS2 is a trademark of Valve Corporation. Not affiliated with or endorsed by Valve.</p>
   </div>
 </div>
@@ -166,13 +107,8 @@ body{min-height:100vh;display:grid;place-items:center}
   try{var v=q.get('date')||localStorage.getItem(K);if(v)d.textContent=v}catch(e){}
   d.addEventListener('input',function(){try{localStorage.setItem(K,d.textContent)}catch(e){}});
   d.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();d.blur()}});
-  /* each glass bar refracts a copy of the scene, aligned to where it sits */
-  var sc=document.getElementById('scene');
-  [].forEach.call(document.querySelectorAll('.glass'),function(g){var c=sc.cloneNode(true);c.removeAttribute('id');
-    [].forEach.call(c.querySelectorAll('[role]'),function(n){n.removeAttribute('role');n.removeAttribute('aria-label')});
-    c.setAttribute('aria-hidden','true');c.style.left=(-g.offsetLeft)+'px';c.style.top=(-g.offsetTop)+'px';g.insertBefore(c,g.firstChild)});
   var st=document.createElement('style');st.textContent='@page{size:'+(W+2*b)+'mm '+(H+2*b)+'mm;margin:0}';document.head.appendChild(st);
-  if(q.get('raw'))document.querySelector('.hint').remove();
+  if(q.get('raw'))document.querySelector('.hint').remove();else document.body.classList.add('grow');
   function fit(){if(q.get('raw')){s.style.transform='none';return}
     var k=Math.min((innerWidth-48)/s.offsetWidth,(innerHeight-72)/s.offsetHeight);s.style.transform='scale('+k+')'}
   addEventListener('resize',fit);addEventListener('beforeprint',function(){s.style.transform='none'});addEventListener('afterprint',fit);fit();

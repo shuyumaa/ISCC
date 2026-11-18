@@ -357,7 +357,7 @@ The final mark is designed by the user with an image-generation model. The syste
 - **tokens/:** colour, type, spacing and motion tokens as CSS, JSON and SCSS; `.ase` and `.gpl` swatches.
 - **plates/:** 4K rendered beam plates in both arenas and three ratios, transparent smoke plates, transparent cup renders in the four finishes.
 - **ornaments/:** spray, utility arcs, tactical map, crop marks, grain tile, 70/20/10 bar.
-- **poster/:** the A4 landscape promotion poster in both arenas (HTML with an editable date, print PDF with and without 3mm bleed, 300dpi PNG), baked from `kit/poster/a4-landscape.src.html` by `tools/poster_build.py`.
+- **poster/:** A4 promotion posters, landscape and portrait, in both arenas (self-contained HTML with an editable date, print PDF with and without 3mm bleed, 300dpi PNG), baked from `kit/poster/a4.src.html` by `tools/poster_build.py`; the light behind the cup is rendered by `tools/poster_rays.py`.
 - **overlays/:** eleven transparent 1920×1080 OBS browser-source pages driven by URL parameters and `ISCC.update`, reading the same tokens as the page HUD.
 - **ae/:** ExtendScript builders for 62 After Effects template comps. They have been validated against a mock runtime only, not inside After Effects.
 
@@ -365,10 +365,11 @@ Broadcast rules adopted for the HUD and overlays are in `docs/broadcast-research
 
 ### A4 poster composition
 
-- Rendered rays converge on the cup at the centre and fade into the floor (mask 58–84% of the height).
-- The cup stands on a liquid floor at 161mm: its mirrored reflection (turbulence-displaced, 0.36 opacity in the dark arena, 0.22 in the light), five ripple rings and a thin sheen line.
-- CT and T rails, 2.2mm, at the left and right edges; a ghost 26 behind at about 5% ink.
-- Reduced copy, nothing else: the name (EN plus 国际学校CS2锦标赛) top left; 百炼 | 成徽 split by an 88mm gap that the cup fills; "Earn your crest." bottom left in gold; one date line bottom right (Grand Final 总决赛 over the date); a single fine-print Valve disclaimer.
+- **Backlit light.** A bright source sits behind the cup's bowl and is radially blurred outward (volumetric light scattering as a post-process), so the rays grow out from behind the cup and the cup's own silhouette casts the shafts. Blue to the left, gold to the right, warm white straight up. Rendered offline at 300 dpi, not drawn in CSS.
+- **The cup** stands on a liquid floor: a mirrored, turbulence-displaced reflection at 0.3 opacity (0.18 in the light arena). On screen the light grows out from the cup on load; print gets the final frame.
+- **Light tubes** at the left (CT blue) and right (T gold) edges: a hot core, a coloured falloff into the page, uneven output along the length.
+- **A ghost 26** behind everything at about 6% ink.
+- **Reduced copy, nothing else:** the name (EN plus 国际学校CS2锦标赛) top left; 百炼 | 成徽 split by the cup (landscape) or set vertically either side of it (portrait); "Earn your crest." bottom left in gold; the date alone bottom right; one fine-print Valve disclaimer. No labels above the date, no corner brackets, no glass.
 
 ## Do's and Don'ts
 
