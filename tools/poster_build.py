@@ -25,12 +25,13 @@ for fam, w, fn, rng in FONTS:
     css += "@font-face{font-family:'%s';font-weight:%d;font-display:block;src:url(%s) format('woff2')%s}\n" % (
         fam, w, b64(os.path.join(R, 'kit/fonts/web', fn), 'font/woff2'), (';unicode-range:' + rng) if rng else '')
 
-src = open(os.path.join(P, 'a4-landscape.src.html'), encoding='utf-8').read()
-for theme in ('dark', 'light'):
-    out = (src.replace('/*@fonts*/', css)
-              .replace('{{THEME}}', theme)
-              .replace('{{BEAMS}}', b64(os.path.join(P, 'plates/beams-%s-a4.jpg' % theme), 'image/jpeg'))
-              .replace('{{CUP}}', b64(os.path.join(P, 'plates/cup-%s.png' % theme), 'image/png')))
-    dst = os.path.join(P, 'ISCC-A4-landscape-%s.html' % theme)
-    open(dst, 'w', encoding='utf-8').write(out)
-    print(os.path.basename(dst), round(len(out.encode()) / 1e6, 2), 'MB')
+src = open(os.path.join(P, 'a4.src.html'), encoding='utf-8').read()
+for fmt in ('landscape', 'portrait'):
+    for theme in ('dark', 'light'):
+        out = (src.replace('/*@fonts*/', css)
+                  .replace('{{THEME}}', theme).replace('{{FORMAT}}', fmt)
+                  .replace('{{BEAMS}}', b64(os.path.join(P, 'plates/beams-%s-%s.jpg' % (theme, fmt)), 'image/jpeg'))
+                  .replace('{{CUP}}', b64(os.path.join(P, 'plates/cup-%s.png' % theme), 'image/png')))
+        dst = os.path.join(P, 'ISCC-A4-%s-%s.html' % (fmt, theme))
+        open(dst, 'w', encoding='utf-8').write(out)
+        print(os.path.basename(dst), round(len(out.encode()) / 1e6, 2), 'MB')
