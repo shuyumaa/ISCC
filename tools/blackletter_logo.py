@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Blackletter monogram + heavy wide 'ISCC' wordmark (after the user's design.com mockup), rebuilt from OFL fonts
 as pure-path SVG.  python3 tools/blackletter_logo.py [--sheet]  ->  concepts/blackletter-options.png, kit/logos/blackletter/"""
-import os, sys, subprocess
+import os, sys, shutil, subprocess
 from fontTools.ttLib import TTFont
 from fontTools.pens.svgPathPen import SVGPathPen
 from fontTools.pens.transformPen import TransformPen
@@ -125,15 +125,21 @@ def export():
                 if cn in ('gold', 'parchment', 'black'):
                     for px in (1024, 2048):
                         jobs.append((os.path.join(out, name + '.svg'), W, H, px, os.path.join(out, 'png', '%s-%d.png' % (name, px))))
+    # each SVG is inlined into a small HTML page on disk and screenshotted with a transparent background
+    tmp = os.path.join(out, '.render')
+    os.makedirs(tmp, exist_ok=True)
     js = "const {chromium}=require('playwright');(async()=>{const b=await chromium.launch();const p=await b.newPage();"
-    for svgp, W, H, px, png in jobs:
+    for i, (svgp, W, H, px, png) in enumerate(jobs):
         sc = px / max(W, H)
+        w, h = round(W * sc), round(H * sc)
+        svg = open(svgp).read().replace('width="%d" height="%d"' % (W, H), 'width="%d" height="%d"' % (w, h), 1)
+        hp = os.path.join(tmp, '%d.html' % i)
+        open(hp, 'w').write('<!doctype html><html><body style="margin:0;background:transparent">%s</body></html>' % svg)
         js += ("await p.setViewportSize({width:%d,height:%d});await p.goto('file://%s');"
-               "await p.screenshot({path:'%s',omitBackground:true,clip:{x:0,y:0,width:%d,height:%d}});") % (round(W * sc), round(H * sc), svgp + '#', png, round(W * sc), round(H * sc))
+               "await p.screenshot({path:'%s',omitBackground:true,clip:{x:0,y:0,width:%d,height:%d}});") % (w, h, hp, png, w, h)
     js += "await b.close()})()"
-    # render each svg scaled to the target size via an html wrapper
-    js = js.replace("await p.goto('file://", "await p.setContent('<html><body style=\"margin:0;background:transparent\"><img style=\"width:100%;height:100%;display:block\" src=\"file://").replace("#');", "\"></body></html>');await p.waitForTimeout(30);")
     subprocess.check_call(['node', '-e', js])
+    shutil.rmtree(tmp)
     print('exported', len(jobs), 'pngs to', out)
 
 
