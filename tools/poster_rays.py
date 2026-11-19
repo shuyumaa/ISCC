@@ -11,6 +11,7 @@ P = os.path.join(R, 'kit/poster/plates')
 # trim size mm, cup centre x, cup top, cup width (must match a4.src.html)
 FMT = {'landscape': (297, 210, 148.5, 58.0, 80.0), 'portrait': (210, 297, 105.0, 92.0, 80.0)}
 DPI = 300
+GLOW = 1.0          # extra glow scale for small formats (banners); 1.0 on the posters
 WORK = 0.5          # render at half resolution; the rays are soft, then upscale
 BLUE = np.array([86, 128, 214]) / 255.0
 GOLD = np.array([226, 178, 72]) / 255.0
@@ -37,6 +38,7 @@ def render(fmt, theme):
     pxmm = DPI / 25.4 * WORK
     W, H = int(round(Wmm * pxmm)), int(round(Hmm * pxmm))
     cupH = cupW * 1.24
+    k = cupW / 80.0 * GLOW                                    # glow sizes scale with the cup (1.0 on the A4 posters)
     lx, ly = cx * pxmm, (cupT + cupH * 0.26) * pxmm     # the source sits behind the bowl
 
     yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
@@ -55,7 +57,7 @@ def render(fmt, theme):
         blades += amp * np.exp(-(d / wdt) ** 2)
     up = np.clip(-np.sin(th), 0, 1)                         # stronger upward, weaker into the floor
     blades *= 0.55 + 0.75 * up
-    core = np.exp(-(r / 13.0) ** 2) * 3.0 + np.exp(-(r / 34.0) ** 2) * 1.1
+    core = np.exp(-(r / (13.0 * k)) ** 2) * 3.0 + np.exp(-(r / (34.0 * k)) ** 2) * 1.1
     emis = core * blades
 
     # occluder: the cup's silhouette, placed exactly where the page draws it
@@ -75,11 +77,11 @@ def render(fmt, theme):
     rays += np.asarray(hz, np.float32) * 0.6   # haze
 
     # colour by side: CT blue to the left, T gold to the right, warm white straight up and in the core
-    side = np.clip(dx / (np.abs(dx) + 40 * pxmm), -1, 1)[..., None]
+    side = np.clip(dx / (np.abs(dx) + 40 * k * pxmm), -1, 1)[..., None]
     tint = np.where(side < 0, BLUE, GOLD)
     mixw = np.clip(np.abs(side) * 1.7, 0, 1)
     col = WARM * (1 - mixw) + tint * mixw
-    hot = np.clip(np.exp(-(r / 22.0) ** 2), 0, 1)[..., None]
+    hot = np.clip(np.exp(-(r / (22.0 * k)) ** 2), 0, 1)[..., None]
     col = col * (1 - hot) + WARM * hot
 
     I = rays[..., None]
